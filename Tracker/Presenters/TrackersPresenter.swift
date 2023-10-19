@@ -54,7 +54,7 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
         cell.completeState = model.complete
         let state = model.complete ? State.complete : State.addRecord
         cell.completeButton.setImage(UIImage(named: state.rawValue), for: .normal)
-        //cell.completeButton.isEnabled = model.isEnable
+        cell.completeButton.isEnabled = model.isEnable
         cell.completeButton.tintColor = model.color
 
         return cell
