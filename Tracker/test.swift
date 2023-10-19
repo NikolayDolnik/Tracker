@@ -160,3 +160,24 @@ extension EmojiPresenter: UICollectionViewDelegateFlowLayout {
 //}
 //
 //print(Date().dayOfWeek()!) // Wednesday
+
+
+
+// Notification
+/*
+TrackersServiceObserver = NotificationCenter.default.addObserver(
+    forName: TrackersService.didChangeNotification,
+    object: nil,
+    queue: .main) { [weak self] _ in
+        guard let self else { return}
+        self.presenter?.newVisibleCategory(get: self.trackerService?.categories ?? [])
+        self.collectionView.reloadData()
+    }
+
+NotificationCenter.default
+    .post(
+        name: TrackersService.didChangeNotification,
+        object: self,
+        userInfo: ["change": self.categories])
+
+*/

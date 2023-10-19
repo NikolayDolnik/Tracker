@@ -20,11 +20,7 @@ final class HabitsViewController: UIViewController {
     var color: UIColor?
     var emoji: String?
     private var timetable: [Int]?
-//    enum identifier: String {
-//        case cell
-//        case header
-//        case footer
-//    }
+
     
     lazy var scrollView: UIScrollView = {
         let scroll = UIScrollView()
@@ -55,7 +51,7 @@ final class HabitsViewController: UIViewController {
         lable.placeholder = "Введите название трекера"
         lable.clearButtonMode = .whileEditing
         lable.textAlignment = .left
-        lable.layer.cornerRadius = 16 // TODO: проверить скругление
+        lable.layer.cornerRadius = 16 
         lable.backgroundColor = .backgroundDayTracker
         lable.borderStyle = .roundedRect
         lable.translatesAutoresizingMaskIntoConstraints = false
@@ -135,7 +131,6 @@ final class HabitsViewController: UIViewController {
         
         view.backgroundColor = .whiteDayTracker
         view.addSubview(scrollView)
-        
         
         scrollView.addSubview(contentView)
         contentView.addSubview(titleLabel)
@@ -247,7 +242,7 @@ extension HabitsViewController: UITableViewDelegate, UITableViewDataSource {
 extension HabitsViewController {
     
     func dataCheking(){
-        guard let  name, let emoji, let color, let timetable   else {return}
+        guard let  name, let timetable   else {return}
         createButton.isEnabled = true
         createButton.backgroundColor  =  createButton.isEnabled ? .blackDayTracker : .grayTracker
     }
@@ -266,9 +261,10 @@ extension HabitsViewController {
     }
     
     @objc func didTapCreateButton(){
-        guard let  name, let emoji, let color, let timetable   else {return}
-        
-        trackerService?.addTracker(categoryNewName: categoreName, name: name, emoji: emoji, color: color, timetable: timetable)
+        guard let  name, let timetable   else {return}
+        emoji = ""
+        color = UIColor(named: "selection6") ?? .selection1
+        trackerService?.addTracker(categoryNewName: categoreName, name: name, emoji: emoji!, color: color!, timetable: timetable)
         self.dismiss(animated: true)
     }
 }

@@ -9,13 +9,14 @@ import Foundation
 import UIKit
 
 public protocol TrackersCollectionViewCellDelegate: AnyObject {
-    func didTapCompleteButton()
+    func didTapCompleteButton(_ cell: TrackersCollectionViewCell)
 }
 
-final class TrackersCollectionViewCell: UICollectionViewCell {
+public final class TrackersCollectionViewCell: UICollectionViewCell {
     
     var delegate: TrackersCollectionViewCellDelegate?
-    private var buttonState = true
+    var completeState: Bool = true
+    //private var buttonState = true
     
     var viewCard: UIView = {
        let view = UIStackView()
@@ -70,9 +71,9 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     }()
     
     lazy var completeButton: UIButton = {
-        let button = UIButton()
-        let state = buttonState ? "ButtonTracker" :  "PropertyDone"
-        button.setImage(UIImage(named: state), for: .normal)
+        let button = UIButton(type: .system)
+//        let state = buttonState ? "ButtonTracker" :  "PropertyDone"
+//        button.setImage(UIImage(named: state), for: .normal)
         button.tintColor = .redTracker
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -133,12 +134,14 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         
     }
     
+    func changeState(state: Bool){
+        completeState = !state
+        let state = completeState ? State.complete : State.addRecord
+        completeButton.setImage(UIImage(named: state.rawValue), for: .normal)
+    }
+    
     @objc func didTapCompleteButton(){
-        print("two")
-        buttonState = !buttonState
-        let state = buttonState ? "ButtonTracker" : "PropertyDone"
-        completeButton.setImage(UIImage(named: state), for: .normal)
-        //delegate?.didTapCompleteButton()
+        delegate?.didTapCompleteButton(self)
     }
     
 }

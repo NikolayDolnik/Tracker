@@ -8,23 +8,30 @@
 import Foundation
 import UIKit
 
-protocol TrackersServiseProtocol {
+public protocol TrackersServiseProtocol {
     var categories:  [TrackerCategory] {get}
     func findTrackers(text: String)-> [TrackerCategory]
-    func changeDate(numberOfDay: Int) -> [TrackerCategory]
+    func changeDate(for day: Date) -> [TrackerCategory]
     func addTracker(categoryNewName: String, name: String, emoji: String, color: UIColor, timetable: [Int] )
+    func createTrackerModel(tracker: Tracker) -> TrackerCellModel
+    func addTrackerrecord(tracker: Tracker)
+    func deleteTrackerRecord(tracker: Tracker)
+    func getTrackerRecord(tracker: Tracker)-> Int
+    func addTrackerEvent(categoryNewName: String, name: String, emoji: String, color: UIColor)
 }
 
 final class TrackersService: TrackersServiseProtocol {
     
     static var shared = TrackersService()
     static let didChangeNotification = Notification.Name(rawValue: "TrackersServiceDidChange")
-    
+    private var currentDay = NSDate()
+    private var visibleDay: Date?
+    var completedTrackers: Set<TrackerRecord> = []
     var categories: [TrackerCategory] = [
         TrackerCategory(
-            categoreName: "First Nax Service",
+            categoreName: "First Service",
             trackers: [Tracker(
-                id: UInt(),
+                id: UUID(),
                 name: "First Tracker",
                 color: .selection10,
                 emoji: "🌺",
@@ -32,16 +39,16 @@ final class TrackersService: TrackersServiseProtocol {
             )]
         ),
         TrackerCategory(
-            categoreName: "Second Nax",
+            categoreName: "Second",
             trackers: [Tracker(
-                id: UInt(),
+                id:  UUID(),
                 name: " Find Two Tracker",
                 color: .selection14,
                 emoji: "🌺",
                 timetable: [WeekDay.monday.rawValue]
             ),
                        Tracker(
-                        id: UInt(),
+                        id:  UUID(),
                         name: "Three blala Tracker",
                         color: .selection11,
                         emoji: "🌺",
@@ -49,16 +56,16 @@ final class TrackersService: TrackersServiseProtocol {
                        )]
         ),
         TrackerCategory(
-            categoreName: "Second Nax",
+            categoreName: "Second",
             trackers: [Tracker(
-                id: UInt(),
+                id:  UUID(),
                 name: "Two Tracker",
                 color: .selection14,
-                emoji: "🌺",
+                emoji: "😱",
                 timetable: [WeekDay.tuesday.rawValue]
             ),
                        Tracker(
-                        id: UInt(),
+                        id:  UUID(),
                         name: "Three Tracker",
                         color: .selection11,
                         emoji: "🌺",
@@ -66,16 +73,16 @@ final class TrackersService: TrackersServiseProtocol {
                        )]
         ),
         TrackerCategory(
-            categoreName: "Poisk Nax",
+            categoreName: "Poisk",
             trackers: [Tracker(
-                id: UInt(),
+                id:  UUID(),
                 name: "Find Tracker",
                 color: .selection14,
-                emoji: "🌺",
+                emoji: "🐶",
                 timetable: [WeekDay.thursday.rawValue]
             ),
                        Tracker(
-                        id: UInt(),
+                        id:  UUID(),
                         name: "Three Tracker",
                         color: .selection11,
                         emoji: "🌺",
@@ -87,7 +94,10 @@ final class TrackersService: TrackersServiseProtocol {
     
     //MARK: - Search Trackers by date
     
-    func changeDate(numberOfDay: Int) -> [TrackerCategory] {
+    func changeDate(for day: Date) -> [TrackerCategory] {
+      
+        let numberOfDay = Calendar.current.component(.weekday, from: day ) - 1
+        
         var newVisibleCategory = [TrackerCategory]()
         for category in categories {
             for (index, tracker) in category.trackers.enumerated(){
@@ -101,13 +111,7 @@ final class TrackersService: TrackersServiseProtocol {
                 }
             }
         }
-        
-//        NotificationCenter.default
-//            .post(
-//                name: TrackersService.didChangeNotification,
-//                object: self,
-//                userInfo: ["change": self.categories])
-        
+        visibleDay = day
         return newVisibleCategory
     }
     
@@ -135,52 +139,131 @@ final class TrackersService: TrackersServiseProtocol {
     //MARK: - Add Trackers
     
     func addTracker(categoryNewName: String, name: String, emoji: String, color: UIColor, timetable: [Int] ) {
-        
-        print("Cоздание категории")
-        var newArray: [Tracker] = []
-        
+        var newVisibleCategory = [TrackerCategory]()
         let tracker = Tracker(
-            id: UInt(),
-            name: "First Tracker",
-            color: .selection14,
-            emoji: "🌺",
-            timetable: [WeekDay.monday.rawValue]
+            id:  UUID(),
+            name: name,
+            color: color,
+            emoji: emoji,
+            timetable: timetable
         )
-        var indexCategory: Int
+        var newArray = [Tracker]()
         
-        for (index, category) in categories.enumerated(){
+        //проверка на существаование катекгории и наличие там трекеров
+        for (index, category) in categories.enumerated() {
             if category.categoreName == categoryNewName {
-                newArray = categories[index].trackers
-                indexCategory = index
+                newArray = category.trackers
+            } else {
+                //добавление старых категорий из массива categories
+                newVisibleCategory.append(categories[index])
             }
         }
+        
         newArray.append(tracker)
+        let newTrackerCategory = TrackerCategory(categoreName: categoryNewName, trackers: newArray)
         
+        newVisibleCategory.append(newTrackerCategory)
         
-        var newTrackerCategory = TrackerCategory(categoreName: categoryNewName, trackers: newArray)
-        // categories.remove(at: indexCategory)
-        categories.append(newTrackerCategory)
+        categories = newVisibleCategory
+        NotificationCenter.default
+            .post(
+                name: TrackersService.didChangeNotification,
+                object: self,
+                userInfo: ["change": self.categories])
+        
     }
     
-    //    func addTracker(_ tracker: Tracker, at category: TrackerCategory) {
-    //            var trackers = category.trackers
-    //
-    //            trackers.append(tracker)
-    //
-    //            let newCategory = TrackerCategory(name: category.name, trackers: trackers)
-    //            var categories = self.categories
-    //
-    //            if let index = categories.firstIndex(where: { $0.name == category.name } ) {
-    //                categories[index] = newCategory
-    //            } else {
-    //                categories.append(newCategory)
-    //            }
-    //            self.categories = categories
-    //        }
+    func addTrackerEvent(categoryNewName: String, name: String, emoji: String, color: UIColor) {
+        let timetable = Calendar.current.component(.weekday, from: currentDay as Date ) - 1
+        var newVisibleCategory = [TrackerCategory]()
+        let tracker = Tracker(
+            id:  UUID(),
+            name: name,
+            color: color,
+            emoji: emoji,
+            timetable: [timetable]
+        )
+        var newArray = [Tracker]()
+        
+        //проверка на существаование катекгории и наличие там трекеров
+        for (index, category) in categories.enumerated() {
+            if category.categoreName == categoryNewName {
+                newArray = category.trackers
+            } else {
+                //добавление старых категорий из массива categories
+                newVisibleCategory.append(categories[index])
+            }
+        }
+        
+        newArray.append(tracker)
+        let newTrackerCategory = TrackerCategory(categoreName: categoryNewName, trackers: newArray)
+        
+        newVisibleCategory.append(newTrackerCategory)
+        
+        categories = newVisibleCategory
+        NotificationCenter.default
+            .post(
+                name: TrackersService.didChangeNotification,
+                object: self,
+                userInfo: ["change": self.categories])
+        
+    }
     
-    //    func trackerCategory(name: String, tracker: Tracker)-> TrackerCategory {
-    //
-    //        return TrackerCategory(categoreName: <#String#>, trackers: <#[Tracker]#>)
-    //    }
-  
-}
+    func createTrackerModel(tracker: Tracker) -> TrackerCellModel {
+        
+        if visibleDay == nil {
+            visibleDay = currentDay as Date
+        }
+        
+        let trackerModell = TrackerCellModel(
+            id: tracker.id,
+            descriptionTracker: tracker.name,
+            color: tracker.color,
+            emoji: tracker.emoji,
+            timetable: tracker.timetable,
+            complete: getCompleteState(tracker: tracker, date: visibleDay!), // функция проверки на выполнение
+            record: getTrackerRecord(tracker: tracker), // функция проверки на рекорд
+            isEnable: isEnableCompleteButton() // проверка доступности состояния кнопки
+            )
+        return trackerModell
+    }
+    
+    func getTrackerRecord(tracker: Tracker)-> Int {
+        // Проверка рекорда принимвает Id
+        var record = 0
+        // искать по айди и дате
+        for completed in completedTrackers {
+            if completed.id == tracker.id {
+                record += 1
+            }
+        }
+        return record
+    }
+    
+    func isEnableCompleteButton() -> Bool {
+        return visibleDay?.daysBetweenDate(toDate: currentDay as Date) == 0 ? true : false
+    }
+    
+    func getCompleteState(tracker: Tracker, date: Date)-> Bool {
+       
+        for completed in completedTrackers {
+            if completed.id == tracker.id || completed.dateRecord == date {
+                return true
+            }
+        }
+        return false
+    }
+        
+    func deleteTrackerRecord(tracker: Tracker){
+        guard let recordDay = visibleDay else { return}
+        let record = TrackerRecord(id: tracker.id, dateRecord: recordDay)
+        completedTrackers.remove(record)
+        }
+    
+    func addTrackerrecord(tracker: Tracker){
+        guard let recordDay = visibleDay else { return}
+        let record = TrackerRecord(id: tracker.id, dateRecord: recordDay)
+        completedTrackers.insert(record)
+        }
+        
+    }

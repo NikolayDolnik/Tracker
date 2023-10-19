@@ -8,18 +8,22 @@
 import Foundation
 import UIKit
 
-protocol TrackersPresenterProtocol: UICollectionViewDelegate,UICollectionViewDataSource {
+public protocol TrackersPresenterProtocol: UICollectionViewDelegate,UICollectionViewDataSource {
     var visibleCategory: [TrackerCategory] {get set}
     func newVisibleCategory(get newCategory: [TrackerCategory])
+    var trackerService: TrackersServiseProtocol? {get set}
+    var view: TrackersViewControllerProtocol? {get set}
+    
 }
 
 final class TrackersPresenter: NSObject, TrackersPresenterProtocol {
     
+    weak var view: TrackersViewControllerProtocol?
     var visibleCategory: [TrackerCategory] = []
     var trackerService: TrackersServiseProtocol?
     private var TrackersServiceObserver: NSObjectProtocol?
     
-    func newVisibleCategory(get newCategory: [TrackerCategory] ){
+    func newVisibleCategory(get newCategory: [TrackerCategory]){
         visibleCategory = newCategory
     }
 
@@ -41,12 +45,18 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier.cell.rawValue, for: indexPath) as! TrackersCollectionViewCell
 
         let tracker = visibleCategory[indexPath.section].trackers[indexPath.row]
+        guard let model = trackerService?.createTrackerModel(tracker: tracker) else {return cell}
+        cell.delegate  = self.view
+        cell.dayCountLable.text = "\(model.record) дней"
+        cell.emojiLabel.text = model.emoji
+        cell.viewCard.backgroundColor = model.color
+        cell.descriptionLable.text = model.descriptionTracker
+        cell.completeState = model.complete
+        let state = model.complete ? State.complete : State.addRecord
+        cell.completeButton.setImage(UIImage(named: state.rawValue), for: .normal)
+        //cell.completeButton.isEnabled = model.isEnable
+        cell.completeButton.tintColor = model.color
 
-        cell.emojiLabel.text = tracker.emoji
-        cell.viewCard.backgroundColor = tracker.color
-        cell.descriptionLable.text = tracker.name
-        cell.completeButton.tintColor = tracker.color
-        
         return cell
     }
     
@@ -145,11 +155,26 @@ extension TrackersPresenter {
 
 //MARK: - TrackersCollectionViewCellDelegate
 
-extension TrackersViewController: TrackersCollectionViewCellDelegate {
-    @objc func didTapCompleteButton() {
-        print("tap now")
-    }
-    
-    
-}
+//extension TrackersPresenter: TrackersCollectionViewCellDelegate {
+//
+//    @objc func didTapCompleteButton(_ cell: TrackersCollectionViewCell) {
+//        //let indexPath =
+//
+//        cell.changeState(state: cell.completeState)
+//        let tracker = visibleCategory[indexPath.section].trackers[indexPath.row]
+//
+//        switch cell.completeState {
+//        case true:
+//            trackerService?.addTrackerrecord(tracker: tracker)
+//            print("быа галка")
+//        case false:
+//            print("был плюс")
+//            trackerService?.deleteTrackerRecord(tracker: tracker)
+//        }
+//
+//        // ПЕРЕГРУЗИТЬ ЯЧЕЙКУ
+//    }
+//
+//
+//}
 

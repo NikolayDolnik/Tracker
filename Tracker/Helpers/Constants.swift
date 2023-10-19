@@ -22,3 +22,8 @@ public enum WeekDay: Int {
     case saturday = 6
     case sunday = 7
 }
+
+public enum State: String {
+    case complete = "PropertyDone"
+    case addRecord = "ButtonTracker"
+}

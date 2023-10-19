@@ -7,11 +7,11 @@
 
 import UIKit
 
-final class TrackersViewController: UIViewController, UINavigationBarDelegate {
+final class TrackersViewController: UIViewController, UINavigationBarDelegate, TrackersViewControllerProtocol {
     
     var trackerService: TrackersServiseProtocol?
     var presenter: TrackersPresenterProtocol?
-    var currentDay = Date()
+    let currentDay = NSDate()
     var categories = [TrackerCategory]()
     var completeTrackers = [TrackerRecord]()
     private let datePicker = UIDatePicker()
@@ -34,16 +34,18 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate {
         navigationBar()
         configUI()
         configPresenter()
-        stubViewConfig()
+        changeDatePicker()
         
         TrackersServiceObserver = NotificationCenter.default.addObserver(
             forName: TrackersService.didChangeNotification,
             object: nil,
             queue: .main) { [weak self] _ in
-                guard self != nil else { return}
-                //self?.presenter?.visibleCategory = self?.trackerService?.categories ?? []
+                guard let self else { return}
+                self.changeDatePicker()
+                // self.presenter?.newVisibleCategory(get: self.trackerService?.categories ?? [])
+                self.collectionView.reloadData()
             }
-        
+    
     }
     
     func configPresenter(){
@@ -54,6 +56,8 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate {
         
         presenter = TrackersPresenter()
         presenter?.visibleCategory =  trackerService?.categories ?? []
+        presenter?.trackerService = trackerService
+        presenter?.view = self
         collectionView.dataSource = presenter
         collectionView.delegate = presenter
         
@@ -117,7 +121,7 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate {
 extension TrackersViewController {
     func stubViewConfig(){
         
-        guard presenter!.visibleCategory .isEmpty else { return }
+        guard presenter!.visibleCategory.isEmpty else { return stubView.isHidden = true }
         let image = UIImageView(image: UIImage(named: "stub"))
         image.translatesAutoresizingMaskIntoConstraints = false
         
@@ -142,8 +146,8 @@ extension TrackersViewController {
             label.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 8)
 
         ])
+        stubView.isHidden = false
     }
-    
 }
 
 
@@ -152,13 +156,11 @@ extension TrackersViewController {
 
 extension TrackersViewController {
     @objc func changeDatePicker() {
-        let timetable = Calendar.current.component(.weekday, from: datePicker.date )
         
         guard let trackerService = trackerService else {return}
-        presenter?.newVisibleCategory(get: trackerService.changeDate(numberOfDay: timetable))
+        presenter?.newVisibleCategory(get: trackerService.changeDate(for: datePicker.date))
         collectionView.reloadData()
-        print("change \(timetable)")
-        
+        stubViewConfig()
     }
 }
 
@@ -176,9 +178,32 @@ extension TrackersViewController: UISearchBarDelegate {
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        guard let allCategory = trackerService?.categories else {return}
-        presenter?.newVisibleCategory(get: allCategory)
+        changeDatePicker()
+//        guard let allCategory = trackerService?.categories else {return}
+//        presenter?.newVisibleCategory(get: allCategory)
         collectionView.reloadData()
     }
     
+}
+
+extension TrackersViewController: TrackersCollectionViewCellDelegate {
+    
+        @objc func didTapCompleteButton(_ cell: TrackersCollectionViewCell) {
+            guard let indexPath = collectionView.indexPath(for: cell),
+                  let tracker = presenter?.visibleCategory[indexPath.section].trackers[indexPath.row],
+                  let trackerService else {return}
+            
+            cell.changeState(state: cell.completeState)
+            switch cell.completeState {
+            case true:
+                trackerService.addTrackerrecord(tracker: tracker)
+                
+                cell.dayCountLable.text = "\(trackerService.getTrackerRecord(tracker: tracker) ) дней"
+            case false:
+                trackerService.deleteTrackerRecord(tracker: tracker)
+                cell.dayCountLable.text = "\(trackerService.getTrackerRecord(tracker: tracker) ) дней"
+            }
+
+            // ПЕРЕГРУЗИТЬ ЯЧЕЙКУ
+        }
 }

@@ -58,6 +58,7 @@ final class CreateViewController: UIViewController {
         }
         
     @objc func didTapEventsButton(){
-            
+        let vc = EventViewController()
+        present(vc, animated: true)
         }
 }

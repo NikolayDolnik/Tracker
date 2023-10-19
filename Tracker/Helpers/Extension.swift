@@ -27,3 +27,10 @@ extension Array where Element: Equatable {
         return self.compactMap{ predicate($0) ? $0 : nil }
     }
 }
+
+extension Date {
+    func daysBetweenDate(toDate: Date) -> Int {
+        let components = Calendar.current.dateComponents([.day], from: self, to: toDate)
+        return components.day ?? 0
+    }
+}
