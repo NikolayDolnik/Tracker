@@ -14,13 +14,13 @@ final class HabitsViewController: UIViewController {
     var presenter: CollectionViewPresenterProtocol?
     private var params = ["Категория","Расписание"]
     
-   
+    
     private var categoreName = "Cоздано контроллером"
     private var name: String?
     var color: UIColor?
     var emoji: String?
     private var timetable: [Int]?
-
+    
     
     lazy var scrollView: UIScrollView = {
         let scroll = UIScrollView()
@@ -46,16 +46,17 @@ final class HabitsViewController: UIViewController {
         return label
     }()
     
-    var nameLable: UITextField = {
-        let lable = UITextField()
-        lable.placeholder = "Введите название трекера"
-        lable.clearButtonMode = .whileEditing
-        lable.textAlignment = .left
-        lable.layer.cornerRadius = 16 
-        lable.backgroundColor = .backgroundDayTracker
-        lable.borderStyle = .roundedRect
-        lable.translatesAutoresizingMaskIntoConstraints = false
-        return lable
+    var nameLabel: UITextField = {
+        let label = UITextField()
+        label.placeholder = "Введите название трекера"
+        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.clearButtonMode = .whileEditing
+        label.textAlignment = .left
+        label.layer.cornerRadius = 16
+        label.backgroundColor = .backgroundDayTracker
+        label.borderStyle = .roundedRect
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     var tableView: UITableView = {
@@ -127,14 +128,14 @@ final class HabitsViewController: UIViewController {
         collectionView.dataSource = presenter
         collectionView.allowsMultipleSelection = false
         
-        nameLable.delegate = self
+        nameLabel.delegate = self
         
         view.backgroundColor = .whiteDayTracker
         view.addSubview(scrollView)
         
         scrollView.addSubview(contentView)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(nameLable)
+        contentView.addSubview(nameLabel)
         contentView.addSubview(tableView)
         contentView.addSubview(collectionView)
         contentView.addSubview(stackViewButtons)
@@ -145,16 +146,16 @@ final class HabitsViewController: UIViewController {
         NSLayoutConstraint.activate([
             
             titleLabel.heightAnchor.constraint(equalToConstant: 22),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 27),
             titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
-            nameLable.heightAnchor.constraint(equalToConstant: 75),
-            nameLable.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
-            nameLable.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            nameLable.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            nameLable.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            nameLabel.heightAnchor.constraint(equalToConstant: 75),
+            nameLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             
-            tableView.topAnchor.constraint(equalTo: nameLable.bottomAnchor, constant: 24),
+            tableView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 24),
             tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             tableView.heightAnchor.constraint(equalToConstant: 150),
@@ -265,12 +266,19 @@ extension HabitsViewController {
         emoji = ""
         color = UIColor(named: "selection6") ?? .selection1
         trackerService?.addTracker(categoryNewName: categoreName, name: name, emoji: emoji!, color: color!, timetable: timetable)
-        self.dismiss(animated: true)
+        
+        guard
+            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+            let window = windowScene.windows.first else {
+            fatalError("Invalid Configuration")
+        }
+        let tabBarController = TabBarController()
+        window.rootViewController = tabBarController
     }
 }
 
 extension HabitsViewController: TimeTableDelegateProtocol {
-   
+    
     func addTimetable(timetable: [Int]) {
         self.timetable = timetable
         dataCheking()

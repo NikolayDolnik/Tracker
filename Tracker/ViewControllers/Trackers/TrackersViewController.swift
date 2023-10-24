@@ -17,8 +17,6 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
     private let datePicker = UIDatePicker()
     private let searchController = UISearchController()
     private var TrackersServiceObserver: NSObjectProtocol?
-    
-
     var collectionView: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collection.register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: identifier.cell.rawValue)
@@ -28,7 +26,10 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
     }()
     var search = UISearchTextField()
     var stubView = UIView()
-
+    
+    
+    //MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationBar()
@@ -42,11 +43,13 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
             queue: .main) { [weak self] _ in
                 guard let self else { return}
                 self.changeDatePicker()
-                // self.presenter?.newVisibleCategory(get: self.trackerService?.categories ?? [])
                 self.collectionView.reloadData()
             }
-    
+        
     }
+    
+    
+    //MARK: - Congfiguration
     
     func configPresenter(){
         searchController.searchBar.delegate = self
@@ -65,7 +68,7 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
     
     
     func configUI(){
-       
+        
         view.backgroundColor = .whiteDayTracker
         view.addSubview(collectionView)
         view.addSubview(stubView)
@@ -77,6 +80,9 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 24)
         ])
     }
+    
+    
+    //MARK: - Navigation Bar
     
     func navigationBar(){
         
@@ -90,6 +96,7 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
             datePicker.backgroundColor = .lightGrayTracker
             datePicker.preferredDatePickerStyle = .compact
             datePicker.datePickerMode = .date
+            datePicker.locale = Locale(identifier: "ru-RU")
             datePicker.date = Date()
             datePicker.addTarget(self, action: #selector(changeDatePicker), for: .valueChanged)
             
@@ -110,9 +117,9 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
         
     }
     
-     @objc func addTrackers(){
+    @objc func addTrackers(){
         let createVC = CreateViewController()
-         self.present(createVC, animated: true)
+        self.present(createVC, animated: true)
     }
 }
 
@@ -144,7 +151,7 @@ extension TrackersViewController {
             image.centerYAnchor.constraint(equalTo: stubView.centerYAnchor),
             label.centerXAnchor.constraint(equalTo: stubView.centerXAnchor),
             label.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 8)
-
+            
         ])
         stubView.isHidden = false
     }
@@ -171,7 +178,7 @@ extension TrackersViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard searchText != "", searchText != " ", let trackerService = trackerService else { return }
-    
+        
         let text = searchText.lowercased()
         presenter?.newVisibleCategory(get: trackerService.findTrackers(text: text))
         collectionView.reloadData()
@@ -179,31 +186,30 @@ extension TrackersViewController: UISearchBarDelegate {
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         changeDatePicker()
-//        guard let allCategory = trackerService?.categories else {return}
-//        presenter?.newVisibleCategory(get: allCategory)
         collectionView.reloadData()
     }
     
 }
 
+
+//MARK: - TrackersCollectionViewCellDelegate
+
 extension TrackersViewController: TrackersCollectionViewCellDelegate {
     
-        @objc func didTapCompleteButton(_ cell: TrackersCollectionViewCell) {
-            guard let indexPath = collectionView.indexPath(for: cell),
-                  let tracker = presenter?.visibleCategory[indexPath.section].trackers[indexPath.row],
-                  let trackerService else {return}
+    @objc func didTapCompleteButton(_ cell: TrackersCollectionViewCell) {
+        guard let indexPath = collectionView.indexPath(for: cell),
+              let tracker = presenter?.visibleCategory[indexPath.section].trackers[indexPath.row],
+              let trackerService else {return}
+        
+        cell.changeState(state: cell.completeState)
+        switch cell.completeState {
+        case true:
+            trackerService.addTrackerrecord(tracker: tracker)
             
-            cell.changeState(state: cell.completeState)
-            switch cell.completeState {
-            case true:
-                trackerService.addTrackerrecord(tracker: tracker)
-                
-                cell.dayCountLable.text = "\(trackerService.getTrackerRecord(tracker: tracker) ) дней"
-            case false:
-                trackerService.deleteTrackerRecord(tracker: tracker)
-                cell.dayCountLable.text = "\(trackerService.getTrackerRecord(tracker: tracker) ) дней"
-            }
-
-            // ПЕРЕГРУЗИТЬ ЯЧЕЙКУ
+            cell.dayCountLable.text = "\(trackerService.getTrackerRecord(tracker: tracker) ) дней"
+        case false:
+            trackerService.deleteTrackerRecord(tracker: tracker)
+            cell.dayCountLable.text = "\(trackerService.getTrackerRecord(tracker: tracker) ) дней"
         }
+    }
 }

@@ -26,7 +26,7 @@ final class TrackersPresenter: NSObject, TrackersPresenterProtocol {
     func newVisibleCategory(get newCategory: [TrackerCategory]){
         visibleCategory = newCategory
     }
-
+    
 }
 
 //MARK: - UITCollectionView DataSource & Delegate
@@ -39,11 +39,11 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return visibleCategory[section].trackers.count
-        }
+    }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier.cell.rawValue, for: indexPath) as! TrackersCollectionViewCell
-
+        
         let tracker = visibleCategory[indexPath.section].trackers[indexPath.row]
         guard let model = trackerService?.createTrackerModel(tracker: tracker) else {return cell}
         cell.delegate  = self.view
@@ -56,7 +56,7 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
         cell.completeButton.setImage(UIImage(named: state.rawValue), for: .normal)
         cell.completeButton.isEnabled = model.isEnable
         cell.completeButton.tintColor = model.color
-
+        
         return cell
     }
     
@@ -69,33 +69,33 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-       }
+    }
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
-                guard indexPaths.count > 0 else {
-                    return nil
-                }
-    
-                return UIContextMenuConfiguration(actionProvider: { actions in
-                    return UIMenu(children: [
-                        UIAction(title: "Закрепить") { [weak self] _ in
-                            self?.pin()
-                        },
-                        UIAction(title: "Редактировать") { [weak self] _ in
-                            self?.edit()
-                        },
-                        UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
-                            self?.delete(indexPaths[0])
-                           
-                            collectionView.performBatchUpdates{
-                                collectionView.deleteItems(at: indexPaths)
-                            }
-
-                                
-                        },
-                    ])
-                })
-            }
+        guard indexPaths.count > 0 else {
+            return nil
+        }
+        
+        return UIContextMenuConfiguration(actionProvider: { actions in
+            return UIMenu(children: [
+                UIAction(title: "Закрепить") { [weak self] _ in
+                    self?.pin()
+                },
+                UIAction(title: "Редактировать") { [weak self] _ in
+                    self?.edit()
+                },
+                UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
+                    self?.delete(indexPaths[0])
+                    
+                    collectionView.performBatchUpdates{
+                        collectionView.deleteItems(at: indexPaths)
+                    }
+                    
+                    
+                },
+            ])
+        })
+    }
     
 }
 
@@ -103,7 +103,7 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
 //MARK: - UITCollectionView FlowLayout
 
 extension TrackersPresenter: UICollectionViewDelegateFlowLayout {
-   
+    
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -130,7 +130,7 @@ extension TrackersPresenter: UICollectionViewDelegateFlowLayout {
                                                   withHorizontalFittingPriority: .required,
                                                   verticalFittingPriority: .fittingSizeLevel)
     }
-   
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
     }
@@ -149,32 +149,7 @@ extension TrackersPresenter {
     }
     
     func delete(_ index: IndexPath){
-       // visibleCategory.remove(at:0)
+       
     }
 }
-
-//MARK: - TrackersCollectionViewCellDelegate
-
-//extension TrackersPresenter: TrackersCollectionViewCellDelegate {
-//
-//    @objc func didTapCompleteButton(_ cell: TrackersCollectionViewCell) {
-//        //let indexPath =
-//
-//        cell.changeState(state: cell.completeState)
-//        let tracker = visibleCategory[indexPath.section].trackers[indexPath.row]
-//
-//        switch cell.completeState {
-//        case true:
-//            trackerService?.addTrackerrecord(tracker: tracker)
-//            print("быа галка")
-//        case false:
-//            print("был плюс")
-//            trackerService?.deleteTrackerRecord(tracker: tracker)
-//        }
-//
-//        // ПЕРЕГРУЗИТЬ ЯЧЕЙКУ
-//    }
-//
-//
-//}
 

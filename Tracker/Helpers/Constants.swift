@@ -21,6 +21,28 @@ public enum WeekDay: Int {
     case friday = 5
     case saturday = 6
     case sunday = 7
+    
+   static var count: Int {
+        return WeekDay.sunday.rawValue 
+    }
+    var description: String {
+        switch self {
+        case .monday:
+            return  "Понедельник" // "monday"
+        case .tuesday:
+            return "Вторник" // "tuesday"
+        case .wednesday:
+            return "Среда" // "wednesday"
+        case .thursday:
+            return "Четверг" // "thursday"
+        case .friday:
+            return "Пятница" // "friday"
+        case .saturday:
+            return "Суббота" // "saturday"
+        case .sunday:
+            return "Воскресенье" // "sunday"
+        }
+    }
 }
 
 public enum State: String {

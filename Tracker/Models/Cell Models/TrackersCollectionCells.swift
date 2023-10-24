@@ -26,9 +26,20 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    var emojiView: UIView = {
+       let view = UIView()
+        view.backgroundColor  = .whiteDayTracker.withAlphaComponent(0.3)
+        view.layer.cornerRadius = 12
+        view.clipsToBounds = false
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     var emojiLabel: UILabel = {
         let label = UILabel()
         label.text = "😻"
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -72,8 +83,6 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
     
     lazy var completeButton: UIButton = {
         let button = UIButton(type: .system)
-//        let state = buttonState ? "ButtonTracker" :  "PropertyDone"
-//        button.setImage(UIImage(named: state), for: .normal)
         button.tintColor = .redTracker
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -93,7 +102,8 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
         pinImage.isHidden = true
         
         contentView.addSubview(viewCard)
-        viewCard.addSubview(emojiLabel)
+        viewCard.addSubview(emojiView)
+        emojiView.addSubview(emojiLabel)
         viewCard.addSubview(pinImage)
         viewCard.addSubview(descriptionLable)
         contentView.addSubview(stackViewDays)
@@ -105,8 +115,13 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
             viewCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             viewCard.heightAnchor.constraint(equalToConstant: 90),
             
-            emojiLabel.topAnchor.constraint(equalTo: viewCard.topAnchor,constant: 12),
-            emojiLabel.leadingAnchor.constraint(equalTo: viewCard.leadingAnchor, constant: 12),
+            emojiView.topAnchor.constraint(equalTo: viewCard.topAnchor,constant: 12),
+            emojiView.leadingAnchor.constraint(equalTo: viewCard.leadingAnchor, constant: 12),
+            emojiView.heightAnchor.constraint(equalToConstant: 24),
+            emojiView.widthAnchor.constraint(equalToConstant: 24),
+            
+            emojiLabel.centerXAnchor.constraint(equalTo: emojiView.centerXAnchor),
+            emojiLabel.centerYAnchor.constraint(equalTo: emojiView.centerYAnchor),
             emojiLabel.heightAnchor.constraint(equalToConstant: 24),
             emojiLabel.widthAnchor.constraint(equalToConstant: 24),
             

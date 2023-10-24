@@ -95,7 +95,7 @@ final class TrackersService: TrackersServiseProtocol {
     //MARK: - Search Trackers by date
     
     func changeDate(for day: Date) -> [TrackerCategory] {
-      
+        
         let numberOfDay = Calendar.current.component(.weekday, from: day ) - 1
         
         var newVisibleCategory = [TrackerCategory]()
@@ -149,12 +149,10 @@ final class TrackersService: TrackersServiseProtocol {
         )
         var newArray = [Tracker]()
         
-        //проверка на существаование катекгории и наличие там трекеров
         for (index, category) in categories.enumerated() {
             if category.categoreName == categoryNewName {
                 newArray = category.trackers
             } else {
-                //добавление старых категорий из массива categories
                 newVisibleCategory.append(categories[index])
             }
         }
@@ -185,12 +183,10 @@ final class TrackersService: TrackersServiseProtocol {
         )
         var newArray = [Tracker]()
         
-        //проверка на существаование катекгории и наличие там трекеров
         for (index, category) in categories.enumerated() {
             if category.categoreName == categoryNewName {
                 newArray = category.trackers
             } else {
-                //добавление старых категорий из массива categories
                 newVisibleCategory.append(categories[index])
             }
         }
@@ -224,14 +220,14 @@ final class TrackersService: TrackersServiseProtocol {
             complete: getCompleteState(tracker: tracker, date: visibleDay!), // функция проверки на выполнение
             record: getTrackerRecord(tracker: tracker), // функция проверки на рекорд
             isEnable: isEnableCompleteButton() // проверка доступности состояния кнопки
-            )
+        )
         return trackerModell
     }
     
     func getTrackerRecord(tracker: Tracker)-> Int {
-        // Проверка рекорда принимвает Id
+        
         var record = 0
-        // искать по айди и дате
+        
         for completed in completedTrackers {
             if completed.id == tracker.id {
                 record += 1
@@ -241,29 +237,31 @@ final class TrackersService: TrackersServiseProtocol {
     }
     
     func isEnableCompleteButton() -> Bool {
-        return visibleDay?.daysBetweenDate(toDate: currentDay as Date) == 0 ? true : false
+        guard let visibleDay else { return true }
+        return visibleDay.daysBetweenDate(toDate: currentDay as Date) >= 0 ? true : false
     }
     
     func getCompleteState(tracker: Tracker, date: Date)-> Bool {
-       
+        
         for completed in completedTrackers {
-            if completed.id == tracker.id || completed.dateRecord == date {
+            if completed.id == tracker.id ||
+                completed.dateRecord.daysBetweenDate(toDate: date) == 0 {  // completed.dateRecord == date {
                 return true
             }
         }
         return false
     }
-        
+    
     func deleteTrackerRecord(tracker: Tracker){
         guard let recordDay = visibleDay else { return}
         let record = TrackerRecord(id: tracker.id, dateRecord: recordDay)
         completedTrackers.remove(record)
-        }
+    }
     
     func addTrackerrecord(tracker: Tracker){
         guard let recordDay = visibleDay else { return}
         let record = TrackerRecord(id: tracker.id, dateRecord: recordDay)
         completedTrackers.insert(record)
-        }
-        
     }
+    
+}
