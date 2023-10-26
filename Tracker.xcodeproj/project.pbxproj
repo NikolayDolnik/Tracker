@@ -26,6 +26,7 @@
 		99C5FD3E2AD8352400F33BFC /* TrackersService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5FD3D2AD8352400F33BFC /* TrackersService.swift */; };
 		99C5FD402ADF18EA00F33BFC /* TrackerCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5FD3F2ADF18EA00F33BFC /* TrackerCellModel.swift */; };
 		99C5FD432AE1659500F33BFC /* TrackersViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5FD422AE1659500F33BFC /* TrackersViewControllerProtocol.swift */; };
+		99C5FD6C2AE7DF3900F33BFC /* TimetableDelegateProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5FD6B2AE7DF3900F33BFC /* TimetableDelegateProtocol.swift */; };
 		99DADA552ACC0B53004467A3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DADA542ACC0B53004467A3 /* AppDelegate.swift */; };
 		99DADA572ACC0B53004467A3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DADA562ACC0B53004467A3 /* SceneDelegate.swift */; };
 		99DADA592ACC0B53004467A3 /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DADA582ACC0B53004467A3 /* TrackersViewController.swift */; };
@@ -76,6 +77,7 @@
 		99C5FD3D2AD8352400F33BFC /* TrackersService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersService.swift; sourceTree = "<group>"; };
 		99C5FD3F2ADF18EA00F33BFC /* TrackerCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCellModel.swift; sourceTree = "<group>"; };
 		99C5FD422AE1659500F33BFC /* TrackersViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewControllerProtocol.swift; sourceTree = "<group>"; };
+		99C5FD6B2AE7DF3900F33BFC /* TimetableDelegateProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableDelegateProtocol.swift; sourceTree = "<group>"; };
 		99DADA512ACC0B53004467A3 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		99DADA542ACC0B53004467A3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		99DADA562ACC0B53004467A3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -122,8 +124,6 @@
 			isa = PBXGroup;
 			children = (
 				99C5FD102ACC5F5500F33BFC /* CreateViewController.swift */,
-				99C5FD152ACEB03300F33BFC /* EventsViewController.swift */,
-				99C5FD132ACEB00800F33BFC /* HabitsViewController.swift */,
 			);
 			path = "Create Trakers";
 			sourceTree = "<group>";
@@ -132,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				99C5FD1F2ACEEC9100F33BFC /* TimetableViewController.swift */,
+				99C5FD6B2AE7DF3900F33BFC /* TimetableDelegateProtocol.swift */,
 			);
 			path = TimeTable;
 			sourceTree = "<group>";
@@ -149,10 +150,12 @@
 		99C5FD2F2AD7FC9400F33BFC /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				99C5FD682AE7CF5D00F33BFC /* Statistics */,
+				99C5FD672AE7CF0A00F33BFC /* Trackers */,
 				99C5FD212ACEEFFE00F33BFC /* TimeTable */,
 				99C5FD122ACEAFDE00F33BFC /* Create Trakers */,
-				99C5FD0C2ACC282E00F33BFC /* StatisticsViewController.swift */,
-				99DADA582ACC0B53004467A3 /* TrackersViewController.swift */,
+				99C5FD6A2AE7CFAC00F33BFC /* Events */,
+				99C5FD692AE7CF9B00F33BFC /* Habits */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -161,7 +164,6 @@
 			isa = PBXGroup;
 			children = (
 				99C5FD262AD007DE00F33BFC /* EmojiCollectionViewPresenter.swift */,
-				99C5FD312AD7FEA500F33BFC /* TrackersPresenter.swift */,
 			);
 			path = Presenters;
 			sourceTree = "<group>";
@@ -188,9 +190,42 @@
 		99C5FD412AE1657A00F33BFC /* Procotols */ = {
 			isa = PBXGroup;
 			children = (
-				99C5FD422AE1659500F33BFC /* TrackersViewControllerProtocol.swift */,
 			);
 			path = Procotols;
+			sourceTree = "<group>";
+		};
+		99C5FD672AE7CF0A00F33BFC /* Trackers */ = {
+			isa = PBXGroup;
+			children = (
+				99DADA582ACC0B53004467A3 /* TrackersViewController.swift */,
+				99C5FD422AE1659500F33BFC /* TrackersViewControllerProtocol.swift */,
+				99C5FD312AD7FEA500F33BFC /* TrackersPresenter.swift */,
+			);
+			path = Trackers;
+			sourceTree = "<group>";
+		};
+		99C5FD682AE7CF5D00F33BFC /* Statistics */ = {
+			isa = PBXGroup;
+			children = (
+				99C5FD0C2ACC282E00F33BFC /* StatisticsViewController.swift */,
+			);
+			path = Statistics;
+			sourceTree = "<group>";
+		};
+		99C5FD692AE7CF9B00F33BFC /* Habits */ = {
+			isa = PBXGroup;
+			children = (
+				99C5FD132ACEB00800F33BFC /* HabitsViewController.swift */,
+			);
+			path = Habits;
+			sourceTree = "<group>";
+		};
+		99C5FD6A2AE7CFAC00F33BFC /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				99C5FD152ACEB03300F33BFC /* EventsViewController.swift */,
+			);
+			path = Events;
 			sourceTree = "<group>";
 		};
 		99DADA482ACC0B53004467A3 = {
@@ -415,6 +450,7 @@
 				99C5FD2E2AD55FBB00F33BFC /* test.swift in Sources */,
 				99DADA552ACC0B53004467A3 /* AppDelegate.swift in Sources */,
 				99DADA572ACC0B53004467A3 /* SceneDelegate.swift in Sources */,
+				99C5FD6C2AE7DF3900F33BFC /* TimetableDelegateProtocol.swift in Sources */,
 				99C5FD272AD007DE00F33BFC /* EmojiCollectionViewPresenter.swift in Sources */,
 				99C5FD0D2ACC282E00F33BFC /* StatisticsViewController.swift in Sources */,
 			);
