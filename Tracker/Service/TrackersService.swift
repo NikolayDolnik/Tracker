@@ -244,7 +244,7 @@ final class TrackersService: TrackersServiseProtocol {
     func getCompleteState(tracker: Tracker, date: Date)-> Bool {
         
         for completed in completedTrackers {
-            if completed.id == tracker.id ||
+            if completed.id == tracker.id &&
                 completed.dateRecord.daysBetweenDate(toDate: date) == 0 {  // completed.dateRecord == date {
                 return true
             }
@@ -254,8 +254,18 @@ final class TrackersService: TrackersServiseProtocol {
     
     func deleteTrackerRecord(tracker: Tracker){
         guard let recordDay = visibleDay else { return}
-        let record = TrackerRecord(id: tracker.id, dateRecord: recordDay)
-        completedTrackers.remove(record)
+        
+        for completed in completedTrackers {
+            if completed.id == tracker.id &&
+                completed.dateRecord.daysBetweenDate(toDate: recordDay) == 0 {
+                let record = TrackerRecord(id: tracker.id, dateRecord: completed.dateRecord)
+                completedTrackers.remove(record)
+            }
+        }
+        
+//        let record = TrackerRecord(id: tracker.id, dateRecord: recordDay)
+//        completedTrackers.remove(record)
+        print(completedTrackers)
     }
     
     func addTrackerrecord(tracker: Tracker){
