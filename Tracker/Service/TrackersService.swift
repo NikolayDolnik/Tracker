@@ -245,7 +245,7 @@ final class TrackersService: TrackersServiseProtocol {
         
         for completed in completedTrackers {
             if completed.id == tracker.id &&
-                completed.dateRecord.daysBetweenDate(toDate: date) == 0 {  // completed.dateRecord == date {
+                completed.dateRecord.daysBetweenDate(toDate: date) == 0 { 
                 return true
             }
         }
@@ -262,10 +262,6 @@ final class TrackersService: TrackersServiseProtocol {
                 completedTrackers.remove(record)
             }
         }
-        
-//        let record = TrackerRecord(id: tracker.id, dateRecord: recordDay)
-//        completedTrackers.remove(record)
-        print(completedTrackers)
     }
     
     func addTrackerrecord(tracker: Tracker){
