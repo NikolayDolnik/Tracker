@@ -19,7 +19,7 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
     //private var buttonState = true
     
     var viewCard: UIView = {
-       let view = UIStackView()
+        let view = UIStackView()
         view.backgroundColor  = .redTracker
         view.layer.cornerRadius = 16
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -27,7 +27,7 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
     }()
     
     var emojiView: UIView = {
-       let view = UIView()
+        let view = UIView()
         view.backgroundColor  = .whiteDayTracker.withAlphaComponent(0.3)
         view.layer.cornerRadius = 12
         view.clipsToBounds = false
@@ -45,11 +45,11 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
     }()
     
     let pinImage : UIImageView = {
-       var view = UIImageView()
-       guard let img = UIImage(named: "pin") else { return view }
+        var view = UIImageView()
+        guard let img = UIImage(named: "pin") else { return view }
         view.image = img
         view.translatesAutoresizingMaskIntoConstraints = false
-       return view
+        return view
     }()
     
     var descriptionLable: UILabel = {
@@ -64,7 +64,7 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
     
     
     let stackViewDays: UIStackView = {
-       let sv = UIStackView()
+        let sv = UIStackView()
         sv.axis = .horizontal
         sv.alignment = .center
         sv.distribution = .equalSpacing
@@ -83,14 +83,15 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
     
     lazy var completeButton: UIButton = {
         let button = UIButton(type: .system)
-        button.tintColor = .redTracker
+        // button.tintColor = .redTracker
+        button.layer.cornerRadius = 17
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-       config()
+        config()
     }
     
     required init?(coder: NSCoder) {
@@ -108,7 +109,7 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
         viewCard.addSubview(descriptionLable)
         contentView.addSubview(stackViewDays)
         
-  
+        
         NSLayoutConstraint.activate([
             viewCard.topAnchor.constraint(equalTo: contentView.topAnchor),
             viewCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -134,7 +135,7 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
             descriptionLable.leadingAnchor.constraint(equalTo: viewCard.leadingAnchor, constant: 12),
             descriptionLable.trailingAnchor.constraint(equalTo: viewCard.trailingAnchor, constant: -12),
             descriptionLable.bottomAnchor.constraint(equalTo: viewCard.bottomAnchor, constant: -12)
-         
+            
         ])
         
         stackViewDays.addArrangedSubview(dayCountLable)
@@ -144,7 +145,7 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
             stackViewDays.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             stackViewDays.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,constant: 12),
             stackViewDays.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12)
-
+            
         ])
         
     }
@@ -152,7 +153,8 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
     func changeState(state: Bool){
         completeState = !state
         let state = completeState ? State.complete : State.addRecord
-        completeButton.setImage(UIImage(named: state.rawValue), for: .normal)
+        let img = UIImage(named: state.rawValue)
+        completeButton.setImage(img, for: .normal)
     }
     
     @objc func didTapCompleteButton(){

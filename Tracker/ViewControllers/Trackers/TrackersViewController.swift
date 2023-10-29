@@ -108,6 +108,7 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
             
             searchController.hidesNavigationBarDuringPresentation = false
             searchController.searchBar.placeholder = "Поиск"
+            searchController.searchBar.setValue("Отменить", forKey: "cancelButtonText")
             searchController.searchBar.accessibilityLanguage = "ru-RU"
             
             navigationItem.searchController = searchController

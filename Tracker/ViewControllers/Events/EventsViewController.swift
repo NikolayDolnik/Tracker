@@ -23,14 +23,14 @@ final class EventViewController: UIViewController, EmojiPresenterDelegateProtoco
         let scroll = UIScrollView()
         scroll.frame = view.bounds
         scroll.alwaysBounceHorizontal = false
-        scroll.contentSize = CGSize(width: view.frame.width, height: 940)
+        scroll.contentSize = CGSize(width: view.frame.width, height: 920)
         return scroll
     }()
     
     lazy var contentView: UIView = {
         let view = UIView()
         view.backgroundColor = .whiteDayTracker
-        view.frame.size =  CGSize(width: self.view.frame.width, height: 940)
+        view.frame.size =  CGSize(width: self.view.frame.width, height: 920)
         return view
     }()
     
@@ -46,11 +46,13 @@ final class EventViewController: UIViewController, EmojiPresenterDelegateProtoco
     var nameLable: UITextField = {
         let lable = UITextField()
         lable.placeholder = "Введите название трекера"
+        lable.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         lable.clearButtonMode = .whileEditing
         lable.textAlignment = .left
-        lable.layer.cornerRadius = 16 
         lable.backgroundColor = .backgroundDayTracker
-        lable.borderStyle = .roundedRect
+        //lable.borderStyle = .roundedRect
+        lable.layer.cornerRadius = 16
+        lable.layer.masksToBounds = true
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
@@ -59,6 +61,8 @@ final class EventViewController: UIViewController, EmojiPresenterDelegateProtoco
         let t = UITableView()
         t.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         t.layer.cornerRadius = 16
+        t.layer.masksToBounds = true
+        t.separatorStyle = .none
         t.clipsToBounds = true
         t.translatesAutoresizingMaskIntoConstraints = false
         return t
@@ -118,13 +122,12 @@ final class EventViewController: UIViewController, EmojiPresenterDelegateProtoco
         tableView.delegate = self
         tableView.dataSource = self
         
+        
         presenter = EmojiPresenter()
         presenter?.delegate = self
         collectionView.delegate = presenter
         collectionView.dataSource = presenter
         collectionView.allowsMultipleSelection = false
-        
-        nameLable.delegate = self
         
         view.backgroundColor = .whiteDayTracker
         view.addSubview(scrollView)
@@ -132,6 +135,10 @@ final class EventViewController: UIViewController, EmojiPresenterDelegateProtoco
         scrollView.addSubview(contentView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(nameLable)
+        nameLable.delegate = self
+        nameLable.leftView = UIView.init(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
+        nameLable.leftViewMode = .always
+        
         contentView.addSubview(tableView)
         contentView.addSubview(collectionView)
         contentView.addSubview(stackViewButtons)
@@ -142,11 +149,11 @@ final class EventViewController: UIViewController, EmojiPresenterDelegateProtoco
         NSLayoutConstraint.activate([
             
             titleLabel.heightAnchor.constraint(equalToConstant: 22),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 27),
             titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             nameLable.heightAnchor.constraint(equalToConstant: 75),
-            nameLable.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
+            nameLable.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
             nameLable.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             nameLable.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             nameLable.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
@@ -154,12 +161,12 @@ final class EventViewController: UIViewController, EmojiPresenterDelegateProtoco
             tableView.topAnchor.constraint(equalTo: nameLable.bottomAnchor, constant: 24),
             tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            tableView.heightAnchor.constraint(equalToConstant: 150),
+            tableView.heightAnchor.constraint(equalToConstant: 75),
             
             collectionView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 32),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            collectionView.heightAnchor.constraint(equalToConstant: 440),
+            collectionView.heightAnchor.constraint(equalToConstant: 460),
             
             stackViewButtons.heightAnchor.constraint(equalToConstant: 60),
             stackViewButtons.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 16),
@@ -215,6 +222,7 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
         cell.textLabel?.text = params[indexPath.row]
         cell.backgroundColor = .backgroundDayTracker
         cell.accessoryType = .disclosureIndicator
+
         return cell
     }
     
@@ -257,7 +265,14 @@ extension EventViewController {
         emoji = "🥶"
         color = UIColor(named: "selection6") ?? .selection1
         trackerService?.addTrackerEvent(categoryNewName: categoreName, name: name, emoji: emoji!, color: color!)
-        self.dismiss(animated: true)
+        
+        guard
+            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+            let window = windowScene.windows.first else {
+            fatalError("Invalid Configuration")
+        }
+        let tabBarController = TabBarController()
+        window.rootViewController = tabBarController
     }
 }
 

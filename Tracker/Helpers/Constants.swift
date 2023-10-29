@@ -20,7 +20,7 @@ public enum WeekDay: Int {
     case thursday = 4
     case friday = 5
     case saturday = 6
-    case sunday = 7
+    case sunday = 0
     
    static var count: Int {
         return WeekDay.sunday.rawValue 
@@ -46,6 +46,6 @@ public enum WeekDay: Int {
 }
 
 public enum State: String {
-    case complete = "PropertyDone"
+    case complete = "Property Done2"
     case addRecord = "ButtonTracker"
 }

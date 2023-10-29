@@ -28,7 +28,7 @@ final class TimeTableViewController: UIViewController {
         t.layer.cornerRadius = 16
         t.clipsToBounds = true
         t.layer.masksToBounds = true
-        t.layer.maskedCorners = [.layerMaxXMaxYCorner,.layerMinXMaxYCorner]
+        //t.layer.maskedCorners = [.layerMaxXMaxYCorner,.layerMinXMaxYCorner]
         t.translatesAutoresizingMaskIntoConstraints = false
         return t
     }()
@@ -72,12 +72,18 @@ final class TimeTableViewController: UIViewController {
 extension TimeTableViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return WeekDay.count
+        return 7
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier.cell.rawValue, for: indexPath)
-        cell.textLabel?.text = WeekDay.init(rawValue: indexPath.row+1)?.description
+        cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        var value = indexPath.row+1
+        if value == 7 {
+            value = 0
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 500)
+        }
+        cell.textLabel?.text = WeekDay.init(rawValue: value)?.description
         cell.backgroundColor = .backgroundDayTracker
         let switchUI = UISwitch()
         switchUI.onTintColor = .blueTracker
@@ -97,7 +103,8 @@ extension TimeTableViewController {
     
     @objc func switchChanged(_ sender: UISwitch!){
         
-        let number = sender.tag + 1
+        var number = sender.tag + 1
+        if number == 7 { number = 0 }
         
         if timetable.contains(where: { index in
             index == number

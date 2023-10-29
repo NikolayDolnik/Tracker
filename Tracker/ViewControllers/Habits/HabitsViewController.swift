@@ -26,14 +26,14 @@ final class HabitsViewController: UIViewController {
         let scroll = UIScrollView()
         scroll.frame = view.bounds
         scroll.alwaysBounceHorizontal = false
-        scroll.contentSize = CGSize(width: view.frame.width, height: 940)
+        scroll.contentSize = CGSize(width: view.frame.width, height: 1000)
         return scroll
     }()
     
     lazy var contentView: UIView = {
         let view = UIView()
         view.backgroundColor = .whiteDayTracker
-        view.frame.size =  CGSize(width: self.view.frame.width, height: 940)
+        view.frame.size =  CGSize(width: self.view.frame.width, height: 1000)
         return view
     }()
     
@@ -52,9 +52,10 @@ final class HabitsViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         label.clearButtonMode = .whileEditing
         label.textAlignment = .left
-        label.layer.cornerRadius = 16
         label.backgroundColor = .backgroundDayTracker
-        label.borderStyle = .roundedRect
+        //label.borderStyle = .roundedRect
+        label.layer.cornerRadius = 16
+        label.layer.masksToBounds = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -62,6 +63,7 @@ final class HabitsViewController: UIViewController {
     var tableView: UITableView = {
         let t = UITableView()
         t.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        t.separatorInset = .init(top: 0, left: 20, bottom: 0, right: 20)
         t.layer.cornerRadius = 16
         t.clipsToBounds = true
         t.translatesAutoresizingMaskIntoConstraints = false
@@ -128,14 +130,16 @@ final class HabitsViewController: UIViewController {
         collectionView.dataSource = presenter
         collectionView.allowsMultipleSelection = false
         
-        nameLabel.delegate = self
-        
         view.backgroundColor = .whiteDayTracker
         view.addSubview(scrollView)
         
         scrollView.addSubview(contentView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(nameLabel)
+        nameLabel.delegate = self
+        nameLabel.leftView = UIView.init(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
+        nameLabel.leftViewMode = .always
+        
         contentView.addSubview(tableView)
         contentView.addSubview(collectionView)
         contentView.addSubview(stackViewButtons)
@@ -163,7 +167,7 @@ final class HabitsViewController: UIViewController {
             collectionView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 32),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            collectionView.heightAnchor.constraint(equalToConstant: 440),
+            collectionView.heightAnchor.constraint(equalToConstant: 460),
             
             stackViewButtons.heightAnchor.constraint(equalToConstant: 60),
             stackViewButtons.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 16),
@@ -219,6 +223,9 @@ extension HabitsViewController: UITableViewDelegate, UITableViewDataSource {
         cell.textLabel?.text = params[indexPath.row]
         cell.backgroundColor = .backgroundDayTracker
         cell.accessoryType = .disclosureIndicator
+        if indexPath.row == 1 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 500)
+        }
         return cell
     }
     

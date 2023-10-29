@@ -32,17 +32,17 @@ final class TrackersService: TrackersServiseProtocol {
             categoreName: "First Service",
             trackers: [Tracker(
                 id: UUID(),
-                name: "First Tracker",
+                name: "First Tracker ВС",
                 color: .selection10,
                 emoji: "🌺",
-                timetable: [WeekDay.monday.rawValue]
+                timetable: [WeekDay.sunday.rawValue]
             )]
         ),
         TrackerCategory(
             categoreName: "Second",
             trackers: [Tracker(
                 id:  UUID(),
-                name: " Find Two Tracker",
+                name: " Find Two Tracker ПН",
                 color: .selection14,
                 emoji: "🌺",
                 timetable: [WeekDay.monday.rawValue]
@@ -168,18 +168,18 @@ final class TrackersService: TrackersServiseProtocol {
                 name: TrackersService.didChangeNotification,
                 object: self,
                 userInfo: ["change": self.categories])
-        
     }
     
     func addTrackerEvent(categoryNewName: String, name: String, emoji: String, color: UIColor) {
-        let timetable = Calendar.current.component(.weekday, from: currentDay as Date ) - 1
+        let timetable =  [0,1,2,3,4,5,6] //Calendar.current.component(.weekday, from: currentDay as Date ) - 1
+        
         var newVisibleCategory = [TrackerCategory]()
         let tracker = Tracker(
             id:  UUID(),
             name: name,
             color: color,
             emoji: emoji,
-            timetable: [timetable]
+            timetable: timetable
         )
         var newArray = [Tracker]()
         
@@ -245,7 +245,7 @@ final class TrackersService: TrackersServiseProtocol {
         
         for completed in completedTrackers {
             if completed.id == tracker.id &&
-                completed.dateRecord.daysBetweenDate(toDate: date) == 0 { 
+                completed.dateRecord.daysBetweenDate(toDate: date) == 0 {
                 return true
             }
         }
