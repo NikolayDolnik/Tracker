@@ -246,6 +246,7 @@ final class TrackersService: TrackersServiseProtocol {
         for completed in completedTrackers {
             if completed.id == tracker.id &&
                 completed.dateRecord.daysBetweenDate(toDate: date) == 0 {
+                print("\(completed.dateRecord.daysBetweenDate(toDate: date))")
                 return true
             }
         }
