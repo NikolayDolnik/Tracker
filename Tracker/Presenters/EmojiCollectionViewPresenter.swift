@@ -39,20 +39,20 @@ final class EmojiPresenter: NSObject, CollectionViewPresenterProtocol {
     func deselectCell(_ collectionView: UICollectionView, for indexPath: IndexPath){
         
         guard let cell =  collectionView.cellForItem(at: indexPath) else {  return print("функция не удалила выделение") }
-
-             switch indexPath.section {
-             case 0:
-                 cell.backgroundColor = .whiteDayTracker
-                 delegate?.emoji = nil
-
-             case 1:
-                 cell.layer.borderColor = UIColor.whiteDayTracker.cgColor
-                 delegate?.color = nil
-
-             default:
-                 print("default")
-                 return
-             }
+        
+        switch indexPath.section {
+        case 0:
+            cell.backgroundColor = .whiteDayTracker
+            delegate?.emoji = nil
+            
+        case 1:
+            cell.layer.borderColor = UIColor.whiteDayTracker.cgColor
+            delegate?.color = nil
+            
+        default:
+            print("default")
+            return
+        }
     }
     
 }
@@ -93,72 +93,17 @@ extension EmojiPresenter {
             return
         }
         
-//
-//        if selectedIndex != nil && selectedIndex?.section == indexPath.section {
-//            guard let cell = collectionView.cellForItem(at: selectedIndex!) as? CustomCollectionViewCell else { return  }
-//            deselectCell(cell: cell, for: selectedIndex!)
-//        }
-//
-        
-        
-        
-//        if selectedIndex != nil && selectedIndex?.section != indexPath.section {
-//            guard let selectedIndex, let cell = collectionView.cellForItem(at: selectedIndex) as? CustomCollectionViewCell else { return  }
-//
-//            switch selectedIndex.section {
-//            case 0:
-//                cell.layer.cornerRadius = 16
-//                cell.backgroundColor = .lightGrayTracker
-//                delegate?.emoji = cell.titleLabel.text
-//            case 1:
-//                cell.view.layer.masksToBounds = false
-//                cell.layer.borderColor = nil
-//                cell.selectedBackgroundView = UIView()
-//                cell.selectedBackgroundView?.backgroundColor = .clear
-//                cell.selectedBackgroundView?.layer.cornerRadius = 8
-//                cell.selectedBackgroundView?.layer.borderWidth = 3
-//                cell.selectedBackgroundView?.layer.borderColor = cell.titleLabel.backgroundColor?.withAlphaComponent(0.3).cgColor
-//
-//                delegate?.color = cell.titleLabel.backgroundColor
-//
-//            default:
-//                return
-//            }
-//        }
-        
-        
         delegate?.dataCheking()
     }
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         print("перед выбором")
-     //   collectionView.indexPathsForSelectedItems?.filter({ $0.section == indexPath.section }).forEach({ collectionView.deselectItem(at: $0, animated: false) })
-        
-//        collectionView.indexPathsForSelectedItems?.filter({ $0.section != indexPath.section }).forEach({
-//           //deselectCell(collectionView, for: $0)
-//            collectionView.deselectItem(at: $0, animated: false)
-//        })
+        //   collectionView.indexPathsForSelectedItems?.filter({ $0.section == indexPath.section }).forEach({ collectionView.deselectItem(at: $0, animated: false) })
         return true
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-     
-//        guard let cell = collectionView.cellForItem(at: indexPath) as? CustomCollectionViewCell else { return  }
-//       // if selectedIndex?.section == indexPath.section {
-//            switch indexPath.section {
-//            case 0:
-//                cell.backgroundColor = .whiteDayTracker
-//                delegate?.emoji = nil
-//
-//            case 1:
-//                cell.layer.borderColor = UIColor.whiteDayTracker.cgColor
-//                delegate?.color = nil
-//
-//            default:
-//                print("default")
-//                return
-//            }
-//
+        
         switch indexPath.section {
         case 0:
             self.emojiIndex = indexPath
@@ -167,14 +112,6 @@ extension EmojiPresenter {
         default:
             return
         }
-     
-//        if selectedIndexSection == nil ||
-//            selectedIndex?.section == selectedIndexSection?.section {
-//            selectedIndexSection = selectedIndex
-//            guard let selectedIndexSection, let cell = collectionView.cellForItem(at: selectedIndexSection) as? CustomCollectionViewCell else { return  }
-//            deselectCell(cell: cell, for: selectedIndexSection)
-//
-//        }
         
         delegate?.dataCheking()
     }

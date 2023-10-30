@@ -171,7 +171,7 @@ final class TrackersService: TrackersServiseProtocol {
     }
     
     func addTrackerEvent(categoryNewName: String, name: String, emoji: String, color: UIColor) {
-        let timetable =  [0,1,2,3,4,5,6] //Calendar.current.component(.weekday, from: currentDay as Date ) - 1
+        let timetable =  [0,1,2,3,4,5,6] 
         
         var newVisibleCategory = [TrackerCategory]()
         let tracker = Tracker(
