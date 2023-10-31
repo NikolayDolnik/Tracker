@@ -128,7 +128,7 @@ final class HabitsViewController: UIViewController {
         presenter?.delegate = self
         collectionView.delegate = presenter
         collectionView.dataSource = presenter
-        collectionView.allowsMultipleSelection = false
+        collectionView.allowsMultipleSelection = true
         
         view.backgroundColor = .whiteDayTracker
         view.addSubview(scrollView)
