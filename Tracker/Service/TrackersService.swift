@@ -35,59 +35,62 @@ final class TrackersService: TrackersServiseProtocol {
                 name: "First Tracker ВС",
                 color: .selection10,
                 emoji: "🌺",
-                timetable: [WeekDay.sunday.rawValue]
+                timetable: [WeekDay.monday.rawValue]
             )]
         ),
         TrackerCategory(
             categoreName: "Second",
-            trackers: [Tracker(
-                id:  UUID(),
-                name: " Find Two Tracker ПН",
-                color: .selection14,
-                emoji: "🌺",
-                timetable: [WeekDay.monday.rawValue]
-            ),
-                       Tracker(
-                        id:  UUID(),
-                        name: "Three blala Tracker",
-                        color: .selection11,
-                        emoji: "🌺",
-                        timetable: [WeekDay.friday.rawValue]
-                       )]
+            trackers: [
+                Tracker(
+                    id:  UUID(),
+                    name: " Find Two Tracker ПН",
+                    color: .selection14,
+                    emoji: "🌺",
+                    timetable: [WeekDay.monday.rawValue]
+                ),
+                Tracker(
+                    id:  UUID(),
+                    name: "Three blala Tracker",
+                    color: .selection11,
+                    emoji: "🌺",
+                    timetable: [WeekDay.monday.rawValue]
+                )]
         ),
         TrackerCategory(
             categoreName: "Second",
-            trackers: [Tracker(
-                id:  UUID(),
-                name: "Two Tracker",
-                color: .selection14,
-                emoji: "😱",
-                timetable: [WeekDay.tuesday.rawValue]
-            ),
-                       Tracker(
-                        id:  UUID(),
-                        name: "Three Tracker",
-                        color: .selection11,
-                        emoji: "🌺",
-                        timetable: [WeekDay.monday.rawValue]
-                       )]
+            trackers: [
+                Tracker(
+                    id:  UUID(),
+                    name: "Two Tracker",
+                    color: .selection14,
+                    emoji: "😱",
+                    timetable: [WeekDay.tuesday.rawValue]
+                ),
+                Tracker(
+                    id:  UUID(),
+                    name: "Three Tracker",
+                    color: .selection11,
+                    emoji: "🌺",
+                    timetable: [WeekDay.tuesday.rawValue]
+                )]
         ),
         TrackerCategory(
             categoreName: "Poisk",
-            trackers: [Tracker(
-                id:  UUID(),
-                name: "Find Tracker",
-                color: .selection14,
-                emoji: "🐶",
-                timetable: [WeekDay.thursday.rawValue]
-            ),
-                       Tracker(
-                        id:  UUID(),
-                        name: "Three Tracker",
-                        color: .selection11,
-                        emoji: "🌺",
-                        timetable: [WeekDay.saturday.rawValue]
-                       )]
+            trackers: [
+                Tracker(
+                    id:  UUID(),
+                    name: "Find Tracker",
+                    color: .selection14,
+                    emoji: "🐶",
+                    timetable: [WeekDay.thursday.rawValue]
+                ),
+                Tracker(
+                    id:  UUID(),
+                    name: "Three Tracker",
+                    color: .selection11,
+                    emoji: "🌺",
+                    timetable: [WeekDay.thursday.rawValue]
+                )]
         )
     ]
     
@@ -100,15 +103,19 @@ final class TrackersService: TrackersServiseProtocol {
         
         var newVisibleCategory = [TrackerCategory]()
         for category in categories {
+            var categoryName: String?
+            var newTrackers = [Tracker]()
+            
             for (index, tracker) in category.trackers.enumerated(){
                 if tracker.timetable.contains(numberOfDay){
-                    var newTrackers = [Tracker]()
                     newTrackers.append(category.trackers[index])
-                    
-                    let newTrackerCategory = TrackerCategory(categoreName: category.categoreName, trackers: newTrackers)
-                    newVisibleCategory.append(newTrackerCategory)
-                    newTrackers = []
+                    categoryName = category.categoreName
                 }
+            }
+            if let categoryName {
+                let newTrackerCategory = TrackerCategory(categoreName: categoryName, trackers: newTrackers)
+                newVisibleCategory.append(newTrackerCategory)
+                newTrackers = []
             }
         }
         visibleDay = day
@@ -171,7 +178,7 @@ final class TrackersService: TrackersServiseProtocol {
     }
     
     func addTrackerEvent(categoryNewName: String, name: String, emoji: String, color: UIColor) {
-        let timetable =  [0,1,2,3,4,5,6] 
+        let timetable =  [0,1,2,3,4,5,6]
         
         var newVisibleCategory = [TrackerCategory]()
         let tracker = Tracker(

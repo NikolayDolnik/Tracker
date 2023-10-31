@@ -261,8 +261,7 @@ extension EventViewController {
     
     @objc func didTapCreateButton(){
         guard let  name, let color, let emoji  else {return}
-//        emoji = "🥶"
-//        color = UIColor(named: "selection6") ?? .selection1
+        
         trackerService?.addTrackerEvent(categoryNewName: categoreName, name: name, emoji: emoji, color: color)
         
         guard

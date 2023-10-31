@@ -45,6 +45,7 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier.cell.rawValue, for: indexPath) as! TrackersCollectionViewCell
         
         let tracker = visibleCategory[indexPath.section].trackers[indexPath.row]
+        
         guard let model = trackerService?.createTrackerModel(tracker: tracker) else {return cell}
         cell.delegate  = self.view
         cell.dayCountLable.text = "\(model.record) дней"
@@ -132,8 +133,9 @@ extension TrackersPresenter: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
+        return UIEdgeInsets(top: 12, left: 0, bottom: 16, right: 0)
     }
+
     
 }
 

@@ -270,8 +270,6 @@ extension HabitsViewController {
     
     @objc func didTapCreateButton(){
         guard let  name, let timetable, let color, let emoji  else {return}
-//        emoji = ""
-//        color = UIColor(named: "selection6") ?? .selection1
         trackerService?.addTracker(categoryNewName: categoreName, name: name, emoji: emoji, color: color, timetable: timetable)
         
         guard
