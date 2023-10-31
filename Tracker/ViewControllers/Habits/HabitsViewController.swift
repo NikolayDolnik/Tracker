@@ -250,7 +250,7 @@ extension HabitsViewController: UITableViewDelegate, UITableViewDataSource {
 extension HabitsViewController {
     
     func dataCheking(){
-        guard let  name, let timetable   else {return}
+        guard let  name, let timetable, let color, let emoji   else {return}
         createButton.isEnabled = true
         createButton.backgroundColor  =  createButton.isEnabled ? .blackDayTracker : .grayTracker
     }
@@ -269,10 +269,10 @@ extension HabitsViewController {
     }
     
     @objc func didTapCreateButton(){
-        guard let  name, let timetable   else {return}
-        emoji = ""
-        color = UIColor(named: "selection6") ?? .selection1
-        trackerService?.addTracker(categoryNewName: categoreName, name: name, emoji: emoji!, color: color!, timetable: timetable)
+        guard let  name, let timetable, let color, let emoji  else {return}
+//        emoji = ""
+//        color = UIColor(named: "selection6") ?? .selection1
+        trackerService?.addTracker(categoryNewName: categoreName, name: name, emoji: emoji, color: color, timetable: timetable)
         
         guard
             let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,

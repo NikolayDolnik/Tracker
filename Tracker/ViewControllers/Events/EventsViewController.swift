@@ -122,12 +122,11 @@ final class EventViewController: UIViewController, EmojiPresenterDelegateProtoco
         tableView.delegate = self
         tableView.dataSource = self
         
-        
         presenter = EmojiPresenter()
         presenter?.delegate = self
         collectionView.delegate = presenter
         collectionView.dataSource = presenter
-        collectionView.allowsMultipleSelection = false
+        collectionView.allowsMultipleSelection = true
         
         view.backgroundColor = .whiteDayTracker
         view.addSubview(scrollView)
@@ -261,10 +260,10 @@ extension EventViewController {
     }
     
     @objc func didTapCreateButton(){
-        guard let  name   else {return}
-        emoji = "🥶"
-        color = UIColor(named: "selection6") ?? .selection1
-        trackerService?.addTrackerEvent(categoryNewName: categoreName, name: name, emoji: emoji!, color: color!)
+        guard let  name, let color, let emoji  else {return}
+//        emoji = "🥶"
+//        color = UIColor(named: "selection6") ?? .selection1
+        trackerService?.addTrackerEvent(categoryNewName: categoreName, name: name, emoji: emoji, color: color)
         
         guard
             let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,

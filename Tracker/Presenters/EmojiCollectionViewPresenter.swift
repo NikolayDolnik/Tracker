@@ -88,7 +88,6 @@ extension EmojiPresenter {
             cell.layer.cornerRadius = 8
             cell.layer.borderWidth = 3
             cell.layer.borderColor = cell.titleLabel.backgroundColor?.withAlphaComponent(0.3).cgColor
-            
             delegate?.color = cell.titleLabel.backgroundColor
             
         default:
