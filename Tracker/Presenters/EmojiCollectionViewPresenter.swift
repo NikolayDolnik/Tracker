@@ -72,8 +72,6 @@ extension EmojiPresenter {
 //
         
         guard let cell = collectionView.cellForItem(at: indexPath) as? CustomCollectionViewCell else { return  }
-        print(collectionView.indexPathsForSelectedItems)
-    
         
         switch indexPath.section {
         case 0:
@@ -102,7 +100,6 @@ extension EmojiPresenter {
         collectionView.indexPathsForSelectedItems?.filter({ $0.section == indexPath.section }).forEach({
             collectionView.deselectItem(at: $0, animated: false)
             collectionView.delegate?.collectionView?(collectionView, didDeselectItemAt: $0)
-            print(collectionView.indexPathsForSelectedItems)
 
                })
     
@@ -124,7 +121,6 @@ extension EmojiPresenter {
         default:
             return
         }
-        print(collectionView.indexPathsForSelectedItems)
         
 //        switch indexPath.section {
 //        case 0:

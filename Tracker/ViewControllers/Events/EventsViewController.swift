@@ -246,7 +246,7 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
 extension EventViewController {
     
     func dataCheking(){
-        guard let  name  else {return}
+        guard let  name, let color , let emoji  else {return}
         createButton.isEnabled = true
         createButton.backgroundColor  =  createButton.isEnabled ? .blackDayTracker : .grayTracker
     }
