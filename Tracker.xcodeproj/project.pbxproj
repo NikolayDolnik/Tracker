@@ -17,7 +17,6 @@
 		99C5FD272AD007DE00F33BFC /* EmojiCollectionViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5FD262AD007DE00F33BFC /* EmojiCollectionViewPresenter.swift */; };
 		99C5FD292AD009CC00F33BFC /* CustomCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5FD282AD009CC00F33BFC /* CustomCollectionCell.swift */; };
 		99C5FD2C2AD2A62200F33BFC /* TrackersCollectionCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5FD2B2AD2A62200F33BFC /* TrackersCollectionCells.swift */; };
-		99C5FD2E2AD55FBB00F33BFC /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5FD2D2AD55FBB00F33BFC /* test.swift */; };
 		99C5FD322AD7FEA500F33BFC /* TrackersPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5FD312AD7FEA500F33BFC /* TrackersPresenter.swift */; };
 		99C5FD352AD7FFCD00F33BFC /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5FD342AD7FFCD00F33BFC /* Tracker.swift */; };
 		99C5FD372AD7FFE200F33BFC /* TrackerCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5FD362AD7FFE200F33BFC /* TrackerCategory.swift */; };
@@ -68,7 +67,6 @@
 		99C5FD262AD007DE00F33BFC /* EmojiCollectionViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCollectionViewPresenter.swift; sourceTree = "<group>"; };
 		99C5FD282AD009CC00F33BFC /* CustomCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionCell.swift; sourceTree = "<group>"; };
 		99C5FD2B2AD2A62200F33BFC /* TrackersCollectionCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersCollectionCells.swift; sourceTree = "<group>"; };
-		99C5FD2D2AD55FBB00F33BFC /* test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
 		99C5FD312AD7FEA500F33BFC /* TrackersPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersPresenter.swift; sourceTree = "<group>"; };
 		99C5FD342AD7FFCD00F33BFC /* Tracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
 		99C5FD362AD7FFE200F33BFC /* TrackerCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategory.swift; sourceTree = "<group>"; };
@@ -251,7 +249,6 @@
 		99DADA532ACC0B53004467A3 /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
-				99C5FD2D2AD55FBB00F33BFC /* test.swift */,
 				99DADA542ACC0B53004467A3 /* AppDelegate.swift */,
 				99C5FD0A2ACC27B000F33BFC /* TabBarController.swift */,
 				99DADA562ACC0B53004467A3 /* SceneDelegate.swift */,
@@ -447,7 +444,6 @@
 				99DADA592ACC0B53004467A3 /* TrackersViewController.swift in Sources */,
 				99C5FD0B2ACC27B000F33BFC /* TabBarController.swift in Sources */,
 				99C5FD352AD7FFCD00F33BFC /* Tracker.swift in Sources */,
-				99C5FD2E2AD55FBB00F33BFC /* test.swift in Sources */,
 				99DADA552ACC0B53004467A3 /* AppDelegate.swift in Sources */,
 				99DADA572ACC0B53004467A3 /* SceneDelegate.swift in Sources */,
 				99C5FD6C2AE7DF3900F33BFC /* TimetableDelegateProtocol.swift in Sources */,
