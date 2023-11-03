@@ -26,6 +26,7 @@
 		99C5FD402ADF18EA00F33BFC /* TrackerCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5FD3F2ADF18EA00F33BFC /* TrackerCellModel.swift */; };
 		99C5FD432AE1659500F33BFC /* TrackersViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5FD422AE1659500F33BFC /* TrackersViewControllerProtocol.swift */; };
 		99C5FD6C2AE7DF3900F33BFC /* TimetableDelegateProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5FD6B2AE7DF3900F33BFC /* TimetableDelegateProtocol.swift */; };
+		99C5FD7D2AF4E66700F33BFC /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5FD7C2AF4E66700F33BFC /* DataProvider.swift */; };
 		99DADA552ACC0B53004467A3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DADA542ACC0B53004467A3 /* AppDelegate.swift */; };
 		99DADA572ACC0B53004467A3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DADA562ACC0B53004467A3 /* SceneDelegate.swift */; };
 		99DADA592ACC0B53004467A3 /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DADA582ACC0B53004467A3 /* TrackersViewController.swift */; };
@@ -76,6 +77,7 @@
 		99C5FD3F2ADF18EA00F33BFC /* TrackerCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCellModel.swift; sourceTree = "<group>"; };
 		99C5FD422AE1659500F33BFC /* TrackersViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewControllerProtocol.swift; sourceTree = "<group>"; };
 		99C5FD6B2AE7DF3900F33BFC /* TimetableDelegateProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableDelegateProtocol.swift; sourceTree = "<group>"; };
+		99C5FD7C2AF4E66700F33BFC /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
 		99DADA512ACC0B53004467A3 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		99DADA542ACC0B53004467A3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		99DADA562ACC0B53004467A3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -226,6 +228,14 @@
 			path = Events;
 			sourceTree = "<group>";
 		};
+		99C5FD7B2AF4E63B00F33BFC /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				99C5FD7C2AF4E66700F33BFC /* DataProvider.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
 		99DADA482ACC0B53004467A3 = {
 			isa = PBXGroup;
 			children = (
@@ -257,6 +267,7 @@
 				99C5FD2F2AD7FC9400F33BFC /* ViewControllers */,
 				99C5FD332AD7FEF800F33BFC /* Models */,
 				99C5FD302AD7FE7900F33BFC /* Presenters */,
+				99C5FD7B2AF4E63B00F33BFC /* CoreData */,
 				99DADA892ACC0FE7004467A3 /* Helpers */,
 				99DADA5A2ACC0B53004467A3 /* Main.storyboard */,
 				99DADA602ACC0B54004467A3 /* Assets.xcassets */,
@@ -442,6 +453,7 @@
 				99C5FD372AD7FFE200F33BFC /* TrackerCategory.swift in Sources */,
 				99C5FD432AE1659500F33BFC /* TrackersViewControllerProtocol.swift in Sources */,
 				99DADA592ACC0B53004467A3 /* TrackersViewController.swift in Sources */,
+				99C5FD7D2AF4E66700F33BFC /* DataProvider.swift in Sources */,
 				99C5FD0B2ACC27B000F33BFC /* TabBarController.swift in Sources */,
 				99C5FD352AD7FFCD00F33BFC /* Tracker.swift in Sources */,
 				99DADA552ACC0B53004467A3 /* AppDelegate.swift in Sources */,
