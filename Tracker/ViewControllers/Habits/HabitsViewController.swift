@@ -14,26 +14,26 @@ final class HabitsViewController: UIViewController {
     var presenter: CollectionViewPresenterProtocol?
     private var params = ["Категория","Расписание"]
     
-   
+    
     private var categoreName = "Cоздано контроллером"
     private var name: String?
     var color: UIColor?
     var emoji: String?
     private var timetable: [Int]?
-
+    
     
     lazy var scrollView: UIScrollView = {
         let scroll = UIScrollView()
         scroll.frame = view.bounds
         scroll.alwaysBounceHorizontal = false
-        scroll.contentSize = CGSize(width: view.frame.width, height: 940)
+        scroll.contentSize = CGSize(width: view.frame.width, height: 1000)
         return scroll
     }()
     
     lazy var contentView: UIView = {
         let view = UIView()
         view.backgroundColor = .whiteDayTracker
-        view.frame.size =  CGSize(width: self.view.frame.width, height: 940)
+        view.frame.size =  CGSize(width: self.view.frame.width, height: 1000)
         return view
     }()
     
@@ -46,21 +46,24 @@ final class HabitsViewController: UIViewController {
         return label
     }()
     
-    var nameLable: UITextField = {
-        let lable = UITextField()
-        lable.placeholder = "Введите название трекера"
-        lable.clearButtonMode = .whileEditing
-        lable.textAlignment = .left
-        lable.layer.cornerRadius = 16 
-        lable.backgroundColor = .backgroundDayTracker
-        lable.borderStyle = .roundedRect
-        lable.translatesAutoresizingMaskIntoConstraints = false
-        return lable
+    var nameLabel: UITextField = {
+        let label = UITextField()
+        label.placeholder = "Введите название трекера"
+        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.clearButtonMode = .whileEditing
+        label.textAlignment = .left
+        label.backgroundColor = .backgroundDayTracker
+        //label.borderStyle = .roundedRect
+        label.layer.cornerRadius = 16
+        label.layer.masksToBounds = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     var tableView: UITableView = {
         let t = UITableView()
         t.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        t.separatorInset = .init(top: 0, left: 20, bottom: 0, right: 20)
         t.layer.cornerRadius = 16
         t.clipsToBounds = true
         t.translatesAutoresizingMaskIntoConstraints = false
@@ -125,16 +128,18 @@ final class HabitsViewController: UIViewController {
         presenter?.delegate = self
         collectionView.delegate = presenter
         collectionView.dataSource = presenter
-        collectionView.allowsMultipleSelection = false
-        
-        nameLable.delegate = self
+        collectionView.allowsMultipleSelection = true
         
         view.backgroundColor = .whiteDayTracker
         view.addSubview(scrollView)
         
         scrollView.addSubview(contentView)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(nameLable)
+        contentView.addSubview(nameLabel)
+        nameLabel.delegate = self
+        nameLabel.leftView = UIView.init(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
+        nameLabel.leftViewMode = .always
+        
         contentView.addSubview(tableView)
         contentView.addSubview(collectionView)
         contentView.addSubview(stackViewButtons)
@@ -145,16 +150,16 @@ final class HabitsViewController: UIViewController {
         NSLayoutConstraint.activate([
             
             titleLabel.heightAnchor.constraint(equalToConstant: 22),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 27),
             titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
-            nameLable.heightAnchor.constraint(equalToConstant: 75),
-            nameLable.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
-            nameLable.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            nameLable.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            nameLable.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            nameLabel.heightAnchor.constraint(equalToConstant: 75),
+            nameLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             
-            tableView.topAnchor.constraint(equalTo: nameLable.bottomAnchor, constant: 24),
+            tableView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 24),
             tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             tableView.heightAnchor.constraint(equalToConstant: 150),
@@ -162,7 +167,7 @@ final class HabitsViewController: UIViewController {
             collectionView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 32),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            collectionView.heightAnchor.constraint(equalToConstant: 440),
+            collectionView.heightAnchor.constraint(equalToConstant: 460),
             
             stackViewButtons.heightAnchor.constraint(equalToConstant: 60),
             stackViewButtons.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 16),
@@ -218,6 +223,9 @@ extension HabitsViewController: UITableViewDelegate, UITableViewDataSource {
         cell.textLabel?.text = params[indexPath.row]
         cell.backgroundColor = .backgroundDayTracker
         cell.accessoryType = .disclosureIndicator
+        if indexPath.row == 1 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 500)
+        }
         return cell
     }
     
@@ -242,7 +250,7 @@ extension HabitsViewController: UITableViewDelegate, UITableViewDataSource {
 extension HabitsViewController {
     
     func dataCheking(){
-        guard let  name, let timetable   else {return}
+        guard let  name, let timetable, let color, let emoji   else {return}
         createButton.isEnabled = true
         createButton.backgroundColor  =  createButton.isEnabled ? .blackDayTracker : .grayTracker
     }
@@ -261,16 +269,21 @@ extension HabitsViewController {
     }
     
     @objc func didTapCreateButton(){
-        guard let  name, let timetable   else {return}
-        emoji = ""
-        color = UIColor(named: "selection6") ?? .selection1
-        trackerService?.addTracker(categoryNewName: categoreName, name: name, emoji: emoji!, color: color!, timetable: timetable)
-        self.dismiss(animated: true)
+        guard let  name, let timetable, let color, let emoji  else {return}
+        trackerService?.addTracker(categoryNewName: categoreName, name: name, emoji: emoji, color: color, timetable: timetable)
+        
+        guard
+            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+            let window = windowScene.windows.first else {
+            fatalError("Invalid Configuration")
+        }
+        let tabBarController = TabBarController()
+        window.rootViewController = tabBarController
     }
 }
 
 extension HabitsViewController: TimeTableDelegateProtocol {
-   
+    
     func addTimetable(timetable: [Int]) {
         self.timetable = timetable
         dataCheking()
