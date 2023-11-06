@@ -56,7 +56,8 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
         let state = model.complete ? State.complete : State.addRecord
         cell.completeButton.setImage(UIImage(named: state.rawValue), for: .normal)
         cell.completeButton.isEnabled = model.isEnable
-        cell.completeButton.tintColor = model.color
+        cell.completeButton.tintColor = model.color // Не помогает
+        cell.completeButton.setTitleColor(model.color, for: .disabled)
         
         return cell
     }
@@ -91,8 +92,6 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
                     collectionView.performBatchUpdates{
                         collectionView.deleteItems(at: indexPaths)
                     }
-                    
-                    
                 },
             ])
         })
@@ -151,7 +150,8 @@ extension TrackersPresenter {
     }
     
     func delete(_ index: IndexPath){
-       
+        let tracker = visibleCategory[index.section].trackers[index.row]
+        trackerService?.deleteTracker(tracker: tracker)
     }
 }
 

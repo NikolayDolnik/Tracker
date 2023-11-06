@@ -40,7 +40,7 @@
 		99DADA6F2ACC0B54004467A3 /* TrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DADA6E2ACC0B54004467A3 /* TrackerTests.swift */; };
 		99DADA792ACC0B54004467A3 /* TrackerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DADA782ACC0B54004467A3 /* TrackerUITests.swift */; };
 		99DADA7B2ACC0B54004467A3 /* TrackerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DADA7A2ACC0B54004467A3 /* TrackerUITestsLaunchTests.swift */; };
-		99DADA882ACC0FE2004467A3 /* UiColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DADA872ACC0FE2004467A3 /* UiColors.swift */; };
+		99DADA882ACC0FE2004467A3 /* UiColors&Marshalling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DADA872ACC0FE2004467A3 /* UiColors&Marshalling.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,7 +98,7 @@
 		99DADA742ACC0B54004467A3 /* TrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		99DADA782ACC0B54004467A3 /* TrackerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerUITests.swift; sourceTree = "<group>"; };
 		99DADA7A2ACC0B54004467A3 /* TrackerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		99DADA872ACC0FE2004467A3 /* UiColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UiColors.swift; sourceTree = "<group>"; };
+		99DADA872ACC0FE2004467A3 /* UiColors&Marshalling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UiColors&Marshalling.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -323,7 +323,7 @@
 		99DADA892ACC0FE7004467A3 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				99DADA872ACC0FE2004467A3 /* UiColors.swift */,
+				99DADA872ACC0FE2004467A3 /* UiColors&Marshalling.swift */,
 				99C5FD3A2AD80D7500F33BFC /* Constants.swift */,
 				99C5FD242ACFFDF900F33BFC /* Extension.swift */,
 			);
@@ -463,7 +463,7 @@
 			files = (
 				99C5FD322AD7FEA500F33BFC /* TrackersPresenter.swift in Sources */,
 				99C5FD162ACEB03300F33BFC /* EventsViewController.swift in Sources */,
-				99DADA882ACC0FE2004467A3 /* UiColors.swift in Sources */,
+				99DADA882ACC0FE2004467A3 /* UiColors&Marshalling.swift in Sources */,
 				99DADA5F2ACC0B53004467A3 /* TrackerDataModel.xcdatamodeld in Sources */,
 				99C5FD292AD009CC00F33BFC /* CustomCollectionCell.swift in Sources */,
 				99C5FD402ADF18EA00F33BFC /* TrackerCellModel.swift in Sources */,

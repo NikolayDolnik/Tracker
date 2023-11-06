@@ -13,6 +13,7 @@ public protocol TrackersServiseProtocol {
     func findTrackers(text: String)-> [TrackerCategory]
     func changeDate(for day: Date) -> [TrackerCategory]
     func addTracker(categoryNewName: String, name: String, emoji: String, color: UIColor, timetable: [Int] )
+    func deleteTracker(tracker: Tracker)
     func createTrackerModel(tracker: Tracker) -> TrackerCellModel
     func addTrackerrecord(tracker: Tracker)
     func deleteTrackerRecord(tracker: Tracker)
@@ -26,6 +27,8 @@ final class TrackersService: TrackersServiseProtocol {
     static let didChangeNotification = Notification.Name(rawValue: "TrackersServiceDidChange")
     private var currentDay = NSDate()
     private var visibleDay: Date?
+    private var trackerStrore = TrackerStore()
+    
     var completedTrackers: Set<TrackerRecord> = []
     var categories: [TrackerCategory] = [
         TrackerCategory(
@@ -119,6 +122,14 @@ final class TrackersService: TrackersServiseProtocol {
             }
         }
         visibleDay = day
+        
+        guard let customTrackers = try? trackerStrore.fetchTrackers() else {
+            print("Не прошла загрузка из БД")
+            return newVisibleCategory
+        }
+        let customTrackerCategory = TrackerCategory(categoreName: "Созданно мной", trackers: customTrackers)
+        newVisibleCategory.append(customTrackerCategory)
+        
         return newVisibleCategory
     }
     
@@ -166,7 +177,7 @@ final class TrackersService: TrackersServiseProtocol {
         
         newArray.append(tracker)
         let newTrackerCategory = TrackerCategory(categoreName: categoryNewName, trackers: newArray)
-        
+        try? trackerStrore.addTracker(tracker: tracker, categoryName: categoryNewName)
         newVisibleCategory.append(newTrackerCategory)
         
         categories = newVisibleCategory
@@ -200,8 +211,11 @@ final class TrackersService: TrackersServiseProtocol {
         
         newArray.append(tracker)
         let newTrackerCategory = TrackerCategory(categoreName: categoryNewName, trackers: newArray)
-        
         newVisibleCategory.append(newTrackerCategory)
+        
+        let customTrackerCategory = TrackerCategory(categoreName: "Нерегулярное событие", trackers: newArray)
+        try? trackerStrore.addTracker(tracker: tracker, categoryName: categoryNewName)
+        newVisibleCategory.append(customTrackerCategory)
         
         categories = newVisibleCategory
         NotificationCenter.default
@@ -211,6 +225,15 @@ final class TrackersService: TrackersServiseProtocol {
                 userInfo: ["change": self.categories])
         
     }
+    
+    
+    //MARK: - Delete Trackers
+    
+    func deleteTracker(tracker: Tracker){
+        try? trackerStrore.deleteTracker(tracker: tracker)
+    }
+    
+    //MARK: - Tracker Model Methods
     
     func createTrackerModel(tracker: Tracker) -> TrackerCellModel {
         
