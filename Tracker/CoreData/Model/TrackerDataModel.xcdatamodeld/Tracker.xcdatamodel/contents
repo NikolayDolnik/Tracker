@@ -11,9 +11,9 @@
         <attribute name="name" attributeType="String"/>
         <attribute name="schedule" attributeType="Transformable" valueTransformerName=""/>
         <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrackercategoryCoreData" inverseName="tracker" inverseEntity="TrackercategoryCoreData"/>
-        <relationship name="record" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrackerRecrodCoreData" inverseName="tracker" inverseEntity="TrackerRecrodCoreData"/>
+        <relationship name="record" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrackerRecordCoreData" inverseName="tracker" inverseEntity="TrackerRecordCoreData"/>
     </entity>
-    <entity name="TrackerRecrodCoreData" representedClassName="TrackerRecrodCoreData" syncable="YES" codeGenerationType="class">
+    <entity name="TrackerRecordCoreData" representedClassName="TrackerRecordCoreData" syncable="YES" codeGenerationType="class">
         <attribute name="dateRecord" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <relationship name="tracker" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrackerCoreData" inverseName="record" inverseEntity="TrackerCoreData"/>

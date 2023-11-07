@@ -5,4 +5,115 @@
 //  Created by Dolnik Nikolay on 03.11.2023.
 //
 
-import Foundation
+import UIKit
+import CoreData
+
+final class TrackerRecordStore: NSObject {
+    
+    private let entityName = "TrackerRecordCoreData"
+    private let UIcolorMarshalling = UIColorMarshalling()
+    private let context: NSManagedObjectContext
+    private lazy var fetchedResultsController: NSFetchedResultsController<TrackerRecordCoreData> = {
+
+        let fetchRequest = NSFetchRequest<TrackerRecordCoreData>(entityName: entityName)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: false)]
+        
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                                                  managedObjectContext: context,
+                                                                  sectionNameKeyPath: nil,
+                                                                  cacheName: nil)
+        fetchedResultsController.delegate = self
+        try? fetchedResultsController.performFetch()
+        return fetchedResultsController
+    }()
+    
+    convenience override init() {
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        self.init(context: context)
+    }
+    
+    init(context: NSManagedObjectContext) {
+        self.context = context
+    }
+    
+    
+    // MARK: - Methods Core Data
+    
+    func addRecord(tracker: Tracker, recordDate: Date) throws {
+      
+        let record = TrackerRecordCoreData(context: context)
+        record.id = tracker.id
+        record.dateRecord = recordDate
+        
+        let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id" , ascending: true)]
+        let r = try? context.fetch(fetchRequest)
+        r?.forEach{ if $0.id == tracker.id {  record.tracker = $0  } }
+        
+         saveContext()
+    }
+    
+    func deleteTracker(tracker: Tracker, recordDay: Date) throws {
+    
+        guard let r = fetchedResultsController.fetchedObjects else { return print("Record не удален") }
+        r.forEach{ if $0.id == tracker.id &&
+                        $0.dateRecord?.daysBetweenDate(toDate: recordDay) == 0 { context.delete($0) } }
+        saveContext()
+    }
+    
+    func getTrackerRecord(tracker: Tracker)-> Int {
+        
+        var record = 0
+        let r = fetchedResultsController.fetchedObjects ?? []
+        r.forEach{ if $0.id == tracker.id { record += 1 } }
+        
+        return record
+    }
+    
+    func getCompleteState(tracker: Tracker, date: Date)-> Bool {
+        var completeState = false
+        
+        guard let r = fetchedResultsController.fetchedObjects else { return false }
+        r.forEach{ if $0.id == tracker.id &&
+                        $0.dateRecord?.daysBetweenDate(toDate: date) == 0 { completeState = true} }
+        return completeState
+    }
+//    func convertTracker(tracker: Tracker ) -> TrackerCoreData {
+//        let trackerCoreData = TrackerCoreData(context: context)
+//        trackerCoreData.emoji = tracker.emoji
+//        trackerCoreData.name = tracker.name
+//        trackerCoreData.id = tracker.id
+//        trackerCoreData.schedule = tracker.timetable as NSObject
+//        trackerCoreData.colorHex = UIcolorMarshalling.hexString(from: tracker.color)
+//
+//        return trackerCoreData
+//    }
+    
+    // MARK: - Core Data Saving support
+    
+    func saveContext () {
+        if context.hasChanges {
+            do {
+                try context.save()
+                print("deleted")
+            } catch {
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+    }
+    
+}
+
+
+// MARK: - NSFetchedResultsControllerDelegate
+
+extension TrackerRecordStore:  NSFetchedResultsControllerDelegate {
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        // вызывается после сохранения контекста -  стоит сделать обновление коллекции?? + Добавить трекер в категорию
+        // Делегать - менеджер который работает с Категориями и трекерам и обновляет таблицу. И рекордом.
+     
+    }
+    
+}

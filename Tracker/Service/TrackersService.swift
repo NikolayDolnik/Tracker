@@ -28,6 +28,7 @@ final class TrackersService: TrackersServiseProtocol {
     private var currentDay = NSDate()
     private var visibleDay: Date?
     private var trackerStrore = TrackerStore()
+    private var trackerRecordStore = TrackerRecordStore()
     
     var completedTrackers: Set<TrackerRecord> = []
     var categories: [TrackerCategory] = [
@@ -129,7 +130,7 @@ final class TrackersService: TrackersServiseProtocol {
         }
         let customTrackerCategory = TrackerCategory(categoreName: "Созданно мной", trackers: customTrackers)
         newVisibleCategory.append(customTrackerCategory)
-        
+        trackerStrore.test()
         return newVisibleCategory
     }
     
@@ -210,12 +211,8 @@ final class TrackersService: TrackersServiseProtocol {
         }
         
         newArray.append(tracker)
-        let newTrackerCategory = TrackerCategory(categoreName: categoryNewName, trackers: newArray)
-        newVisibleCategory.append(newTrackerCategory)
         
-        let customTrackerCategory = TrackerCategory(categoreName: "Нерегулярное событие", trackers: newArray)
         try? trackerStrore.addTracker(tracker: tracker, categoryName: categoryNewName)
-        newVisibleCategory.append(customTrackerCategory)
         
         categories = newVisibleCategory
         NotificationCenter.default
@@ -255,15 +252,7 @@ final class TrackersService: TrackersServiseProtocol {
     }
     
     func getTrackerRecord(tracker: Tracker)-> Int {
-        
-        var record = 0
-        
-        for completed in completedTrackers {
-            if completed.id == tracker.id {
-                record += 1
-            }
-        }
-        return record
+        return trackerRecordStore.getTrackerRecord(tracker: tracker)
     }
     
     func isEnableCompleteButton() -> Bool {
@@ -272,33 +261,19 @@ final class TrackersService: TrackersServiseProtocol {
     }
     
     func getCompleteState(tracker: Tracker, date: Date)-> Bool {
-        
-        for completed in completedTrackers {
-            if completed.id == tracker.id &&
-                completed.dateRecord.daysBetweenDate(toDate: date) == 0 {
-                print("\(completed.dateRecord.daysBetweenDate(toDate: date))")
-                return true
-            }
-        }
-        return false
+        return trackerRecordStore.getCompleteState(tracker: tracker, date: date)
     }
     
     func deleteTrackerRecord(tracker: Tracker){
-        guard let recordDay = visibleDay else { return}
+        guard let recordDay = visibleDay else { return }
         
-        for completed in completedTrackers {
-            if completed.id == tracker.id &&
-                completed.dateRecord.daysBetweenDate(toDate: recordDay) == 0 {
-                let record = TrackerRecord(id: tracker.id, dateRecord: completed.dateRecord)
-                completedTrackers.remove(record)
-            }
-        }
+        try? trackerRecordStore.deleteTracker(tracker: tracker, recordDay: recordDay)
     }
     
     func addTrackerrecord(tracker: Tracker){
-        guard let recordDay = visibleDay else { return}
-        let record = TrackerRecord(id: tracker.id, dateRecord: recordDay)
-        completedTrackers.insert(record)
+        guard let recordDay = visibleDay else { return }
+        try? trackerRecordStore.addRecord(tracker: tracker, recordDate: recordDay)
     }
     
 }
+

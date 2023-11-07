@@ -89,9 +89,9 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
                 UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
                     self?.delete(indexPaths[0])
                     
-                    collectionView.performBatchUpdates{
-                        collectionView.deleteItems(at: indexPaths)
-                    }
+//                    collectionView.performBatchUpdates{
+//                        collectionView.deleteItems(at: indexPaths)
+//                    }
                 },
             ])
         })

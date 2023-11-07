@@ -10,12 +10,12 @@ import CoreData
 
 final class TrackerStore: NSObject {
     
-    private let modelName = "TrackerDataModel"
+    private let entityName = "TrackerCoreData"
     private let UIcolorMarshalling = UIColorMarshalling()
     private let context: NSManagedObjectContext
     private lazy var fetchedResultsController: NSFetchedResultsController<TrackerCoreData> = {
 
-        let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: entityName)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: false)]
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
@@ -51,10 +51,11 @@ final class TrackerStore: NSObject {
     }
     
     func deleteTracker(tracker: Tracker) throws {
-        let trackerCoreData = convertTracker(tracker: tracker)
-        context.delete(trackerCoreData)
-        // try context.save()
+    
+        var r = fetchedResultsController.fetchedObjects
+        r?.forEach{ if $0.id == tracker.id { context.delete($0) } }
         saveContext()
+        print("удалили трекер и сохранили контекст")
     }
     
     func convertTracker(tracker: Tracker ) -> TrackerCoreData {
@@ -64,10 +65,8 @@ final class TrackerStore: NSObject {
         trackerCoreData.id = tracker.id
         trackerCoreData.schedule = tracker.timetable as NSObject
         trackerCoreData.colorHex = UIcolorMarshalling.hexString(from: tracker.color)
-        
         return trackerCoreData
     }
-    
     
     func fetchTrackers() throws -> [Tracker] {
         let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
@@ -97,6 +96,11 @@ final class TrackerStore: NSObject {
             emoji: emoji,
             timetable: schedule
         )
+    }
+    
+    func test() {
+        print(fetchedResultsController.sections?.count)
+        print(fetchedResultsController.sections?[0].numberOfObjects)
     }
     
     // MARK: - Core Data Saving support
