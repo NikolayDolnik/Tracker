@@ -10,6 +10,7 @@
 		9968F49F2AF523D30033C4B9 /* TrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9968F49E2AF523D30033C4B9 /* TrackerStore.swift */; };
 		9968F4A12AF523E80033C4B9 /* TrackerCategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9968F4A02AF523E80033C4B9 /* TrackerCategoryStore.swift */; };
 		9968F4A32AF524020033C4B9 /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9968F4A22AF524020033C4B9 /* TrackerRecordStore.swift */; };
+		9968F4A52AFB7DBC0033C4B9 /* StoreDelegateProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9968F4A42AFB7DBC0033C4B9 /* StoreDelegateProtocol.swift */; };
 		99C5FD0B2ACC27B000F33BFC /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5FD0A2ACC27B000F33BFC /* TabBarController.swift */; };
 		99C5FD0D2ACC282E00F33BFC /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5FD0C2ACC282E00F33BFC /* StatisticsViewController.swift */; };
 		99C5FD112ACC5F5500F33BFC /* CreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5FD102ACC5F5500F33BFC /* CreateViewController.swift */; };
@@ -64,6 +65,7 @@
 		9968F49E2AF523D30033C4B9 /* TrackerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStore.swift; sourceTree = "<group>"; };
 		9968F4A02AF523E80033C4B9 /* TrackerCategoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStore.swift; sourceTree = "<group>"; };
 		9968F4A22AF524020033C4B9 /* TrackerRecordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStore.swift; sourceTree = "<group>"; };
+		9968F4A42AFB7DBC0033C4B9 /* StoreDelegateProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDelegateProtocol.swift; sourceTree = "<group>"; };
 		99C5FD0A2ACC27B000F33BFC /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		99C5FD0C2ACC282E00F33BFC /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		99C5FD102ACC5F5500F33BFC /* CreateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateViewController.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 			children = (
 				9968F49E2AF523D30033C4B9 /* TrackerStore.swift */,
 				9968F4A02AF523E80033C4B9 /* TrackerCategoryStore.swift */,
+				9968F4A42AFB7DBC0033C4B9 /* StoreDelegateProtocol.swift */,
 				9968F4A22AF524020033C4B9 /* TrackerRecordStore.swift */,
 			);
 			path = DataStore;
@@ -467,6 +470,7 @@
 				99DADA5F2ACC0B53004467A3 /* TrackerDataModel.xcdatamodeld in Sources */,
 				99C5FD292AD009CC00F33BFC /* CustomCollectionCell.swift in Sources */,
 				99C5FD402ADF18EA00F33BFC /* TrackerCellModel.swift in Sources */,
+				9968F4A52AFB7DBC0033C4B9 /* StoreDelegateProtocol.swift in Sources */,
 				99C5FD392AD7FFFD00F33BFC /* TrackerRecord.swift in Sources */,
 				99C5FD112ACC5F5500F33BFC /* CreateViewController.swift in Sources */,
 				99C5FD2C2AD2A62200F33BFC /* TrackersCollectionCells.swift in Sources */,

@@ -14,7 +14,7 @@ final class EventViewController: UIViewController, EmojiPresenterDelegateProtoco
     var presenter: CollectionViewPresenterProtocol?
     private var params = ["Категория"]
     
-    private var categoreName = "Cоздано контроллером"
+    private var categoreName = "Нерегулярное событие"
     private var name: String?
     var color: UIColor?
     var emoji: String?

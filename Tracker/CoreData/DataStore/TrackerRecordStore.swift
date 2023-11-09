@@ -75,19 +75,10 @@ final class TrackerRecordStore: NSObject {
         
         guard let r = fetchedResultsController.fetchedObjects else { return false }
         r.forEach{ if $0.id == tracker.id &&
-                        $0.dateRecord?.daysBetweenDate(toDate: date) == 0 { completeState = true} }
+                        $0.dateRecord?.daysBetweenDate(toDate: date) == 0 { return completeState = true }
+        }
         return completeState
     }
-//    func convertTracker(tracker: Tracker ) -> TrackerCoreData {
-//        let trackerCoreData = TrackerCoreData(context: context)
-//        trackerCoreData.emoji = tracker.emoji
-//        trackerCoreData.name = tracker.name
-//        trackerCoreData.id = tracker.id
-//        trackerCoreData.schedule = tracker.timetable as NSObject
-//        trackerCoreData.colorHex = UIcolorMarshalling.hexString(from: tracker.color)
-//
-//        return trackerCoreData
-//    }
     
     // MARK: - Core Data Saving support
     
@@ -95,7 +86,6 @@ final class TrackerRecordStore: NSObject {
         if context.hasChanges {
             do {
                 try context.save()
-                print("deleted")
             } catch {
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
@@ -111,8 +101,6 @@ final class TrackerRecordStore: NSObject {
 extension TrackerRecordStore:  NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        // вызывается после сохранения контекста -  стоит сделать обновление коллекции?? + Добавить трекер в категорию
-        // Делегать - менеджер который работает с Категориями и трекерам и обновляет таблицу. И рекордом.
      
     }
     

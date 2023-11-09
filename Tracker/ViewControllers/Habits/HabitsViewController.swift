@@ -62,7 +62,8 @@ final class HabitsViewController: UIViewController {
     
     var tableView: UITableView = {
         let t = UITableView()
-        t.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+        t.register(cell.classForCoder, forCellReuseIdentifier: "cell")
         t.separatorInset = .init(top: 0, left: 20, bottom: 0, right: 20)
         t.layer.cornerRadius = 16
         t.clipsToBounds = true
@@ -219,13 +220,30 @@ extension HabitsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = params[indexPath.row]
+        //let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+        
         cell.backgroundColor = .backgroundDayTracker
+        cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        cell.detailTextLabel?.textColor = .grayTracker
         cell.accessoryType = .disclosureIndicator
-        if indexPath.row == 1 {
+        
+        switch indexPath.row {
+        case 0:
+            cell.textLabel?.text = params[0]
+            cell.detailTextLabel?.text = ""
+        case 1:
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 500)
+            cell.textLabel?.text = params[1]
+            if timetable != nil {
+                cell.detailTextLabel?.text = WeekDay.getShortTimetable(for: timetable!)
+            } else {
+                cell.detailTextLabel?.text = nil
+            }
+        default:
+            break
         }
+        
         return cell
     }
     
@@ -259,7 +277,7 @@ extension HabitsViewController {
     }
     
     func tapTimeTable(){
-        let vc = TimeTableViewController()
+        let vc = TimeTableViewController(timetable: timetable)
         vc.delegate = self
         self.present(vc, animated: true)
     }
@@ -286,6 +304,7 @@ extension HabitsViewController: TimeTableDelegateProtocol {
     
     func addTimetable(timetable: [Int]) {
         self.timetable = timetable
+        tableView.reloadData()
         dataCheking()
     }
     

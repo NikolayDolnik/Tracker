@@ -10,4 +10,6 @@ import Foundation
 public protocol TrackersViewControllerProtocol: AnyObject, TrackersCollectionViewCellDelegate {
     var trackerService: TrackersServiseProtocol?  {get set}
     var presenter: TrackersPresenterProtocol? {get set}
+    func updateData(_ update: StoreUpdate)
+    func update()
 }

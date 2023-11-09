@@ -13,7 +13,10 @@ final class TrackerStore: NSObject {
     private let entityName = "TrackerCoreData"
     private let UIcolorMarshalling = UIColorMarshalling()
     private let context: NSManagedObjectContext
-    private lazy var fetchedResultsController: NSFetchedResultsController<TrackerCoreData> = {
+    private var insertedIndexes: IndexSet?
+    private var deletedIndexes: IndexSet?
+    weak var delegate: StoreDelegateProtocol?
+    lazy var fetchedResultsController: NSFetchedResultsController<TrackerCoreData> = {
 
         let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: entityName)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: false)]
@@ -42,20 +45,17 @@ final class TrackerStore: NSObject {
     func addTracker(tracker: Tracker, categoryName: String) throws {
         let trackerCoreData = convertTracker(tracker: tracker)
         //Получаем название категории от VC и ищем их в БД, если нет осоздаем новую категорию. Покаиспользуем кастомную
-        let trackerCategoryCoreData = TrackercategoryCoreData(context: context)
+        let trackerCategoryCoreData = TrackerCategoryCoreData(context: context)
         trackerCategoryCoreData.categoryName = categoryName //"Созданно контроллером"
         trackerCoreData.category = trackerCategoryCoreData
         
-        try context.save()
-        // saveContext()
+        saveContext()
     }
     
-    func deleteTracker(tracker: Tracker) throws {
-    
-        var r = fetchedResultsController.fetchedObjects
-        r?.forEach{ if $0.id == tracker.id { context.delete($0) } }
+    func deleteTracker(for indexPath: IndexPath) throws {
+        let deleteTracker = fetchedResultsController.object(at: indexPath)
+        context.delete(deleteTracker)
         saveContext()
-        print("удалили трекер и сохранили контекст")
     }
     
     func convertTracker(tracker: Tracker ) -> TrackerCoreData {
@@ -63,7 +63,7 @@ final class TrackerStore: NSObject {
         trackerCoreData.emoji = tracker.emoji
         trackerCoreData.name = tracker.name
         trackerCoreData.id = tracker.id
-        trackerCoreData.schedule = tracker.timetable as NSObject
+        trackerCoreData.schedule = WeekDay.getShedule(for: tracker.timetable )
         trackerCoreData.colorHex = UIcolorMarshalling.hexString(from: tracker.color)
         return trackerCoreData
     }
@@ -71,7 +71,7 @@ final class TrackerStore: NSObject {
     func fetchTrackers() throws -> [Tracker] {
         let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: false)]
-
+        try? fetchedResultsController.performFetch()
         let trackersCD = try? context.fetch(fetchRequest)
         var customTrackers: [Tracker] = []
         try trackersCD?.forEach{ customTrackers.append( try self.trackers(from: $0) ) }
@@ -79,12 +79,12 @@ final class TrackerStore: NSObject {
     }
     
     func trackers(from trackerCoreData: TrackerCoreData) throws -> Tracker {
-        //  let timetable =  [0,1,2,3,4,5,6]
+   
         guard let id = trackerCoreData.id,
               let name = trackerCoreData.name,
               let emoji = trackerCoreData.emoji,
               let colorHex = trackerCoreData.colorHex,
-              let schedule = trackerCoreData.schedule as? [Int]
+              let schedule = trackerCoreData.schedule
         else {
             throw TrackerStoreError.decodingError
         }
@@ -94,14 +94,33 @@ final class TrackerStore: NSObject {
             name:name,
             color: UIcolorMarshalling.color(from: colorHex),
             emoji: emoji,
-            timetable: schedule
+            timetable: WeekDay.getTimetable(for: schedule)
         )
     }
     
-    func test() {
-        print(fetchedResultsController.sections?.count)
-        print(fetchedResultsController.sections?[0].numberOfObjects)
+    func tracker(for indexPath: IndexPath) -> Tracker? {
+        return try? trackers(from: fetchedResultsController.object(at: indexPath))
     }
+    
+    func predicateFetch(numberOfDay: Int){
+
+        let stringDay = WeekDay.getString(for: numberOfDay)
+        let predicate = NSPredicate(format: "%K CONTAINS[cd] %@",
+                                    #keyPath(TrackerCoreData.schedule),
+                                    stringDay)
+        fetchedResultsController.fetchRequest.predicate = predicate
+        try? fetchedResultsController.performFetch()
+    }
+    
+    func predicateFetch(text: String){
+
+        let predicate = NSPredicate(format: "%K CONTAINS[cd] %@",
+                                    #keyPath(TrackerCoreData.name),
+                                    text)
+        fetchedResultsController.fetchRequest.predicate = predicate
+        try? fetchedResultsController.performFetch()
+    }
+    
     
     // MARK: - Core Data Saving support
     
@@ -110,7 +129,6 @@ final class TrackerStore: NSObject {
             
             do {
                 try context.save()
-                print("deleted")
             } catch {
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
@@ -127,7 +145,35 @@ extension TrackerStore:  NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         // вызывается после сохранения контекста -  стоит сделать обновление коллекции?? + Добавить трекер в категорию
         // Делегать - менеджер который работает с Категориями и трекерам и обновляет таблицу. И рекордом.
+        delegate?.didUpdate(StoreUpdate(
+                insertedIndexes: insertedIndexes!,
+                deletedIndexes: deletedIndexes!
+            )
+        )
+        insertedIndexes = nil
+        deletedIndexes = nil
      
+    }
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        insertedIndexes = IndexSet()
+        deletedIndexes = IndexSet()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        
+        switch type {
+        case .delete:
+            if let indexPath = indexPath {
+                deletedIndexes?.insert(indexPath.item)
+            }
+        case .insert:
+            if let indexPath = newIndexPath {
+                insertedIndexes?.insert(indexPath.item)
+            }
+        default:
+            break
+        }
     }
     
 }

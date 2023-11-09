@@ -35,6 +35,16 @@ final class TimeTableViewController: UIViewController {
     
     var button = UIButton()
     
+    init(timetable: [Int]? ){
+        super.init(nibName: nil, bundle: nil)
+        guard let timetable else { return }
+        self.timetable = timetable
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         config()
@@ -90,6 +100,11 @@ extension TimeTableViewController: UITableViewDelegate, UITableViewDataSource {
         switchUI.tag = indexPath.row
         switchUI.addTarget(self, action: #selector(switchChanged(_:)), for: .valueChanged)
         cell.accessoryView = switchUI
+        
+        if timetable.contains(WeekDay.init(rawValue: value)!.rawValue){
+            switchUI.isOn = true
+        }
+        
         return cell
     }
     
@@ -102,7 +117,6 @@ extension TimeTableViewController: UITableViewDelegate, UITableViewDataSource {
 extension TimeTableViewController {
     
     @objc func switchChanged(_ sender: UISwitch!){
-        
         var number = sender.tag + 1
         if number == 7 { number = 0 }
         

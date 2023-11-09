@@ -14,6 +14,7 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
     let currentDay = NSDate()
     var categories = [TrackerCategory]()
     var completeTrackers = [TrackerRecord]()
+    
     private let datePicker = UIDatePicker()
     private let searchController = UISearchController()
     private var TrackersServiceObserver: NSObjectProtocol?
@@ -36,16 +37,6 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
         configUI()
         configPresenter()
         changeDatePicker()
-        
-        TrackersServiceObserver = NotificationCenter.default.addObserver(
-            forName: TrackersService.didChangeNotification,
-            object: nil,
-            queue: .main) { [weak self] _ in
-                guard let self else { return}
-                self.changeDatePicker()
-                self.collectionView.reloadData()
-            }
-        
     }
     
     
@@ -55,6 +46,7 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
         searchController.searchBar.delegate = self
         
         trackerService = TrackersService.shared
+        trackerService?.view = self
         categories = trackerService!.categories
         
         presenter = TrackersPresenter()
@@ -129,7 +121,7 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
 extension TrackersViewController {
     func stubViewConfig(){
         
-        guard presenter!.visibleCategory.isEmpty else { return stubView.isHidden = true }
+        guard collectionView.numberOfItems(inSection: 0) == 0 else { return stubView.isHidden = true }
         let image = UIImageView(image: UIImage(named: "stub"))
         image.translatesAutoresizingMaskIntoConstraints = false
         
@@ -159,6 +151,26 @@ extension TrackersViewController {
 }
 
 
+//MARK: - UpdateData
+
+extension TrackersViewController {
+    
+    func update() {
+        collectionView.reloadData()
+    }
+    
+    func updateData(_ update: StoreUpdate) {
+        collectionView.performBatchUpdates{
+            let insertedIndexPaths = update.insertedIndexes.map { IndexPath(item: $0, section: 0) }
+            let deletedIndexPaths = update.deletedIndexes.map { IndexPath(item: $0, section: 0) }
+            collectionView.deleteItems(at: deletedIndexPaths)
+            collectionView.insertItems(at: insertedIndexPaths)
+        }
+        stubViewConfig()
+    }
+
+}
+
 //MARK: - DatePicker
 
 
@@ -166,8 +178,7 @@ extension TrackersViewController {
     @objc func changeDatePicker() {
         
         guard let trackerService = trackerService else {return}
-        presenter?.newVisibleCategory(get: trackerService.changeDate(for: datePicker.date))
-        collectionView.reloadData()
+        trackerService.changeDate(for: datePicker.date)
         stubViewConfig()
     }
 }
@@ -181,8 +192,9 @@ extension TrackersViewController: UISearchBarDelegate {
         guard searchText != "", searchText != " ", let trackerService = trackerService else { return }
         
         let text = searchText.lowercased()
-        presenter?.newVisibleCategory(get: trackerService.findTrackers(text: text))
-        collectionView.reloadData()
+        trackerService.searchTrackers(text: text)
+        stubViewConfig()
+        
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -199,18 +211,17 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
     
     @objc func didTapCompleteButton(_ cell: TrackersCollectionViewCell) {
         guard let indexPath = collectionView.indexPath(for: cell),
-              let tracker = presenter?.visibleCategory[indexPath.section].trackers[indexPath.row],
               let trackerService else {return}
         
         cell.changeState(state: cell.completeState)
         switch cell.completeState {
         case true:
-            trackerService.addTrackerrecord(tracker: tracker)
+            trackerService.addTrackerRecord(for: indexPath)
             
-            cell.dayCountLable.text = "\(trackerService.getTrackerRecord(tracker: tracker) ) дней"
+            cell.dayCountLable.text = "\(trackerService.getTrackerRecord(for: indexPath)) дней"
         case false:
-            trackerService.deleteTrackerRecord(tracker: tracker)
-            cell.dayCountLable.text = "\(trackerService.getTrackerRecord(tracker: tracker) ) дней"
+            trackerService.deleteTrackerRecord(for: indexPath)
+            cell.dayCountLable.text = "\(trackerService.getTrackerRecord(for: indexPath) ) дней"
         }
     }
 }
