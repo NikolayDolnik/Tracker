@@ -26,7 +26,7 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
         return collection
     }()
     var search = UISearchTextField()
-    var stubView = UIView()
+    var stubsView = StubView()
     
     
     //MARK: - LifeCycle
@@ -37,6 +37,7 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
         configUI()
         configPresenter()
         changeDatePicker()
+        view.addTapGestureToHideKeyboard()
     }
     
     
@@ -63,14 +64,20 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
         
         view.backgroundColor = .whiteDayTracker
         view.addSubview(collectionView)
-        view.addSubview(stubView)
+        view.addSubview(stubsView)
+        stubsView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 24)
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 24),
+            stubsView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
+            stubsView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            stubsView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            stubsView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -24)
         ])
+        stubsView.isHidden = false
     }
     
     
@@ -119,34 +126,13 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
 //MARK: - StubView
 
 extension TrackersViewController {
-    func stubViewConfig(){
+    
+    func stubViewConfig(stubs: Stubs){
         
-        guard collectionView.numberOfItems(inSection: 0) == 0 else { return stubView.isHidden = true }
-        let image = UIImageView(image: UIImage(named: "stub"))
-        image.translatesAutoresizingMaskIntoConstraints = false
+        guard collectionView.numberOfItems(inSection: 0) == 0 else { return  stubsView.isHidden = true }
         
-        let label = UILabel()
-        label.text = "Что будем отслеживать?"
-        label.font = .systemFont(ofSize: 12, weight: .medium)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
-        stubView.addSubview(image)
-        stubView.addSubview(label)
-        stubView.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            stubView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
-            stubView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            stubView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            stubView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -24),
-            
-            image.centerXAnchor.constraint(equalTo: stubView.centerXAnchor),
-            image.centerYAnchor.constraint(equalTo: stubView.centerYAnchor),
-            label.centerXAnchor.constraint(equalTo: stubView.centerXAnchor),
-            label.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 8)
-            
-        ])
-        stubView.isHidden = false
+        stubsView.stubViewConfig(stubs: stubs)
+        stubsView.isHidden = false
     }
 }
 
@@ -166,7 +152,7 @@ extension TrackersViewController {
             collectionView.deleteItems(at: deletedIndexPaths)
             collectionView.insertItems(at: insertedIndexPaths)
         }
-        stubViewConfig()
+        stubViewConfig(stubs: Stubs.date)
     }
 
 }
@@ -179,7 +165,7 @@ extension TrackersViewController {
         
         guard let trackerService = trackerService else {return}
         trackerService.changeDate(for: datePicker.date)
-        stubViewConfig()
+        stubViewConfig(stubs: Stubs.date)
     }
 }
 
@@ -193,8 +179,7 @@ extension TrackersViewController: UISearchBarDelegate {
         
         let text = searchText.lowercased()
         trackerService.searchTrackers(text: text)
-        stubViewConfig()
-        
+        stubViewConfig(stubs: Stubs.search)
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -225,3 +210,5 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
         }
     }
 }
+
+

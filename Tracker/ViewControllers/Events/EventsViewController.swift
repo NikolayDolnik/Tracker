@@ -113,6 +113,7 @@ final class EventViewController: UIViewController, EmojiPresenterDelegateProtoco
     override func viewDidLoad() {
         super.viewDidLoad()
         config()
+        view.addTapGestureToHideKeyboard()
     }
     
     //MARK: - UI config
@@ -202,6 +203,11 @@ extension EventViewController: UITextFieldDelegate {
     
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         name = nil
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
         return true
     }
     

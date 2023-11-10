@@ -116,9 +116,16 @@ final class HabitsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         config()
+        view.addTapGestureToHideKeyboard()
     }
     
     //MARK: - UI config
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+            self.view.endEditing(true)
+    }
+    
+    
     
     func config(){
         trackerService = TrackersService.shared
@@ -208,6 +215,11 @@ extension HabitsViewController: UITextFieldDelegate {
         return true
     }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return true
+    }
+    
 }
 
 
@@ -268,7 +280,11 @@ extension HabitsViewController: UITableViewDelegate, UITableViewDataSource {
 extension HabitsViewController {
     
     func dataCheking(){
-        guard let  name, let timetable, let color, let emoji   else {return}
+        guard let  name, let timetable, let color, let emoji, timetable != []   else {
+            createButton.isEnabled = false
+            createButton.backgroundColor  =  createButton.isEnabled ? .blackDayTracker : .grayTracker
+            return
+        }
         createButton.isEnabled = true
         createButton.backgroundColor  =  createButton.isEnabled ? .blackDayTracker : .grayTracker
     }
@@ -287,7 +303,7 @@ extension HabitsViewController {
     }
     
     @objc func didTapCreateButton(){
-        guard let  name, let timetable, let color, let emoji  else {return}
+        guard let  name, let timetable, let color, let emoji else {return}
         trackerService?.addTracker(categoryNewName: categoreName, name: name, emoji: emoji, color: color, timetable: timetable)
         
         guard

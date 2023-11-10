@@ -47,35 +47,40 @@ final class TrackerRecordStore: NSObject {
         
         let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id" , ascending: true)]
-        let r = try? context.fetch(fetchRequest)
-        r?.forEach{ if $0.id == tracker.id {  record.tracker = $0  } }
+        let result = try? context.fetch(fetchRequest)
+        result?.forEach{ if $0.id == tracker.id {  record.tracker = $0  } }
         
          saveContext()
     }
     
     func deleteTracker(tracker: Tracker, recordDay: Date) throws {
-    
+        
         guard let r = fetchedResultsController.fetchedObjects else { return print("Record не удален") }
-        r.forEach{ if $0.id == tracker.id &&
-                        $0.dateRecord?.daysBetweenDate(toDate: recordDay) == 0 { context.delete($0) } }
+        r.forEach{
+            if $0.id == tracker.id &&
+                $0.dateRecord?.daysBetweenDate(toDate: recordDay) == 0 { context.delete($0)
+            }
+        }
         saveContext()
     }
     
     func getTrackerRecord(tracker: Tracker)-> Int {
         
         var record = 0
-        let r = fetchedResultsController.fetchedObjects ?? []
-        r.forEach{ if $0.id == tracker.id { record += 1 } }
-        
+        let result = fetchedResultsController.fetchedObjects ?? []
+        result.forEach{
+            if $0.id == tracker.id { record += 1 }
+        }
         return record
     }
     
     func getCompleteState(tracker: Tracker, date: Date)-> Bool {
         var completeState = false
         
-        guard let r = fetchedResultsController.fetchedObjects else { return false }
-        r.forEach{ if $0.id == tracker.id &&
-                        $0.dateRecord?.daysBetweenDate(toDate: date) == 0 { return completeState = true }
+        guard let result = fetchedResultsController.fetchedObjects else { return false }
+        result.forEach{
+            if $0.id == tracker.id &&
+                $0.dateRecord?.daysBetweenDate(toDate: date) == 0 { completeState = true }
         }
         return completeState
     }

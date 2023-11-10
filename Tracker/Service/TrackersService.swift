@@ -141,7 +141,9 @@ final class TrackersService: TrackersServiseProtocol {
     }
     
     func searchTrackers(text: String) {
-        trackerStrore.predicateFetch(text: text)
+        
+        let numberOfDay = Calendar.current.component(.weekday, from: currentDay as Date ) - 1
+        trackerStrore.predicateFetch(text: text, numberOfDay: numberOfDay)
         view?.update()
     }
     
@@ -169,7 +171,6 @@ final class TrackersService: TrackersServiseProtocol {
             emoji: emoji,
             timetable: timetable
         )
-        
         try? trackerStrore.addTracker(tracker: tracker, categoryName: categoryNewName)
     }
     
@@ -182,7 +183,7 @@ final class TrackersService: TrackersServiseProtocol {
     
     func isEnableCompleteButton() -> Bool {
         guard let visibleDay else { return true }
-        return visibleDay.daysBetweenDate(toDate: currentDay as Date) >= 0 ? true : false
+        return visibleDay.daysBetweenDate(toDate: currentDay as Date) >= 0
     }
     
     func getCompleteState(tracker: Tracker, date: Date)-> Bool {
@@ -233,7 +234,7 @@ extension TrackersService: StoreDelegateProtocol {
     
     func objectModel(at indexPath: IndexPath) -> TrackerCellModel? {
        let trackerCore = trackerStrore.fetchedResultsController.object(at: indexPath)
-        guard let tracker = try? trackerStrore.trackers(from: trackerCore) else { return nil }
+        guard let tracker = try? trackerStrore.getTrackers(from: trackerCore) else { return nil }
         
         if visibleDay == nil {
             visibleDay = currentDay as Date

@@ -74,11 +74,11 @@ final class TrackerStore: NSObject {
         try? fetchedResultsController.performFetch()
         let trackersCD = try? context.fetch(fetchRequest)
         var customTrackers: [Tracker] = []
-        try trackersCD?.forEach{ customTrackers.append( try self.trackers(from: $0) ) }
+        try trackersCD?.forEach{ customTrackers.append( try self.getTrackers(from: $0) ) }
         return customTrackers
     }
     
-    func trackers(from trackerCoreData: TrackerCoreData) throws -> Tracker {
+    func getTrackers(from trackerCoreData: TrackerCoreData) throws -> Tracker {
    
         guard let id = trackerCoreData.id,
               let name = trackerCoreData.name,
@@ -99,7 +99,7 @@ final class TrackerStore: NSObject {
     }
     
     func tracker(for indexPath: IndexPath) -> Tracker? {
-        return try? trackers(from: fetchedResultsController.object(at: indexPath))
+        return try? getTrackers(from: fetchedResultsController.object(at: indexPath))
     }
     
     func predicateFetch(numberOfDay: Int){
@@ -112,12 +112,18 @@ final class TrackerStore: NSObject {
         try? fetchedResultsController.performFetch()
     }
     
-    func predicateFetch(text: String){
+    func predicateFetch(text: String, numberOfDay: Int){
 
         let predicate = NSPredicate(format: "%K CONTAINS[cd] %@",
                                     #keyPath(TrackerCoreData.name),
                                     text)
-        fetchedResultsController.fetchRequest.predicate = predicate
+        
+        let stringDay = WeekDay.getString(for: numberOfDay)
+        let predicateDate = NSPredicate(format: "%K CONTAINS[cd] %@",
+                                    #keyPath(TrackerCoreData.schedule),
+                                    stringDay)
+        
+        fetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, predicateDate])
         try? fetchedResultsController.performFetch()
     }
     

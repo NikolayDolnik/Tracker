@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		993F7FA42AFE526A00EB0978 /* StubViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993F7FA32AFE526A00EB0978 /* StubViewPresenter.swift */; };
 		9968F49F2AF523D30033C4B9 /* TrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9968F49E2AF523D30033C4B9 /* TrackerStore.swift */; };
 		9968F4A12AF523E80033C4B9 /* TrackerCategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9968F4A02AF523E80033C4B9 /* TrackerCategoryStore.swift */; };
 		9968F4A32AF524020033C4B9 /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9968F4A22AF524020033C4B9 /* TrackerRecordStore.swift */; };
@@ -62,6 +63,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		993F7FA32AFE526A00EB0978 /* StubViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubViewPresenter.swift; sourceTree = "<group>"; };
 		9968F49E2AF523D30033C4B9 /* TrackerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStore.swift; sourceTree = "<group>"; };
 		9968F4A02AF523E80033C4B9 /* TrackerCategoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStore.swift; sourceTree = "<group>"; };
 		9968F4A22AF524020033C4B9 /* TrackerRecordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStore.swift; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 			isa = PBXGroup;
 			children = (
 				99C5FD262AD007DE00F33BFC /* EmojiCollectionViewPresenter.swift */,
+				993F7FA32AFE526A00EB0978 /* StubViewPresenter.swift */,
 			);
 			path = Presenters;
 			sourceTree = "<group>";
@@ -471,6 +474,7 @@
 				99C5FD292AD009CC00F33BFC /* CustomCollectionCell.swift in Sources */,
 				99C5FD402ADF18EA00F33BFC /* TrackerCellModel.swift in Sources */,
 				9968F4A52AFB7DBC0033C4B9 /* StoreDelegateProtocol.swift in Sources */,
+				993F7FA42AFE526A00EB0978 /* StubViewPresenter.swift in Sources */,
 				99C5FD392AD7FFFD00F33BFC /* TrackerRecord.swift in Sources */,
 				99C5FD112ACC5F5500F33BFC /* CreateViewController.swift in Sources */,
 				99C5FD2C2AD2A62200F33BFC /* TrackersCollectionCells.swift in Sources */,

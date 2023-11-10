@@ -23,13 +23,16 @@ public enum WeekDay: Int {
     case sunday = 0
     
     static func getString(for count: Int) -> String {
-        return WeekDay.init(rawValue: count)!.description
+        guard let string = WeekDay.init(rawValue: count)?.description else {
+            return ""
+        }
+        return string
     }
     
     static func getShedule(for timetable: [Int]) -> String {
         var shedule: String = ""
-        for i in timetable {
-           shedule = shedule + getString(for: i) + " "
+        for number in timetable {
+           shedule = shedule + getString(for: number) + " "
         }
         return shedule
     }
@@ -39,9 +42,9 @@ public enum WeekDay: Int {
         
         let components = shedule.components(separatedBy: " ")
         
-        for i in components {
+        for day in components {
             for n in 0...6 {
-                if WeekDay.init(rawValue: n)?.description == i {
+                if WeekDay.init(rawValue: n)?.description == day {
                     guard let numberDay = WeekDay.init(rawValue: n) else { break }
                     timetable.append(numberDay.rawValue)
                 }
@@ -57,8 +60,13 @@ public enum WeekDay: Int {
         if array.count == 7 {
             string = "Каждый день"
         } else {
-            for i in array {
-                string = string + getShortString(for: i) + ", "
+            for (index, value) in array.enumerated() {
+                if index >= 1 && index < 7 {
+                    string += ", "
+                    string = string + getShortString(for: value)
+                } else {
+                    string = string + getShortString(for: value)
+                }
             }
         }
         return string
@@ -113,6 +121,35 @@ public enum WeekDay: Int {
 public enum State: String {
     case complete = "Property Done2"
     case addRecord = "ButtonTracker"
+}
+
+public enum Stubs {
+    case search
+    case date
+    case statistic
+    
+    var image: String {
+        switch self {
+        case .search:
+            return  "stubSearch"
+        case .date:
+            return "stub"
+        case .statistic:
+            return "stubStatistic"
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .search:
+            return  "Ничего не найдено"
+        case .date:
+            return "Что будем отслеживать?"
+        case .statistic:
+            return "Анализировать пока нечего"
+        }
+    }
+    
 }
 
 public struct StoreUpdate {
