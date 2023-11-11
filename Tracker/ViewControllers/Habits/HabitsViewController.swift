@@ -280,7 +280,7 @@ extension HabitsViewController: UITableViewDelegate, UITableViewDataSource {
 extension HabitsViewController {
     
     func dataCheking(){
-        guard let  name, let timetable, let color, let emoji, timetable != []   else {
+        guard let  name, let timetable, let color, let emoji, timetable != [], name != "", name != " "   else {
             createButton.isEnabled = false
             createButton.backgroundColor  =  createButton.isEnabled ? .blackDayTracker : .grayTracker
             return
