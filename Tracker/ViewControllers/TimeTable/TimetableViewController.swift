@@ -8,16 +8,9 @@
 import Foundation
 import UIKit
 
-protocol TimeTableDelegateProtocol {
-    func addTimetable(timetable: [Int])
-}
-
 final class TimeTableViewController: UIViewController {
     
     var delegate: TimeTableDelegateProtocol?
-    let daysOfWeek = [
-        "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"
-    ]
     var timetable = [Int]()
     
     lazy var titleLabel: UILabel = {
@@ -31,21 +24,30 @@ final class TimeTableViewController: UIViewController {
     
     var tableView: UITableView = {
         let t = UITableView()
-        t.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        t.register(UITableViewCell.self, forCellReuseIdentifier: identifier.cell.rawValue)
         t.layer.cornerRadius = 16
         t.clipsToBounds = true
         t.layer.masksToBounds = true
-        t.layer.maskedCorners = [.layerMaxXMaxYCorner,.layerMinXMaxYCorner]
+        //t.layer.maskedCorners = [.layerMaxXMaxYCorner,.layerMinXMaxYCorner]
         t.translatesAutoresizingMaskIntoConstraints = false
         return t
     }()
     
     var button = UIButton()
     
+    init(timetable: [Int]? ){
+        super.init(nibName: nil, bundle: nil)
+        guard let timetable else { return }
+        self.timetable = timetable
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         config()
-        
     }
     
     
@@ -80,18 +82,29 @@ final class TimeTableViewController: UIViewController {
 extension TimeTableViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return daysOfWeek.count
+        return 7
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = daysOfWeek[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: identifier.cell.rawValue, for: indexPath)
+        cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        var value = indexPath.row+1
+        if value == 7 {
+            value = 0
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 500)
+        }
+        cell.textLabel?.text = WeekDay.init(rawValue: value)?.description
         cell.backgroundColor = .backgroundDayTracker
         let switchUI = UISwitch()
         switchUI.onTintColor = .blueTracker
         switchUI.tag = indexPath.row
         switchUI.addTarget(self, action: #selector(switchChanged(_:)), for: .valueChanged)
         cell.accessoryView = switchUI
+        
+        if timetable.contains(WeekDay.init(rawValue: value)!.rawValue){
+            switchUI.isOn = true
+        }
+        
         return cell
     }
     
@@ -104,8 +117,8 @@ extension TimeTableViewController: UITableViewDelegate, UITableViewDataSource {
 extension TimeTableViewController {
     
     @objc func switchChanged(_ sender: UISwitch!){
-        
-        let number = sender.tag + 1
+        var number = sender.tag + 1
+        if number == 7 { number = 0 }
         
         if timetable.contains(where: { index in
             index == number
@@ -116,8 +129,6 @@ extension TimeTableViewController {
         } else {
             timetable.append((number))
         }
-        
-        print(timetable)
     }
     
     @objc func didTabCompleteButton(){
