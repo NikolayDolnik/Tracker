@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		993F7FA42AFE526A00EB0978 /* StubViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993F7FA32AFE526A00EB0978 /* StubViewPresenter.swift */; };
+		993F7FB22B0CFC0200EB0978 /* OnBoardingPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993F7FB12B0CFC0200EB0978 /* OnBoardingPage.swift */; };
+		993F7FB52B0D062800EB0978 /* PagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993F7FB42B0D062800EB0978 /* PagesViewController.swift */; };
+		993F7FB82B0F3EC200EB0978 /* CategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993F7FB72B0F3EC200EB0978 /* CategoriesViewController.swift */; };
+		993F7FBA2B0F40A000EB0978 /* CategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993F7FB92B0F40A000EB0978 /* CategoriesViewModel.swift */; };
+		993F7FBC2B0F42C100EB0978 /* CategoriesDelegateProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993F7FBB2B0F42C100EB0978 /* CategoriesDelegateProtocol.swift */; };
+		993F7FBE2B0F5A0400EB0978 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993F7FBD2B0F5A0400EB0978 /* Observable.swift */; };
+		993F7FC12B0F7E3800EB0978 /* NewCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993F7FC02B0F7E3800EB0978 /* NewCategoryViewController.swift */; };
 		9968F49F2AF523D30033C4B9 /* TrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9968F49E2AF523D30033C4B9 /* TrackerStore.swift */; };
 		9968F4A12AF523E80033C4B9 /* TrackerCategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9968F4A02AF523E80033C4B9 /* TrackerCategoryStore.swift */; };
 		9968F4A32AF524020033C4B9 /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9968F4A22AF524020033C4B9 /* TrackerRecordStore.swift */; };
@@ -64,6 +71,13 @@
 
 /* Begin PBXFileReference section */
 		993F7FA32AFE526A00EB0978 /* StubViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubViewPresenter.swift; sourceTree = "<group>"; };
+		993F7FB12B0CFC0200EB0978 /* OnBoardingPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingPage.swift; sourceTree = "<group>"; };
+		993F7FB42B0D062800EB0978 /* PagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagesViewController.swift; sourceTree = "<group>"; };
+		993F7FB72B0F3EC200EB0978 /* CategoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewController.swift; sourceTree = "<group>"; };
+		993F7FB92B0F40A000EB0978 /* CategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewModel.swift; sourceTree = "<group>"; };
+		993F7FBB2B0F42C100EB0978 /* CategoriesDelegateProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesDelegateProtocol.swift; sourceTree = "<group>"; };
+		993F7FBD2B0F5A0400EB0978 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
+		993F7FC02B0F7E3800EB0978 /* NewCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryViewController.swift; sourceTree = "<group>"; };
 		9968F49E2AF523D30033C4B9 /* TrackerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStore.swift; sourceTree = "<group>"; };
 		9968F4A02AF523E80033C4B9 /* TrackerCategoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStore.swift; sourceTree = "<group>"; };
 		9968F4A22AF524020033C4B9 /* TrackerRecordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStore.swift; sourceTree = "<group>"; };
@@ -130,6 +144,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		993F7FB02B0CFBDD00EB0978 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				993F7FB12B0CFC0200EB0978 /* OnBoardingPage.swift */,
+				993F7FB42B0D062800EB0978 /* PagesViewController.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		993F7FB62B0F3E7400EB0978 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				993F7FB72B0F3EC200EB0978 /* CategoriesViewController.swift */,
+				993F7FBB2B0F42C100EB0978 /* CategoriesDelegateProtocol.swift */,
+				993F7FB92B0F40A000EB0978 /* CategoriesViewModel.swift */,
+				993F7FBD2B0F5A0400EB0978 /* Observable.swift */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		993F7FBF2B0F7E0600EB0978 /* CreateCategories */ = {
+			isa = PBXGroup;
+			children = (
+				993F7FC02B0F7E3800EB0978 /* NewCategoryViewController.swift */,
+			);
+			path = CreateCategories;
+			sourceTree = "<group>";
+		};
 		9968F49C2AF522BD0033C4B9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -179,12 +221,15 @@
 		99C5FD2F2AD7FC9400F33BFC /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				993F7FB02B0CFBDD00EB0978 /* Onboarding */,
 				99C5FD682AE7CF5D00F33BFC /* Statistics */,
 				99C5FD672AE7CF0A00F33BFC /* Trackers */,
 				99C5FD212ACEEFFE00F33BFC /* TimeTable */,
 				99C5FD122ACEAFDE00F33BFC /* Create Trakers */,
 				99C5FD6A2AE7CFAC00F33BFC /* Events */,
 				99C5FD692AE7CF9B00F33BFC /* Habits */,
+				993F7FBF2B0F7E0600EB0978 /* CreateCategories */,
+				993F7FB62B0F3E7400EB0978 /* Categories */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -467,14 +512,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				993F7FBC2B0F42C100EB0978 /* CategoriesDelegateProtocol.swift in Sources */,
 				99C5FD322AD7FEA500F33BFC /* TrackersPresenter.swift in Sources */,
 				99C5FD162ACEB03300F33BFC /* EventsViewController.swift in Sources */,
 				99DADA882ACC0FE2004467A3 /* UiColors&Marshalling.swift in Sources */,
+				993F7FB52B0D062800EB0978 /* PagesViewController.swift in Sources */,
 				99DADA5F2ACC0B53004467A3 /* TrackerDataModel.xcdatamodeld in Sources */,
 				99C5FD292AD009CC00F33BFC /* CustomCollectionCell.swift in Sources */,
 				99C5FD402ADF18EA00F33BFC /* TrackerCellModel.swift in Sources */,
 				9968F4A52AFB7DBC0033C4B9 /* StoreDelegateProtocol.swift in Sources */,
+				993F7FB22B0CFC0200EB0978 /* OnBoardingPage.swift in Sources */,
 				993F7FA42AFE526A00EB0978 /* StubViewPresenter.swift in Sources */,
+				993F7FBA2B0F40A000EB0978 /* CategoriesViewModel.swift in Sources */,
 				99C5FD392AD7FFFD00F33BFC /* TrackerRecord.swift in Sources */,
 				99C5FD112ACC5F5500F33BFC /* CreateViewController.swift in Sources */,
 				99C5FD2C2AD2A62200F33BFC /* TrackersCollectionCells.swift in Sources */,
@@ -485,9 +534,12 @@
 				99C5FD3E2AD8352400F33BFC /* TrackersService.swift in Sources */,
 				9968F4A12AF523E80033C4B9 /* TrackerCategoryStore.swift in Sources */,
 				99C5FD372AD7FFE200F33BFC /* TrackerCategory.swift in Sources */,
+				993F7FBE2B0F5A0400EB0978 /* Observable.swift in Sources */,
 				99C5FD432AE1659500F33BFC /* TrackersViewControllerProtocol.swift in Sources */,
 				99DADA592ACC0B53004467A3 /* TrackersViewController.swift in Sources */,
 				99C5FD7D2AF4E66700F33BFC /* TrackersDataProvider.swift in Sources */,
+				993F7FC12B0F7E3800EB0978 /* NewCategoryViewController.swift in Sources */,
+				993F7FB82B0F3EC200EB0978 /* CategoriesViewController.swift in Sources */,
 				99C5FD0B2ACC27B000F33BFC /* TabBarController.swift in Sources */,
 				99C5FD352AD7FFCD00F33BFC /* Tracker.swift in Sources */,
 				99DADA552ACC0B53004467A3 /* AppDelegate.swift in Sources */,

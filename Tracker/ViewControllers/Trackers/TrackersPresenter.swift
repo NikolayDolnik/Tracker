@@ -34,20 +34,19 @@ final class TrackersPresenter: NSObject, TrackersPresenterProtocol {
 extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-      
-        return  trackerService?.numberOfSections ?? 0 //visibleCategory.count
+        guard let number = trackerService?.numberOfSections else {
+            return 0 }
+        return number
+        //старый метод return  trackerService?.numberOfSections ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        //visibleCategory[section].trackers.count
         return trackerService?.numberOfRowsInSection(section) ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier.cell.rawValue, for: indexPath) as! TrackersCollectionViewCell
         
-        //let tracker = visibleCategory[indexPath.section].trackers[indexPath.row]
-//        guard let model = trackerService?.createTrackerModel(tracker: tracker) else {return cell}
         guard let model = trackerService?.objectModel(at: indexPath) else {return cell}
         
         cell.delegate  = self.view
@@ -66,13 +65,17 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView{
+//        guard indexPath.section > 0 else {
+//            return
+//        }
         let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: identifier.header.rawValue, for: indexPath) as! SupplementaryView
         
         guard let name = trackerService?.nameforSection(indexPath.section) else { return view }
         view.titleLabel.text = name
-        
+
 //        for i in 0...indexPath.section{
-//            view.titleLabel.text = visibleCategory[i].categoreName
+//            view.titleLabel.text = trackerService?.nameforSection(i)
+//            print("Номер секйции \(i)")
 //        }
         return view
     }
@@ -95,10 +98,6 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
                 },
                 UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
                     self?.delete(indexPaths[0])
-                    
-//                    collectionView.performBatchUpdates{
-//                        collectionView.deleteItems(at: indexPaths)
-//                    }
                 },
             ])
         })

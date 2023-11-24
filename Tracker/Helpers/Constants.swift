@@ -127,6 +127,7 @@ public enum Stubs {
     case search
     case date
     case statistic
+    case category
     
     var image: String {
         switch self {
@@ -136,6 +137,8 @@ public enum Stubs {
             return "stub"
         case .statistic:
             return "stubStatistic"
+        case .category:
+            return "stub"
         }
     }
     
@@ -147,6 +150,8 @@ public enum Stubs {
             return "Что будем отслеживать?"
         case .statistic:
             return "Анализировать пока нечего"
+        case .category:
+            return "Привычки и события можно\n обьединить по смыслу"
         }
     }
     
@@ -155,4 +160,29 @@ public enum Stubs {
 public struct StoreUpdate {
     let insertedIndexes: IndexSet
     let deletedIndexes: IndexSet
+}
+
+
+public enum Page: CaseIterable {
+    case first
+    case second
+    
+    var image: String {
+        switch self {
+        case .first:
+            return  "backgroundBlue"
+        case .second:
+            return "backgroundRed"
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .first:
+            return  "Отслеживате только то, что хотите"
+        case .second:
+            return "Даже если это не литры воды и йога"
+        }
+    }
+    
 }

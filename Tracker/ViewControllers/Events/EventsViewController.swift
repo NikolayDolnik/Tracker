@@ -12,9 +12,10 @@ final class EventViewController: UIViewController, EmojiPresenterDelegateProtoco
     
     var trackerService: TrackersServiseProtocol?
     var presenter: CollectionViewPresenterProtocol?
+    private var viewModel: CategoriesViewModel?
     private var params = ["Категория"]
     
-    private var categoreName = "Нерегулярное событие"
+    private var categoreName: String?
     private var name: String?
     var color: UIColor?
     var emoji: String?
@@ -43,7 +44,7 @@ final class EventViewController: UIViewController, EmojiPresenterDelegateProtoco
         return label
     }()
     
-    var nameLable: UITextField = {
+    var nameLabel: UITextField = {
         let lable = UITextField()
         lable.placeholder = "Введите название трекера"
         lable.font = UIFont.systemFont(ofSize: 17, weight: .regular)
@@ -56,6 +57,17 @@ final class EventViewController: UIViewController, EmojiPresenterDelegateProtoco
         lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
+    
+    lazy var limitsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Ограничение 38 символов"
+        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.textAlignment = .center
+        label.textColor = .redTracker
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     
     var tableView: UITableView = {
         let t = UITableView()
@@ -119,6 +131,12 @@ final class EventViewController: UIViewController, EmojiPresenterDelegateProtoco
     //MARK: - UI config
     
     func config(){
+        viewModel = CategoriesViewModel()
+        viewModel?.$selectedCategory.bind(action: { [weak self] _ in
+            self?.categoreName = self?.viewModel?.selectedCategory
+            self?.tableView.reloadData()
+        })
+        
         trackerService = TrackersService.shared
         tableView.delegate = self
         tableView.dataSource = self
@@ -134,11 +152,12 @@ final class EventViewController: UIViewController, EmojiPresenterDelegateProtoco
         
         scrollView.addSubview(contentView)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(nameLable)
-        nameLable.delegate = self
-        nameLable.leftView = UIView.init(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
-        nameLable.leftViewMode = .always
+        contentView.addSubview(nameLabel)
+        nameLabel.delegate = self
+        nameLabel.leftView = UIView.init(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
+        nameLabel.leftViewMode = .always
         
+        contentView.addSubview(limitsLabel)
         contentView.addSubview(tableView)
         contentView.addSubview(collectionView)
         contentView.addSubview(stackViewButtons)
@@ -152,13 +171,17 @@ final class EventViewController: UIViewController, EmojiPresenterDelegateProtoco
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 27),
             titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
-            nameLable.heightAnchor.constraint(equalToConstant: 75),
-            nameLable.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
-            nameLable.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            nameLable.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            nameLable.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            nameLabel.heightAnchor.constraint(equalToConstant: 75),
+            nameLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+          
+            limitsLabel.heightAnchor.constraint(equalToConstant: 22),
+            limitsLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
+            limitsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            limitsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
-            tableView.topAnchor.constraint(equalTo: nameLable.bottomAnchor, constant: 24),
+            tableView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 62),
             tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             tableView.heightAnchor.constraint(equalToConstant: 75),
@@ -174,7 +197,7 @@ final class EventViewController: UIViewController, EmojiPresenterDelegateProtoco
             stackViewButtons.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
             
         ])
-        
+        limitsLabel.isHidden = true
         cancelButton.addTarget(self, action: #selector(didTapCancelButton), for: .touchUpInside)
         createButton.addTarget(self, action: #selector(didTapCreateButton), for: .touchUpInside)
         createButton.isEnabled = false
@@ -192,6 +215,14 @@ extension EventViewController: UITextFieldDelegate {
         dataCheking()
     }
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let maxText = 38
+        let inputText = (textField.text ?? "") as NSString
+        let limitsTex = inputText.replacingCharacters(in: range, with: string)
+        limitsLabel.isHidden = limitsTex.count <= maxText
+        
+        return limitsTex.count <= maxText
+    }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         return textField.text != nil
@@ -203,6 +234,7 @@ extension EventViewController: UITextFieldDelegate {
     
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         name = nil
+        limitsLabel.isHidden = true
         return true
     }
     
@@ -223,10 +255,19 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        //let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
         cell.textLabel?.text = params[indexPath.row]
         cell.backgroundColor = .backgroundDayTracker
         cell.accessoryType = .disclosureIndicator
+        cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        cell.detailTextLabel?.textColor = .grayTracker
+        
+        if categoreName != nil {
+            cell.detailTextLabel?.text = categoreName
+        } else {
+            cell.detailTextLabel?.text = nil
+        }
 
         return cell
     }
@@ -239,6 +280,7 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         switch indexPath.row {
         case 0:
+            tapCategory()
             return
         case 1:
             return
@@ -252,7 +294,7 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
 extension EventViewController {
     
     func dataCheking(){
-        guard let  name, let color , let emoji, name != "", name != " "  else {
+        guard let categoreName, let  name, let color , let emoji, name != "", name != " "  else {
             createButton.isEnabled = false
             createButton.backgroundColor  =  createButton.isEnabled ? .blackDayTracker : .grayTracker
             return
@@ -262,6 +304,8 @@ extension EventViewController {
     }
     
     func tapCategory(){
+        let vc = CategoriesViewController(viewModel: viewModel!, delegate: self)
+        self.present(vc, animated: true)
     }
     
     
@@ -270,7 +314,7 @@ extension EventViewController {
     }
     
     @objc func didTapCreateButton(){
-        guard let  name, let color, let emoji  else {return}
+        guard let categoreName, let  name, let color, let emoji  else {return}
         
         trackerService?.addTrackerEvent(categoryNewName: categoreName, name: name, emoji: emoji, color: color)
         
@@ -284,5 +328,10 @@ extension EventViewController {
     }
 }
 
-
+extension EventViewController: CategoriesDelegateProtocol {
+    func addCategories() {
+        //
+    }
+    
+}
 

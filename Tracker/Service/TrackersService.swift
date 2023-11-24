@@ -34,8 +34,13 @@ final class TrackersService: TrackersServiseProtocol {
     private var currentDay = NSDate()
     private var visibleDay: Date?
     weak var view: TrackersViewControllerProtocol?
-    private lazy var trackerStrore: TrackerStore = {
+    private lazy var trackerStore: TrackerStore = {
         let store = TrackerStore()
+        store.delegate = self
+        return store
+    }()
+    private lazy var trackerCategoryStore: TrackerCategoryStore = {
+        let store = TrackerCategoryStore()
         store.delegate = self
         return store
     }()
@@ -115,7 +120,7 @@ final class TrackersService: TrackersServiseProtocol {
     func changeDate(for day: Date)  {
         
         let numberOfDay = Calendar.current.component(.weekday, from: day ) - 1
-        trackerStrore.predicateFetch(numberOfDay: numberOfDay)
+        trackerStore.predicateFetch(numberOfDay: numberOfDay)
         visibleDay = day
         view?.update()
     }
@@ -143,11 +148,16 @@ final class TrackersService: TrackersServiseProtocol {
     func searchTrackers(text: String) {
         
         let numberOfDay = Calendar.current.component(.weekday, from: currentDay as Date ) - 1
-        trackerStrore.predicateFetch(text: text, numberOfDay: numberOfDay)
+        trackerStore.predicateFetch(text: text, numberOfDay: numberOfDay)
         view?.update()
     }
     
     //MARK: - Add Trackers
+    
+    func saveTracker(tracker: Tracker, with categoryName: String){
+        let trackerCoreData = trackerStore.convertTracker(tracker: tracker)
+        try?  trackerCategoryStore.addTrackerToCategory(tracker: trackerCoreData, categoryName: categoryName)
+    }
     
     func addTracker(categoryNewName: String, name: String, emoji: String, color: UIColor, timetable: [Int] ) {
         let tracker = Tracker(
@@ -157,8 +167,8 @@ final class TrackersService: TrackersServiseProtocol {
             emoji: emoji,
             timetable: timetable
         )
-    
-        try? trackerStrore.addTracker(tracker: tracker, categoryName: categoryNewName)
+        saveTracker(tracker: tracker, with: categoryNewName)
+       // try? trackerStore.addTracker(tracker: tracker, categoryName: categoryNewName)
     }
     
     func addTrackerEvent(categoryNewName: String, name: String, emoji: String, color: UIColor) {
@@ -171,14 +181,14 @@ final class TrackersService: TrackersServiseProtocol {
             emoji: emoji,
             timetable: timetable
         )
-        try? trackerStrore.addTracker(tracker: tracker, categoryName: categoryNewName)
+        saveTracker(tracker: tracker, with: categoryNewName)
     }
     
     
     //MARK: - Delete Trackers
     
     func deleteTracker(for indexPath: IndexPath){
-        try? trackerStrore.deleteTracker(for: indexPath)
+        try? trackerStore.deleteTracker(for: indexPath)
     }
     
     func isEnableCompleteButton() -> Bool {
@@ -192,21 +202,21 @@ final class TrackersService: TrackersServiseProtocol {
     
     func deleteTrackerRecord(for indexPath: IndexPath){
         guard let recordDay = visibleDay,
-              let tracker = trackerStrore.tracker(for: indexPath) else { return }
+              let tracker = trackerStore.tracker(for: indexPath) else { return }
         
         try? trackerRecordStore.deleteTracker(tracker: tracker, recordDay: recordDay)
     }
     
     func addTrackerRecord(for indexPath: IndexPath){
         guard let recordDay = visibleDay,
-              let tracker = trackerStrore.tracker(for: indexPath)
+              let tracker = trackerStore.tracker(for: indexPath)
         else { return }
         
         try? trackerRecordStore.addRecord(tracker: tracker, recordDate: recordDay)
     }
     
     func getTrackerRecord(for indexPath: IndexPath)-> Int {
-        guard let tracker = trackerStrore.tracker(for: indexPath)
+        guard let tracker = trackerStore.tracker(for: indexPath)
         else { return 0 }
         
         return trackerRecordStore.getTrackerRecord(tracker: tracker)
@@ -220,21 +230,22 @@ final class TrackersService: TrackersServiseProtocol {
 extension TrackersService: StoreDelegateProtocol {
    
     func didUpdate(_ update: StoreUpdate) {
-        view?.updateData(update)
+        view?.update()
+       // view?.updateData(update)
     }
     
     
     var numberOfSections: Int {
-        trackerStrore.fetchedResultsController.sections?.count ?? 0
+        trackerStore.fetchedResultsController.sections?.count ?? 0
     }
     
     func numberOfRowsInSection(_ section: Int) -> Int {
-        trackerStrore.fetchedResultsController.sections?[section].numberOfObjects ?? 0
+        trackerStore.fetchedResultsController.sections?[section].numberOfObjects ?? 0
     }
     
     func objectModel(at indexPath: IndexPath) -> TrackerCellModel? {
-       let trackerCore = trackerStrore.fetchedResultsController.object(at: indexPath)
-        guard let tracker = try? trackerStrore.getTrackers(from: trackerCore) else { return nil }
+       let trackerCore = trackerStore.fetchedResultsController.object(at: indexPath)
+        guard let tracker = try? trackerStore.getTrackers(from: trackerCore) else { return nil }
         
         if visibleDay == nil {
             visibleDay = currentDay as Date
@@ -255,13 +266,19 @@ extension TrackersService: StoreDelegateProtocol {
     }
     
     func fetchTrackers() -> [Tracker] {
-        guard let trackers = try? trackerStrore.fetchTrackers()  else { return [] }
+        guard let trackers = try? trackerStore.fetchTrackers()  else { return [] }
         return trackers
     }
     
     func nameforSection(_ section: Int) -> String? {
-        guard let trackerCoreData = trackerStrore.fetchedResultsController.sections?[section].objects?.first as? TrackerCoreData else { return nil }
+        guard let trackerCoreData = trackerStore.fetchedResultsController.sections?[section].objects?.first as? TrackerCoreData else { return nil }
         return trackerCoreData.category?.categoryName
         }
     
+}
+
+extension TrackersService: TrackerCategoryStoreDelegate {
+    func storeDidUpdate(_ store: TrackerCategoryStore) {
+    
+    }
 }

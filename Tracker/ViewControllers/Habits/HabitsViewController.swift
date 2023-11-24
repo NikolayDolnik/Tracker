@@ -10,12 +10,13 @@ import UIKit
 
 final class HabitsViewController: UIViewController {
     
-    var trackerService: TrackersServiseProtocol?
-    var presenter: CollectionViewPresenterProtocol?
+    private var trackerService: TrackersServiseProtocol?
+    private var presenter: CollectionViewPresenterProtocol?
+    private var viewModel: CategoriesViewModel?
     private var params = ["Категория","Расписание"]
     
     
-    private var categoreName = "Cоздано контроллером"
+    private var categoreName: String?
     private var name: String?
     var color: UIColor?
     var emoji: String?
@@ -56,6 +57,16 @@ final class HabitsViewController: UIViewController {
         //label.borderStyle = .roundedRect
         label.layer.cornerRadius = 16
         label.layer.masksToBounds = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    lazy var limitsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Ограничение 38 символов"
+        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.textAlignment = .center
+        label.textColor = .redTracker
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -125,9 +136,13 @@ final class HabitsViewController: UIViewController {
             self.view.endEditing(true)
     }
     
-    
-    
     func config(){
+        viewModel = CategoriesViewModel()
+        viewModel?.$selectedCategory.bind(action: { [weak self] _ in
+            self?.categoreName = self?.viewModel?.selectedCategory
+            self?.tableView.reloadData()
+        })
+        
         trackerService = TrackersService.shared
         tableView.delegate = self
         tableView.dataSource = self
@@ -143,6 +158,7 @@ final class HabitsViewController: UIViewController {
         
         scrollView.addSubview(contentView)
         contentView.addSubview(titleLabel)
+        contentView.addSubview(limitsLabel)
         contentView.addSubview(nameLabel)
         nameLabel.delegate = self
         nameLabel.leftView = UIView.init(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
@@ -165,9 +181,13 @@ final class HabitsViewController: UIViewController {
             nameLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
             nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             
-            tableView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 24),
+            limitsLabel.heightAnchor.constraint(equalToConstant: 22),
+            limitsLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
+            limitsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            limitsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+           
+            tableView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 62),
             tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             tableView.heightAnchor.constraint(equalToConstant: 150),
@@ -183,7 +203,7 @@ final class HabitsViewController: UIViewController {
             stackViewButtons.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
             
         ])
-        
+        limitsLabel.isHidden = true
         cancelButton.addTarget(self, action: #selector(didTapCancelButton), for: .touchUpInside)
         createButton.addTarget(self, action: #selector(didTapCreateButton), for: .touchUpInside)
         createButton.isEnabled = false
@@ -201,6 +221,14 @@ extension HabitsViewController: UITextFieldDelegate {
         dataCheking()
     }
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let maxText = 38
+        let inputText = (textField.text ?? "") as NSString
+        let limitsTex = inputText.replacingCharacters(in: range, with: string)
+        limitsLabel.isHidden = limitsTex.count <= maxText
+        
+        return limitsTex.count <= maxText
+    }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         return textField.text != nil
@@ -212,6 +240,7 @@ extension HabitsViewController: UITextFieldDelegate {
     
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         name = nil
+        limitsLabel.isHidden = true
         return true
     }
     
@@ -243,7 +272,11 @@ extension HabitsViewController: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.row {
         case 0:
             cell.textLabel?.text = params[0]
-            cell.detailTextLabel?.text = ""
+            if categoreName != nil {
+                cell.detailTextLabel?.text = categoreName
+            } else {
+                cell.detailTextLabel?.text = nil
+            }
         case 1:
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 500)
             cell.textLabel?.text = params[1]
@@ -267,7 +300,7 @@ extension HabitsViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         switch indexPath.row {
         case 0:
-            return
+            tapCategory()
         case 1:
             tapTimeTable()
         default:
@@ -280,7 +313,7 @@ extension HabitsViewController: UITableViewDelegate, UITableViewDataSource {
 extension HabitsViewController {
     
     func dataCheking(){
-        guard let  name, let timetable, let color, let emoji, timetable != [], name != "", name != " "   else {
+        guard let categoreName, let  name, let timetable, let color, let emoji, timetable != [], name != "", name != " "   else {
             createButton.isEnabled = false
             createButton.backgroundColor  =  createButton.isEnabled ? .blackDayTracker : .grayTracker
             return
@@ -290,6 +323,8 @@ extension HabitsViewController {
     }
     
     func tapCategory(){
+        let vc = CategoriesViewController(viewModel: viewModel!, delegate: self)
+        self.present(vc, animated: true)
     }
     
     func tapTimeTable(){
@@ -303,7 +338,7 @@ extension HabitsViewController {
     }
     
     @objc func didTapCreateButton(){
-        guard let  name, let timetable, let color, let emoji else {return}
+        guard let categoreName, let name, let timetable, let color, let emoji else {return}
         trackerService?.addTracker(categoryNewName: categoreName, name: name, emoji: emoji, color: color, timetable: timetable)
         
         guard
@@ -325,6 +360,12 @@ extension HabitsViewController: TimeTableDelegateProtocol {
     }
     
     
+}
+
+extension HabitsViewController: CategoriesDelegateProtocol {
+    func addCategories() {
+        //
+    }
 }
 
 extension HabitsViewController: EmojiPresenterDelegateProtocol {

@@ -23,7 +23,7 @@ final class TrackerStore: NSObject {
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
                                                                   managedObjectContext: context,
-                                                                  sectionNameKeyPath: nil,
+                                                                  sectionNameKeyPath: #keyPath(TrackerCoreData.category.categoryName),
                                                                   cacheName: nil)
         fetchedResultsController.delegate = self
         try? fetchedResultsController.performFetch()
@@ -51,6 +51,7 @@ final class TrackerStore: NSObject {
         
         saveContext()
     }
+    
     
     func deleteTracker(for indexPath: IndexPath) throws {
         let deleteTracker = fetchedResultsController.object(at: indexPath)

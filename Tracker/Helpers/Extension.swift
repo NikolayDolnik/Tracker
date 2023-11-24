@@ -12,6 +12,7 @@ extension UIViewController {
     
     func configUIButton(button: UIButton, title: String?, action: Selector?)-> UIButton {
         button.setTitle(title, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.layer.cornerRadius = 16
         button.backgroundColor = .blackDayTracker
         button.tintColor = .whiteDayTracker

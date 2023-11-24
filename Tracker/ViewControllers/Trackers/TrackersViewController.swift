@@ -25,8 +25,8 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
     }()
-    var search = UISearchTextField()
-    var stubsView = StubView()
+    private var search = UISearchTextField()
+    private var stubsView = StubView()
     
     
     //MARK: - LifeCycle
@@ -128,8 +128,11 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
 extension TrackersViewController {
     
     func stubViewConfig(stubs: Stubs){
-        
-        guard collectionView.numberOfItems(inSection: 0) == 0 else { return  stubsView.isHidden = true }
+        print(collectionView.numberOfSections)
+        guard
+            collectionView.numberOfSections == 0
+           // collectionView.numberOfItems(inSection: 0) == 0
+        else { return  stubsView.isHidden = true }
         
         stubsView.stubViewConfig(stubs: stubs)
         stubsView.isHidden = false

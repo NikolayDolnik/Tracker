@@ -14,6 +14,8 @@ final class StubView: UIView {
         let label = UILabel()
         label.text = Stubs.date.description
         label.font = .systemFont(ofSize: 12, weight: .medium)
+        label.textAlignment = .center
+        label.numberOfLines = 2
         return label
     }()
     
