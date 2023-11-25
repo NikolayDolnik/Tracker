@@ -35,6 +35,7 @@ final class CategoriesViewController: UIViewController {
         t.clipsToBounds = true
         t.isScrollEnabled = true
         t.layer.masksToBounds = true
+        t.backgroundColor = .clear
         //t.layer.maskedCorners = [.layerMaxXMaxYCorner,.layerMinXMaxYCorner]
         t.translatesAutoresizingMaskIntoConstraints = false
         return t
@@ -116,13 +117,15 @@ extension CategoriesViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier.cell.rawValue, for: indexPath)
-        cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        cell.selectionStyle = .none
         
-
         if indexPath.row == viewModel.categories.count - 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 500)
             cell.layer.cornerRadius = 16
             cell.layer.maskedCorners =  [.layerMaxXMaxYCorner,.layerMinXMaxYCorner]
+        } else {
+            cell.layer.cornerRadius = 0
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         }
         cell.textLabel?.text = viewModel.categories[indexPath.row].categoreName
         cell.textLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
@@ -138,7 +141,7 @@ extension CategoriesViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
         cell.accessoryType = .checkmark
-        cell.selectionStyle = .none
+       /// cell.selectionStyle = .none
         
         viewModel.selectedCategory = cell.textLabel?.text
         self.dismiss(animated: true)
@@ -154,7 +157,6 @@ extension CategoriesViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-       
         if cell.textLabel?.text == viewModel.selectedCategory {
             cell.accessoryType = .checkmark
             cell.isSelected = true
@@ -163,6 +165,11 @@ extension CategoriesViewController: UITableViewDelegate, UITableViewDataSource {
             cell.accessoryType = .none
             cell.isSelected = false
         }
+        
+        if indexPath.row != viewModel.categories.count - 1 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
@@ -188,6 +195,9 @@ extension CategoriesViewController {
     }
     
     private func deleteCategory(for indexPath: IndexPath){
+        if viewModel.categories[indexPath.row].categoreName == viewModel.selectedCategory {
+            viewModel.selectedCategory = nil
+        }
         viewModel.deleteCategory(for: indexPath)
     }
     

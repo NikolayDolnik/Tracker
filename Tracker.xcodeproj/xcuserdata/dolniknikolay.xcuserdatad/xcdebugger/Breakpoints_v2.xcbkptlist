@@ -179,22 +179,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "8B88C9EE-EECB-4480-9E1D-26B708CE69BC"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Tracker/ViewControllers/Categories/CategoriesViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "18"
-            endingLineNumber = "18"
-            landmarkName = "CategoriesViewController"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "485C388F-1277-406D-8525-52FEBD691852"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -204,6 +188,22 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "136"
             endingLineNumber = "136"
+            landmarkName = "config()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "042DCF9B-0BB1-4335-A589-5AB9A2309B99"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Tracker/ViewControllers/Habits/HabitsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "142"
+            endingLineNumber = "142"
             landmarkName = "config()"
             landmarkType = "7">
          </BreakpointContent>

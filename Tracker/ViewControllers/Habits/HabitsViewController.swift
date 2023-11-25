@@ -143,6 +143,7 @@ final class HabitsViewController: UIViewController {
             self?.tableView.reloadData()
         })
         
+        
         trackerService = TrackersService.shared
         tableView.delegate = self
         tableView.dataSource = self
