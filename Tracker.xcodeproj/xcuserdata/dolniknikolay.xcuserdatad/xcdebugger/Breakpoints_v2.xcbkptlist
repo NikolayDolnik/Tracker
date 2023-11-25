@@ -131,54 +131,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "3736C8F8-4E23-4EE7-871C-6A0D7FFE6721"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Tracker/ViewControllers/Trackers/TrackersViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "152"
-            endingLineNumber = "152"
-            landmarkName = "updateData(_:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "3736C8F8-4E23-4EE7-871C-6A0D7FFE6721 - 570bc7b6716e8649"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Tracker.TrackersViewController.updateData(Tracker.StoreUpdate) -&gt; ()"
-                  moduleName = "Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/dolniknikolay/Desktop/iOS/Tracker/Tracker/ViewControllers/Trackers/TrackersViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "152"
-                  endingLineNumber = "152"
-                  offsetFromSymbolStart = "96">
-               </Location>
-               <Location
-                  uuid = "3736C8F8-4E23-4EE7-871C-6A0D7FFE6721 - c1f0251042a4857c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in Tracker.TrackersViewController.updateData(Tracker.StoreUpdate) -&gt; ()"
-                  moduleName = "Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/dolniknikolay/Desktop/iOS/Tracker/Tracker/ViewControllers/Trackers/TrackersViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "153"
-                  endingLineNumber = "153"
-                  offsetFromSymbolStart = "156">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "485C388F-1277-406D-8525-52FEBD691852"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -188,22 +140,6 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "136"
             endingLineNumber = "136"
-            landmarkName = "config()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "042DCF9B-0BB1-4335-A589-5AB9A2309B99"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Tracker/ViewControllers/Habits/HabitsViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "142"
-            endingLineNumber = "142"
             landmarkName = "config()"
             landmarkType = "7">
          </BreakpointContent>

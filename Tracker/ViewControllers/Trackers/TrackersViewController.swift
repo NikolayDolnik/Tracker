@@ -146,6 +146,7 @@ extension TrackersViewController {
     
     func update() {
         collectionView.reloadData()
+        stubViewConfig(stubs: Stubs.date)
     }
     
     func updateData(_ update: StoreUpdate) {
