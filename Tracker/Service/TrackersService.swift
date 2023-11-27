@@ -147,7 +147,6 @@ final class TrackersService: TrackersServiseProtocol {
     
     func searchTrackers(text: String, day: Date) {
         
-        //let numberOfDay = Calendar.current.component(.weekday, from: currentDay as Date ) - 1
         let numberOfDay = Calendar.current.component(.weekday, from: day as Date ) - 1
         trackerStore.predicateFetch(text: text, numberOfDay: numberOfDay)
         view?.update()
@@ -169,7 +168,6 @@ final class TrackersService: TrackersServiseProtocol {
             timetable: timetable
         )
         saveTracker(tracker: tracker, with: categoryNewName)
-       // try? trackerStore.addTracker(tracker: tracker, categoryName: categoryNewName)
     }
     
     func addTrackerEvent(categoryNewName: String, name: String, emoji: String, color: UIColor) {
@@ -237,11 +235,11 @@ extension TrackersService: StoreDelegateProtocol {
     
     
     var numberOfSections: Int {
-        trackerStore.fetchedResultsController.sections?.count ?? 0
+      trackerStore.fetchedResultsController.sections?.count ?? 0
     }
     
     func numberOfRowsInSection(_ section: Int) -> Int {
-        trackerStore.fetchedResultsController.sections?[section].numberOfObjects ?? 0
+       trackerStore.fetchedResultsController.sections?[section].numberOfObjects ?? 0
     }
     
     func objectModel(at indexPath: IndexPath) -> TrackerCellModel? {
@@ -272,8 +270,7 @@ extension TrackersService: StoreDelegateProtocol {
     }
     
     func nameforSection(_ section: Int) -> String? {
-        guard let trackerCoreData = trackerStore.fetchedResultsController.sections?[section].objects?.first as? TrackerCoreData else { return nil }
-        return trackerCoreData.category?.categoryName
+        return trackerStore.fetchedResultsController.sections?[section].name ?? ""
         }
     
 }
