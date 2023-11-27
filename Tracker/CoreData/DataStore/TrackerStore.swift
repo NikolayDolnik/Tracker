@@ -19,7 +19,7 @@ final class TrackerStore: NSObject {
     lazy var fetchedResultsController: NSFetchedResultsController<TrackerCoreData> = {
 
         let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: entityName)
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: false)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "category.categoryName", ascending: false)]
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
                                                                   managedObjectContext: context,
