@@ -7,12 +7,20 @@
 
 import UIKit
 
-final class CategoriesViewModel {
+final class CategoriesViewModel: CategoriesViewModelProtocol {
     
-    private let categoriesStore: TrackerCategoryStore
+    private var categoriesStore: TrackerCategoryStore
     
     @Observable
-    private (set) var categories: [TrackerCategory] = []
+    var categories: [TrackerCategory] = []
+    var categoriesBind: Observable<[TrackerCategory]> {
+        get {
+            self.$categories
+        }
+        set {
+            Observable(wrappedValue: self.categories)
+        }
+    }
     
     @Observable
     var selectedCategory: String?
@@ -27,12 +35,16 @@ final class CategoriesViewModel {
         categories = getCategoriesFromStore()
     }
     
+    func setSelectedcategories(selectedCategory: String?){
+        self.selectedCategory = selectedCategory
+    }
+    
     func deleteCategory(for indexPath: IndexPath) {
         try? categoriesStore.deleteTrackerCategory(for: indexPath)
         categories = getCategoriesFromStore()
     }
 
-    private func getCategoriesFromStore() -> [TrackerCategory] {
+   func getCategoriesFromStore() -> [TrackerCategory] {
         guard let categories = try? categoriesStore.fetchTrackerCategories()  else { return [] }
         return categories
     }
@@ -48,5 +60,6 @@ extension CategoriesViewModel: TrackerCategoryStoreDelegate {
 extension CategoriesViewModel: NewCategoryDelegateProtocol {
     func addTrackerCategory(categoryName: String) {
         try? categoriesStore.addTrackerCategory(categoryName: categoryName)
+        selectedCategory = categoryName
     }
 }

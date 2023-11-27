@@ -37,7 +37,6 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
         guard let number = trackerService?.numberOfSections else {
             return 0 }
         return number
-        //старый метод return  trackerService?.numberOfSections ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -50,7 +49,7 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
         guard let model = trackerService?.objectModel(at: indexPath) else {return cell}
         
         cell.delegate  = self.view
-        cell.dayCountLable.text = "\(model.record) дней"
+        cell.dayCountLable.text = model.record.days()
         cell.emojiLabel.text = model.emoji
         cell.viewCard.backgroundColor = model.color
         cell.descriptionLable.text = model.descriptionTracker
@@ -58,25 +57,19 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
         let state = model.complete ? State.complete : State.addRecord
         cell.completeButton.setImage(UIImage(named: state.rawValue), for: .normal)
         cell.completeButton.isEnabled = model.isEnable
-        cell.completeButton.tintColor = model.color // Не помогает
+        cell.completeButton.tintColor = model.color
         cell.completeButton.setTitleColor(model.color, for: .disabled)
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView{
-//        guard indexPath.section > 0 else {
-//            return
-//        }
+        
         let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: identifier.header.rawValue, for: indexPath) as! SupplementaryView
         
         guard let name = trackerService?.nameforSection(indexPath.section) else { return view }
         view.titleLabel.text = name
-
-//        for i in 0...indexPath.section{
-//            view.titleLabel.text = trackerService?.nameforSection(i)
-//            print("Номер секйции \(i)")
-//        }
+        
         return view
     }
     
@@ -140,7 +133,7 @@ extension TrackersPresenter: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 12, left: 0, bottom: 16, right: 0)
     }
-
+    
     
 }
 

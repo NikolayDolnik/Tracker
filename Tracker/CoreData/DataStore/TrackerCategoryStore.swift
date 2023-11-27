@@ -102,7 +102,7 @@ final class TrackerCategoryStore: NSObject {
             try? addTrackerCategory(categoryName: categoryName)
             tracker.category = trackerCategoriesCoreData.first(where: {$0.categoryName == categoryName })
         }
-        
+        saveContext()
     }
     
     func getTrackerCategory(for indexPath: IndexPath) -> TrackerCategory? {
@@ -112,9 +112,6 @@ final class TrackerCategoryStore: NSObject {
     func deleteTrackerCategory(for indexPath: IndexPath) throws {
         let category = fetchedResultsController.object(at: indexPath)
         context.delete(category)
-        
-//        let category = fetchedResultsController.fetchedObjects
-//        category?.forEach({context.delete($0)})
         saveContext()
     }
     

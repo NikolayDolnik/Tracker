@@ -15,6 +15,7 @@
 		993F7FBC2B0F42C100EB0978 /* CategoriesDelegateProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993F7FBB2B0F42C100EB0978 /* CategoriesDelegateProtocol.swift */; };
 		993F7FBE2B0F5A0400EB0978 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993F7FBD2B0F5A0400EB0978 /* Observable.swift */; };
 		993F7FC12B0F7E3800EB0978 /* NewCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993F7FC02B0F7E3800EB0978 /* NewCategoryViewController.swift */; };
+		993F7FC32B13643200EB0978 /* CategoriesViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993F7FC22B13643200EB0978 /* CategoriesViewModelProtocol.swift */; };
 		9968F49F2AF523D30033C4B9 /* TrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9968F49E2AF523D30033C4B9 /* TrackerStore.swift */; };
 		9968F4A12AF523E80033C4B9 /* TrackerCategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9968F4A02AF523E80033C4B9 /* TrackerCategoryStore.swift */; };
 		9968F4A32AF524020033C4B9 /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9968F4A22AF524020033C4B9 /* TrackerRecordStore.swift */; };
@@ -78,6 +79,7 @@
 		993F7FBB2B0F42C100EB0978 /* CategoriesDelegateProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesDelegateProtocol.swift; sourceTree = "<group>"; };
 		993F7FBD2B0F5A0400EB0978 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		993F7FC02B0F7E3800EB0978 /* NewCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryViewController.swift; sourceTree = "<group>"; };
+		993F7FC22B13643200EB0978 /* CategoriesViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewModelProtocol.swift; sourceTree = "<group>"; };
 		9968F49E2AF523D30033C4B9 /* TrackerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStore.swift; sourceTree = "<group>"; };
 		9968F4A02AF523E80033C4B9 /* TrackerCategoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStore.swift; sourceTree = "<group>"; };
 		9968F4A22AF524020033C4B9 /* TrackerRecordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStore.swift; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 				993F7FB72B0F3EC200EB0978 /* CategoriesViewController.swift */,
 				993F7FBB2B0F42C100EB0978 /* CategoriesDelegateProtocol.swift */,
 				993F7FB92B0F40A000EB0978 /* CategoriesViewModel.swift */,
+				993F7FC22B13643200EB0978 /* CategoriesViewModelProtocol.swift */,
 				993F7FBD2B0F5A0400EB0978 /* Observable.swift */,
 			);
 			path = Categories;
@@ -546,6 +549,7 @@
 				99DADA572ACC0B53004467A3 /* SceneDelegate.swift in Sources */,
 				9968F4A32AF524020033C4B9 /* TrackerRecordStore.swift in Sources */,
 				99C5FD6C2AE7DF3900F33BFC /* TimetableDelegateProtocol.swift in Sources */,
+				993F7FC32B13643200EB0978 /* CategoriesViewModelProtocol.swift in Sources */,
 				99C5FD272AD007DE00F33BFC /* EmojiCollectionViewPresenter.swift in Sources */,
 				9968F49F2AF523D30033C4B9 /* TrackerStore.swift in Sources */,
 				99C5FD0D2ACC282E00F33BFC /* StatisticsViewController.swift in Sources */,

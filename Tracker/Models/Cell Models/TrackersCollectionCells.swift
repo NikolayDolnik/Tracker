@@ -16,7 +16,6 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
     
     var delegate: TrackersCollectionViewCellDelegate?
     var completeState: Bool = true
-    //private var buttonState = true
     
     var viewCard: UIView = {
         let view = UIStackView()
@@ -83,7 +82,6 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
     
     lazy var completeButton: UIButton = {
         let button = UIButton(type: .system)
-        // button.tintColor = .redTracker
         button.layer.cornerRadius = 17
         button.translatesAutoresizingMaskIntoConstraints = false
         return button

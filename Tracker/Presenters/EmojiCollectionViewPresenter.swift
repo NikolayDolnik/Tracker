@@ -63,14 +63,6 @@ extension EmojiPresenter {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-//        if indexPath.section == emojiIndex?.section {
-//            deselectCell(collectionView, for: emojiIndex!)
-//        }
-//        if indexPath.section == colorIndex?.section {
-//            deselectCell(collectionView, for: colorIndex!)
-//        }
-//
-        
         guard let cell = collectionView.cellForItem(at: indexPath) as? CustomCollectionViewCell else { return  }
         
         switch indexPath.section {
@@ -91,8 +83,7 @@ extension EmojiPresenter {
         default:
             return
         }
-       
-        delegate?.dataCheking()
+               delegate?.dataCheking()
     }
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
@@ -121,16 +112,6 @@ extension EmojiPresenter {
         default:
             return
         }
-        
-//        switch indexPath.section {
-//        case 0:
-//            self.emojiIndex = indexPath
-//        case 1:
-//            self.colorIndex = indexPath
-//        default:
-//            return
-//        }
-        
         delegate?.dataCheking()
     }
     

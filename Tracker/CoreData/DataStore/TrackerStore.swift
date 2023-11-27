@@ -48,7 +48,6 @@ final class TrackerStore: NSObject {
         let trackerCategoryCoreData = TrackerCategoryCoreData(context: context)
         trackerCategoryCoreData.categoryName = categoryName //"Созданно контроллером"
         trackerCoreData.category = trackerCategoryCoreData
-        
         saveContext()
     }
     

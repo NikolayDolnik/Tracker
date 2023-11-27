@@ -262,7 +262,6 @@ extension HabitsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
         
         cell.backgroundColor = .backgroundDayTracker
@@ -314,7 +313,9 @@ extension HabitsViewController: UITableViewDelegate, UITableViewDataSource {
 extension HabitsViewController {
     
     func dataCheking(){
-        guard let categoreName, let  name, let timetable, let color, let emoji, timetable != [], name != "", name != " "   else {
+        guard let categoreName, let  name, let timetable, let color, let emoji, timetable != [],
+              name.inputText()
+        else {
             createButton.isEnabled = false
             createButton.backgroundColor  =  createButton.isEnabled ? .blackDayTracker : .grayTracker
             return

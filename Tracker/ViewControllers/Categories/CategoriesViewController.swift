@@ -9,15 +9,10 @@ import UIKit
 
 final class CategoriesViewController: UIViewController {
     
-    var delegate: CategoriesDelegateProtocol
-    private var viewModel: CategoriesViewModel
-    private var textButton = "Добавить категорию"
+    private let delegate: CategoriesDelegateProtocol
+    private let viewModel: CategoriesViewModelProtocol
+    private let textButton = "Добавить категорию"
     private var categoryName: String?
-//    {
-//        didSet{
-//            viewModel.selectedCategory = categoryName
-//        }
-//    }
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -28,7 +23,7 @@ final class CategoriesViewController: UIViewController {
         return label
     }()
     
-    var tableView: UITableView = {
+   private let tableView: UITableView = {
         let t = UITableView()
         t.register(UITableViewCell.self, forCellReuseIdentifier: identifier.cell.rawValue)
         t.layer.cornerRadius = 16
@@ -36,19 +31,13 @@ final class CategoriesViewController: UIViewController {
         t.isScrollEnabled = true
         t.layer.masksToBounds = true
         t.backgroundColor = .clear
-        //t.layer.maskedCorners = [.layerMaxXMaxYCorner,.layerMinXMaxYCorner]
         t.translatesAutoresizingMaskIntoConstraints = false
         return t
     }()
     private var stubsView = StubView()
     private var addCategoryButton = UIButton()
     
-//    convenience init(){
-//
-//        self.init(viewModel: CategoriesViewModel(), delegate: TimeTableDelegateProtocol)
-//    }
-    
-    init(viewModel: CategoriesViewModel, delegate: CategoriesDelegateProtocol){
+    init(viewModel:  CategoriesViewModelProtocol, delegate: CategoriesDelegateProtocol){
         self.viewModel = viewModel
         self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
@@ -64,13 +53,13 @@ final class CategoriesViewController: UIViewController {
         stubViewConfig(stubs: Stubs.category)
     }
     
-    
+
     func config(){
-        viewModel.$categories.bind(action: { [weak self] _ in
-            guard let self else { return }
-            self.tableView.reloadData()
-            self.stubViewConfig(stubs: Stubs.date)
-        })
+        viewModel.categoriesBind.bind(action: { [weak self] _ in
+                        guard let self else { return }
+                        self.tableView.reloadData()
+                        self.stubViewConfig(stubs: Stubs.date)
+                    })
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -141,9 +130,9 @@ extension CategoriesViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
         cell.accessoryType = .checkmark
-       /// cell.selectionStyle = .none
         
-        viewModel.selectedCategory = cell.textLabel?.text
+        viewModel.setSelectedcategories(selectedCategory: cell.textLabel?.text )
+       // viewModel.selectedCategory = cell.textLabel?.text
         self.dismiss(animated: true)
     }
     
@@ -196,7 +185,8 @@ extension CategoriesViewController {
     
     private func deleteCategory(for indexPath: IndexPath){
         if viewModel.categories[indexPath.row].categoreName == viewModel.selectedCategory {
-            viewModel.selectedCategory = nil
+            viewModel.setSelectedcategories(selectedCategory: nil)
+            //viewModel.selectedCategory = nil
         }
         viewModel.deleteCategory(for: indexPath)
     }

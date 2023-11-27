@@ -128,7 +128,6 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
 extension TrackersViewController {
     
     func stubViewConfig(stubs: Stubs){
-        print(collectionView.numberOfSections)
         guard
             collectionView.numberOfSections == 0
            // collectionView.numberOfItems(inSection: 0) == 0
@@ -182,7 +181,7 @@ extension TrackersViewController: UISearchBarDelegate {
         guard searchText != "", searchText != " ", let trackerService = trackerService else { return }
         
         let text = searchText.lowercased()
-        trackerService.searchTrackers(text: text)
+        trackerService.searchTrackers(text: text, day: datePicker.date)
         stubViewConfig(stubs: Stubs.search)
     }
     

@@ -20,7 +20,7 @@ public protocol TrackersServiseProtocol {
     func deleteTrackerRecord(for indexPath: IndexPath)
     func getTrackerRecord(for indexPath: IndexPath)-> Int
     func addTrackerEvent(categoryNewName: String, name: String, emoji: String, color: UIColor)
-    func searchTrackers(text: String)
+    func searchTrackers(text: String, day: Date)
     var numberOfSections: Int { get }
     func numberOfRowsInSection(_ section: Int) -> Int
     func objectModel(at indexPath: IndexPath) -> TrackerCellModel?
@@ -145,9 +145,10 @@ final class TrackersService: TrackersServiseProtocol {
         return newVisibleCategory
     }
     
-    func searchTrackers(text: String) {
+    func searchTrackers(text: String, day: Date) {
         
-        let numberOfDay = Calendar.current.component(.weekday, from: currentDay as Date ) - 1
+        //let numberOfDay = Calendar.current.component(.weekday, from: currentDay as Date ) - 1
+        let numberOfDay = Calendar.current.component(.weekday, from: day as Date ) - 1
         trackerStore.predicateFetch(text: text, numberOfDay: numberOfDay)
         view?.update()
     }

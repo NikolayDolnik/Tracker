@@ -56,3 +56,25 @@ extension UIView {
         topSuperview?.endEditing(true)
     }
 }
+
+extension Int {
+     func days() -> String {
+         var dayString: String!
+         if "1".contains("\(self % 10)")      {dayString = "день"}
+         if "234".contains("\(self % 10)")    {dayString = "дня" }
+         if "567890".contains("\(self % 10)") {dayString = "дней"}
+         if 11...14 ~= self % 100                   {dayString = "дней"}
+    return "\(self) " + dayString
+    }
+}
+
+extension String {
+    func inputText() -> Bool {
+        if self == "" ||
+           self == " " ||
+            self.trimmingCharacters(in: .whitespaces).isEmpty {
+            return false
+        }
+        return true
+    }
+}
