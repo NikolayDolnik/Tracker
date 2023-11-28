@@ -9,6 +9,7 @@ import UIKit
 
 final class TrackersViewController: UIViewController, UINavigationBarDelegate, TrackersViewControllerProtocol {
     
+    private var trackersTitle = "Трекеры"
     var trackerService: TrackersServiseProtocol?
     var presenter: TrackersPresenterProtocol?
     let currentDay = NSDate()
@@ -86,7 +87,7 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
     func navigationBar(){
         
         if let navBar = navigationController?.navigationBar {
-            navBar.topItem?.title = "Трекеры"
+            navBar.topItem?.title = trackersTitle.localized()
             navBar.prefersLargeTitles = true
             let leftButton = UIBarButtonItem(image: UIImage(named: "addTracker"), style: .done, target: self, action: #selector(addTrackers))
             leftButton.tintColor = .blackDayTracker
@@ -95,7 +96,7 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
             datePicker.backgroundColor = .lightGrayTracker
             datePicker.preferredDatePickerStyle = .compact
             datePicker.datePickerMode = .date
-            datePicker.locale = Locale(identifier: "ru-RU")
+            datePicker.locale = Locale.current
             datePicker.date = Date()
             datePicker.addTarget(self, action: #selector(changeDatePicker), for: .valueChanged)
             

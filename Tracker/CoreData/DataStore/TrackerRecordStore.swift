@@ -85,6 +85,10 @@ final class TrackerRecordStore: NSObject {
         return completeState
     }
     
+    func getCompletedTracker() -> Int? {
+        return fetchedResultsController.fetchedObjects?.count ?? nil
+    }
+    
     // MARK: - Core Data Saving support
     
     func saveContext () {

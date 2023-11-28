@@ -16,6 +16,12 @@
 		993F7FBE2B0F5A0400EB0978 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993F7FBD2B0F5A0400EB0978 /* Observable.swift */; };
 		993F7FC12B0F7E3800EB0978 /* NewCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993F7FC02B0F7E3800EB0978 /* NewCategoryViewController.swift */; };
 		993F7FC32B13643200EB0978 /* CategoriesViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993F7FC22B13643200EB0978 /* CategoriesViewModelProtocol.swift */; };
+		993F7FC52B152BE400EB0978 /* StatisticCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993F7FC42B152BE400EB0978 /* StatisticCell.swift */; };
+		993F7FC72B152DB700EB0978 /* StatisticsViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993F7FC62B152DB700EB0978 /* StatisticsViewModelProtocol.swift */; };
+		993F7FC92B15359D00EB0978 /* StatisticCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993F7FC82B15359D00EB0978 /* StatisticCellViewModel.swift */; };
+		993F7FCB2B15E0DE00EB0978 /* StatisticViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993F7FCA2B15E0DE00EB0978 /* StatisticViewModel.swift */; };
+		993F7FD22B15FE8700EB0978 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 993F7FD42B15FE8700EB0978 /* Localizable.strings */; };
+		993F7FD92B1608F200EB0978 /* Stringsdict.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 993F7FDB2B1608F200EB0978 /* Stringsdict.stringsdict */; };
 		9968F49F2AF523D30033C4B9 /* TrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9968F49E2AF523D30033C4B9 /* TrackerStore.swift */; };
 		9968F4A12AF523E80033C4B9 /* TrackerCategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9968F4A02AF523E80033C4B9 /* TrackerCategoryStore.swift */; };
 		9968F4A32AF524020033C4B9 /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9968F4A22AF524020033C4B9 /* TrackerRecordStore.swift */; };
@@ -80,6 +86,15 @@
 		993F7FBD2B0F5A0400EB0978 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		993F7FC02B0F7E3800EB0978 /* NewCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryViewController.swift; sourceTree = "<group>"; };
 		993F7FC22B13643200EB0978 /* CategoriesViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewModelProtocol.swift; sourceTree = "<group>"; };
+		993F7FC42B152BE400EB0978 /* StatisticCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticCell.swift; sourceTree = "<group>"; };
+		993F7FC62B152DB700EB0978 /* StatisticsViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewModelProtocol.swift; sourceTree = "<group>"; };
+		993F7FC82B15359D00EB0978 /* StatisticCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticCellViewModel.swift; sourceTree = "<group>"; };
+		993F7FCA2B15E0DE00EB0978 /* StatisticViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticViewModel.swift; sourceTree = "<group>"; };
+		993F7FD12B15FE7900EB0978 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
+		993F7FD32B15FE8700EB0978 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		993F7FD62B16006F00EB0978 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		993F7FDA2B1608F200EB0978 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Stringsdict.stringsdict; sourceTree = "<group>"; };
+		993F7FDC2B1608FA00EB0978 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Stringsdict.stringsdict; sourceTree = "<group>"; };
 		9968F49E2AF523D30033C4B9 /* TrackerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStore.swift; sourceTree = "<group>"; };
 		9968F4A02AF523E80033C4B9 /* TrackerCategoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStore.swift; sourceTree = "<group>"; };
 		9968F4A22AF524020033C4B9 /* TrackerRecordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStore.swift; sourceTree = "<group>"; };
@@ -175,6 +190,15 @@
 			path = CreateCategories;
 			sourceTree = "<group>";
 		};
+		993F7FCC2B15F67000EB0978 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				993F7FD42B15FE8700EB0978 /* Localizable.strings */,
+				993F7FDB2B1608F200EB0978 /* Stringsdict.stringsdict */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		9968F49C2AF522BD0033C4B9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -214,6 +238,7 @@
 		99C5FD2A2AD2A5D500F33BFC /* Cell Models */ = {
 			isa = PBXGroup;
 			children = (
+				993F7FC42B152BE400EB0978 /* StatisticCell.swift */,
 				99C5FD3F2ADF18EA00F33BFC /* TrackerCellModel.swift */,
 				99C5FD282AD009CC00F33BFC /* CustomCollectionCell.swift */,
 				99C5FD2B2AD2A62200F33BFC /* TrackersCollectionCells.swift */,
@@ -286,6 +311,9 @@
 			isa = PBXGroup;
 			children = (
 				99C5FD0C2ACC282E00F33BFC /* StatisticsViewController.swift */,
+				993F7FC62B152DB700EB0978 /* StatisticsViewModelProtocol.swift */,
+				993F7FCA2B15E0DE00EB0978 /* StatisticViewModel.swift */,
+				993F7FC82B15359D00EB0978 /* StatisticCellViewModel.swift */,
 			);
 			path = Statistics;
 			sourceTree = "<group>";
@@ -349,6 +377,7 @@
 				99C5FD302AD7FE7900F33BFC /* Presenters */,
 				99C5FD7B2AF4E63B00F33BFC /* CoreData */,
 				99DADA892ACC0FE7004467A3 /* Helpers */,
+				993F7FCC2B15F67000EB0978 /* Resources */,
 				99DADA5A2ACC0B53004467A3 /* Main.storyboard */,
 				99DADA602ACC0B54004467A3 /* Assets.xcassets */,
 				99DADA622ACC0B54004467A3 /* LaunchScreen.storyboard */,
@@ -470,6 +499,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 99DADA482ACC0B53004467A3;
 			productRefGroup = 99DADA522ACC0B53004467A3 /* Products */;
@@ -489,6 +519,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				99DADA642ACC0B54004467A3 /* LaunchScreen.storyboard in Resources */,
+				993F7FD92B1608F200EB0978 /* Stringsdict.stringsdict in Resources */,
+				993F7FD22B15FE8700EB0978 /* Localizable.strings in Resources */,
 				99DADA612ACC0B54004467A3 /* Assets.xcassets in Resources */,
 				99DADA5C2ACC0B53004467A3 /* Main.storyboard in Resources */,
 			);
@@ -516,6 +548,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				993F7FBC2B0F42C100EB0978 /* CategoriesDelegateProtocol.swift in Sources */,
+				993F7FC92B15359D00EB0978 /* StatisticCellViewModel.swift in Sources */,
 				99C5FD322AD7FEA500F33BFC /* TrackersPresenter.swift in Sources */,
 				99C5FD162ACEB03300F33BFC /* EventsViewController.swift in Sources */,
 				99DADA882ACC0FE2004467A3 /* UiColors&Marshalling.swift in Sources */,
@@ -523,6 +556,7 @@
 				99DADA5F2ACC0B53004467A3 /* TrackerDataModel.xcdatamodeld in Sources */,
 				99C5FD292AD009CC00F33BFC /* CustomCollectionCell.swift in Sources */,
 				99C5FD402ADF18EA00F33BFC /* TrackerCellModel.swift in Sources */,
+				993F7FCB2B15E0DE00EB0978 /* StatisticViewModel.swift in Sources */,
 				9968F4A52AFB7DBC0033C4B9 /* StoreDelegateProtocol.swift in Sources */,
 				993F7FB22B0CFC0200EB0978 /* OnBoardingPage.swift in Sources */,
 				993F7FA42AFE526A00EB0978 /* StubViewPresenter.swift in Sources */,
@@ -538,6 +572,7 @@
 				9968F4A12AF523E80033C4B9 /* TrackerCategoryStore.swift in Sources */,
 				99C5FD372AD7FFE200F33BFC /* TrackerCategory.swift in Sources */,
 				993F7FBE2B0F5A0400EB0978 /* Observable.swift in Sources */,
+				993F7FC72B152DB700EB0978 /* StatisticsViewModelProtocol.swift in Sources */,
 				99C5FD432AE1659500F33BFC /* TrackersViewControllerProtocol.swift in Sources */,
 				99DADA592ACC0B53004467A3 /* TrackersViewController.swift in Sources */,
 				99C5FD7D2AF4E66700F33BFC /* TrackersDataProvider.swift in Sources */,
@@ -549,6 +584,7 @@
 				99DADA572ACC0B53004467A3 /* SceneDelegate.swift in Sources */,
 				9968F4A32AF524020033C4B9 /* TrackerRecordStore.swift in Sources */,
 				99C5FD6C2AE7DF3900F33BFC /* TimetableDelegateProtocol.swift in Sources */,
+				993F7FC52B152BE400EB0978 /* StatisticCell.swift in Sources */,
 				993F7FC32B13643200EB0978 /* CategoriesViewModelProtocol.swift in Sources */,
 				99C5FD272AD007DE00F33BFC /* EmojiCollectionViewPresenter.swift in Sources */,
 				9968F49F2AF523D30033C4B9 /* TrackerStore.swift in Sources */,
@@ -589,10 +625,29 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		993F7FD42B15FE8700EB0978 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				993F7FD32B15FE8700EB0978 /* ru */,
+				993F7FD62B16006F00EB0978 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		993F7FDB2B1608F200EB0978 /* Stringsdict.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				993F7FDA2B1608F200EB0978 /* en */,
+				993F7FDC2B1608FA00EB0978 /* ru */,
+			);
+			name = Stringsdict.stringsdict;
+			sourceTree = "<group>";
+		};
 		99DADA5A2ACC0B53004467A3 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				99DADA5B2ACC0B53004467A3 /* Base */,
+				993F7FD12B15FE7900EB0978 /* ru */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -612,6 +667,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -672,6 +728,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

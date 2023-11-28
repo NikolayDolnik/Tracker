@@ -22,6 +22,7 @@ final class TrackersPresenter: NSObject, TrackersPresenterProtocol {
     var visibleCategory: [TrackerCategory] = []
     var trackerService: TrackersServiseProtocol?
     private var TrackersServiceObserver: NSObjectProtocol?
+    private var dayCountlabel = NSLocalizedString("dayCountlabel", comment: "")
     
     func newVisibleCategory(get newCategory: [TrackerCategory]){
         visibleCategory = newCategory
@@ -49,7 +50,12 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
         guard let model = trackerService?.objectModel(at: indexPath) else {return cell}
         
         cell.delegate  = self.view
-        cell.dayCountLable.text = model.record.days()
+        
+        cell.dayCountLable.text = String.localizedStringWithFormat(
+            NSLocalizedString("day_Count",comment: ""),
+            model.record
+        )
+        //cell.dayCountLable.text = model.record.days()
         cell.emojiLabel.text = model.emoji
         cell.viewCard.backgroundColor = model.color
         cell.descriptionLable.text = model.descriptionTracker

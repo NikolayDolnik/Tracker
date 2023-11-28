@@ -77,4 +77,12 @@ extension String {
         }
         return true
     }
+    
+    func localized() -> String {
+        NSLocalizedString(self,
+                          tableName: "Localizable",
+                          bundle: .main,
+                          value: self,
+                          comment: self)
+    }
 }
