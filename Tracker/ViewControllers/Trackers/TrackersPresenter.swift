@@ -55,6 +55,7 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
             NSLocalizedString("day_Count",comment: ""),
             model.record
         )
+        
         //cell.dayCountLable.text = model.record.days()
         cell.emojiLabel.text = model.emoji
         cell.viewCard.backgroundColor = model.color
