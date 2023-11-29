@@ -9,8 +9,6 @@ import Foundation
 import UIKit
 
 public protocol TrackersPresenterProtocol: UICollectionViewDelegate,UICollectionViewDataSource {
-    var visibleCategory: [TrackerCategory] {get set}
-    func newVisibleCategory(get newCategory: [TrackerCategory])
     var trackerService: TrackersServiseProtocol? {get set}
     var view: TrackersViewControllerProtocol? {get set}
     
@@ -19,14 +17,9 @@ public protocol TrackersPresenterProtocol: UICollectionViewDelegate,UICollection
 final class TrackersPresenter: NSObject, TrackersPresenterProtocol {
     
     weak var view: TrackersViewControllerProtocol?
-    var visibleCategory: [TrackerCategory] = []
     var trackerService: TrackersServiseProtocol?
     private var TrackersServiceObserver: NSObjectProtocol?
     private var dayCountlabel = NSLocalizedString("dayCountlabel", comment: "")
-    
-    func newVisibleCategory(get newCategory: [TrackerCategory]){
-        visibleCategory = newCategory
-    }
     
 }
 
@@ -55,8 +48,8 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
             NSLocalizedString("day_Count",comment: ""),
             model.record
         )
-        
-        //cell.dayCountLable.text = model.record.days()
+
+       // cell.dayCountLable.text = model.record.days()
         cell.emojiLabel.text = model.emoji
         cell.viewCard.backgroundColor = model.color
         cell.descriptionLable.text = model.descriptionTracker

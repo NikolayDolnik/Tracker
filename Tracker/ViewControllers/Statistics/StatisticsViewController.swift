@@ -24,8 +24,8 @@ final class StatisticsViewController: UIViewController {
          return t
      }()
     
-    init(){ // viewModel:  StatisticsViewModelProtocol
-        self.viewModel = StatisticViewModel() //viewModel
+    init(){
+        self.viewModel = StatisticViewModel() 
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -61,7 +61,6 @@ final class StatisticsViewController: UIViewController {
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             tableView.heightAnchor.constraint(equalToConstant: 396),
-            //tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             
             stubsView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
             stubsView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
@@ -101,26 +100,6 @@ extension StatisticsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 102
     }
-    
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//            return 12
-//        }
-//
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        4
-//    }
-//
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        if section == 1 {
-//            return nil
-//        } else {
-//            let headerView = UIView()
-//            headerView.backgroundColor = UIColor.clear
-//            return headerView
-//        }
-//    }
-    
-    
     
 }
 

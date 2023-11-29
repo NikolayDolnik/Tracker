@@ -186,7 +186,6 @@ extension CategoriesViewController {
     private func deleteCategory(for indexPath: IndexPath){
         if viewModel.categories[indexPath.row].categoreName == viewModel.selectedCategory {
             viewModel.setSelectedcategories(selectedCategory: nil)
-            //viewModel.selectedCategory = nil
         }
         viewModel.deleteCategory(for: indexPath)
     }

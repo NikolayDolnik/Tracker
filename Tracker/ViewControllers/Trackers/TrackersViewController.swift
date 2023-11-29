@@ -10,11 +10,10 @@ import UIKit
 final class TrackersViewController: UIViewController, UINavigationBarDelegate, TrackersViewControllerProtocol {
     
     private var trackersTitle = "Трекеры"
+    private var filterTitle = "Фильтры"
     var trackerService: TrackersServiseProtocol?
     var presenter: TrackersPresenterProtocol?
     let currentDay = NSDate()
-    var categories = [TrackerCategory]()
-    var completeTrackers = [TrackerRecord]()
     
     private let datePicker = UIDatePicker()
     private let searchController = UISearchController()
@@ -23,11 +22,23 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collection.register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: identifier.cell.rawValue)
         collection.register(SupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: identifier.header.rawValue)
+        collection.alwaysBounceVertical = true
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
     }()
     private var search = UISearchTextField()
     private var stubsView = StubView()
+    private lazy var filterButton: UIButton = {
+       let button = UIButton()
+        button.addTarget(self, action: #selector(didTapFilters), for: .touchUpInside)
+        button.setTitle(filterTitle, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        button.setTitleColor(.whiteDayTracker, for: .normal)
+        button.layer.cornerRadius = 16
+        button.backgroundColor = .blueTracker
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     
     
     //MARK: - LifeCycle
@@ -49,10 +60,8 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
         
         trackerService = TrackersService.shared
         trackerService?.view = self
-        categories = trackerService!.categories
         
         presenter = TrackersPresenter()
-        presenter?.visibleCategory =  trackerService?.categories ?? []
         presenter?.trackerService = trackerService
         presenter?.view = self
         collectionView.dataSource = presenter
@@ -66,6 +75,7 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
         view.backgroundColor = .whiteDayTracker
         view.addSubview(collectionView)
         view.addSubview(stubsView)
+        view.addSubview(filterButton)
         stubsView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -73,6 +83,12 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 24),
+            
+            filterButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            filterButton.heightAnchor.constraint(equalToConstant: 50),
+            filterButton.widthAnchor.constraint(equalToConstant: 114),
+            filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            
             stubsView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
             stubsView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             stubsView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
@@ -122,6 +138,12 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
         let createVC = CreateViewController()
         self.present(createVC, animated: true)
     }
+    
+    @objc func didTapFilters(){
+        guard let trackerService else { return }
+        let filtersVC = FiltersViewController(viewModel: FilersViewModel(selectedDay: datePicker.date, selectedFilters: trackerService.selectedFilter))
+        self.present(filtersVC, animated: true)
+    }
 }
 
 //MARK: - StubView
@@ -132,10 +154,15 @@ extension TrackersViewController {
         guard
             collectionView.numberOfSections == 0
            // collectionView.numberOfItems(inSection: 0) == 0
-        else { return  stubsView.isHidden = true }
+        else {
+            stubsView.isHidden = true
+            filterButton.isHidden = false
+            return
+        }
         
         stubsView.stubViewConfig(stubs: stubs)
         stubsView.isHidden = false
+        filterButton.isHidden = true
     }
 }
 
@@ -147,6 +174,10 @@ extension TrackersViewController {
     func update() {
         collectionView.reloadData()
         stubViewConfig(stubs: Stubs.date)
+        
+        guard let day = trackerService?.visibleDay else { return }
+            datePicker.date = day
+        
     }
     
     func updateData(_ update: StoreUpdate) {
@@ -203,14 +234,15 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
               let trackerService else {return}
         
         cell.changeState(state: cell.completeState)
+        
         switch cell.completeState {
         case true:
             trackerService.addTrackerRecord(for: indexPath)
             
-            cell.dayCountLable.text = "\(trackerService.getTrackerRecord(for: indexPath)) дней"
+           // cell.dayCountLable.text = "\(trackerService.getTrackerRecord(for: indexPath)) дней"
         case false:
             trackerService.deleteTrackerRecord(for: indexPath)
-            cell.dayCountLable.text = "\(trackerService.getTrackerRecord(for: indexPath) ) дней"
+            //cell.dayCountLable.text = "\(trackerService.getTrackerRecord(for: indexPath) ) дней"
         }
     }
 }

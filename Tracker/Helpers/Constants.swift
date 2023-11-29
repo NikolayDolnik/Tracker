@@ -13,6 +13,13 @@ public enum identifier: String {
     case footer
 }
 
+public enum Filters: String {
+    case all = "Все трекеры"
+    case allToday = "Трекеры на сегодня"
+    case completed = "Завершенные"
+    case notCompleted = "Не завершенные"
+}
+
 public enum WeekDay: Int {
     case monday = 1
     case tuesday = 2

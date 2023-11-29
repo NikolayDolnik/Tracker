@@ -127,6 +127,30 @@ final class TrackerStore: NSObject {
         try? fetchedResultsController.performFetch()
     }
     
+    func predicateFetch(completedDay: Date){
+
+        let predicateComplete = NSPredicate(format: "ANY record.dateRecord == %@",
+                                            completedDay as CVarArg)
+        fetchedResultsController.fetchRequest.predicate = predicateComplete
+        try? fetchedResultsController.performFetch()
+    }
+    
+    func predicateFetch(notCompleted: Date){
+        let format1 = "NOT (ANY record.dateRecord ==%@)"
+        let format = "SUBQUERY(record, $record, $record.date != %@ ).@count"
+        let predicateComplete = NSPredicate(format: format1 ,
+                                            notCompleted as CVarArg)
+        
+        let numberOfDay = Calendar.current.component(.weekday, from: notCompleted as Date ) - 1
+        let stringDay = WeekDay.getString(for: numberOfDay)
+        let predicateDate = NSPredicate(format: "%K CONTAINS[cd] %@",
+                                    #keyPath(TrackerCoreData.schedule),
+                                    stringDay)
+        
+        fetchedResultsController.fetchRequest.predicate = predicateComplete //NSCompoundPredicate(andPredicateWithSubpredicates: [predicateComplete, predicateDate])
+        try? fetchedResultsController.performFetch()
+    }
+    
     
     // MARK: - Core Data Saving support
     

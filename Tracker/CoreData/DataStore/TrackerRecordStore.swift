@@ -85,6 +85,15 @@ final class TrackerRecordStore: NSObject {
         return completeState
     }
     
+    func allCompletedTracker() -> [UUID] {
+        var completedId: [UUID] = []
+        guard let result = fetchedResultsController.fetchedObjects else { return []}
+        result.forEach{
+            completedId.append($0.id!)
+        }
+        return completedId
+    }
+    
     func getCompletedTracker() -> Int? {
         return fetchedResultsController.fetchedObjects?.count ?? nil
     }

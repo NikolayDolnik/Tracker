@@ -9,10 +9,10 @@ import UIKit
 
 final class StatisticCell: UITableViewCell {
     
-   private let stackViewDays: UIStackView = {
+    private let stackViewDays: UIStackView = {
         let sv = UIStackView()
-       sv.axis = .vertical
-       sv.alignment = .leading
+        sv.axis = .vertical
+        sv.alignment = .leading
         sv.distribution = .equalSpacing
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
@@ -46,11 +46,13 @@ final class StatisticCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 30, bottom: 12, right: 30))
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 12, right: 0))
+        contentView.layer.cornerRadius = 16
+        contentView.layer.addSublayer((addGradientBackground()))
     }
-    
+
     func config(){
-      
+        
         contentView.addSubview(stackViewDays)
         stackViewDays.addArrangedSubview(dayCountLable)
         stackViewDays.addArrangedSubview(nameSatisticLable)
@@ -67,31 +69,26 @@ final class StatisticCell: UITableViewCell {
     func setViewModel(model: StatisticCellViewModel){
         dayCountLable.text = String(model.dayCount)
         nameSatisticLable.text = model.description
-        contentView.layer.cornerRadius = 16
-        contentView.layer.borderWidth = 1
-        contentView.layer.borderColor = UIColor.redTracker.cgColor
-        //contentView.layer.addSublayer(addGradientBackground())
     }
     
     func addGradientBackground() -> CAGradientLayer {
         let gradient = CAGradientLayer()
-        let firstColor = UIColor.redTracker
-        let secondColor = UIColor.blueTracker
-        gradient.frame =  self.contentView.frame //CGRect(origin: .zero, size: self.frame.size)
-        gradient.colors = [firstColor.cgColor, secondColor.cgColor]
+        let firstColor = UIColor.red
+        let secondColor = UIColor.green
+        let thirdColor = UIColor.blue
+        
+        gradient.frame = CGRect(origin: .zero, size: contentView.frame.size)
+        gradient.colors = [firstColor.cgColor, secondColor.cgColor, thirdColor.cgColor]
+        gradient.startPoint = CGPoint(x: 0.0, y: 0.5)
+        gradient.endPoint = CGPoint(x: 1.0, y: 0.5)
         let shape = CAShapeLayer()
-        shape.lineWidth = 2
-        shape.path = UIBezierPath(rect: self.contentView.bounds).cgPath
+        shape.lineWidth = 1
+        shape.path = UIBezierPath(roundedRect: contentView.frame, cornerRadius: 16).cgPath
         shape.strokeColor = UIColor.black.cgColor
         shape.fillColor = UIColor.clear.cgColor
         gradient.mask = shape
-//           clipsToBounds = true
-//           let gradientLayer = CAGradientLayer()
-//           gradientLayer.colors = [firstColor.cgColor, secondColor.cgColor]
-//           gradientLayer.frame = self.bounds
-//           gradientLayer.startPoint = CGPoint(x: 0, y: 0)
-//           gradientLayer.endPoint = CGPoint(x: 0, y: 1)
-//           self.layer.insertSublayer(gradientLayer, at: 0)
+        
         return gradient
-       }
+    }
+  
 }
