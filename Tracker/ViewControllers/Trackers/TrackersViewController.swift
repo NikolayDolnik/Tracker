@@ -33,7 +33,7 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
         button.addTarget(self, action: #selector(didTapFilters), for: .touchUpInside)
         button.setTitle(filterTitle, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        button.setTitleColor(.whiteDayTracker, for: .normal)
+        button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 16
         button.backgroundColor = .blueTracker
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -73,6 +73,8 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
     func configUI(){
         
         view.backgroundColor = .whiteDayTracker
+        collectionView.backgroundColor = .whiteDayTracker
+        
         view.addSubview(collectionView)
         view.addSubview(stubsView)
         view.addSubview(filterButton)

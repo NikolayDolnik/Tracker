@@ -27,7 +27,7 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
     
     var emojiView: UIView = {
         let view = UIView()
-        view.backgroundColor  = .whiteDayTracker.withAlphaComponent(0.3)
+        view.backgroundColor  = .white.withAlphaComponent(0.3)
         view.layer.cornerRadius = 12
         view.clipsToBounds = false
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -55,7 +55,7 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.text = "Описание привычки"
         label.font = .systemFont(ofSize: 12, weight: .medium)
-        label.textColor = .whiteDayTracker
+        label.textColor = .white
         label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
