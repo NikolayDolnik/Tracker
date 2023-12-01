@@ -37,6 +37,7 @@ final class TrackersService: TrackersServiseProtocol {
     private let UIcolorMarshalling = UIColorMarshalling()
     var visibleDay: Date?
     var selectedFilter: String = "Все трекеры"
+    private var pinnedCategory = "Закрепленные"
     weak var view: TrackersViewControllerProtocol?
     private lazy var trackerStore: TrackerStore = {
         let store = TrackerStore()
@@ -179,7 +180,19 @@ final class TrackersService: TrackersServiseProtocol {
     func pinnedTracker(index: IndexPath, state: Bool){
         //Получаем старый трекер
         guard let tracker = trackerStore.getTrackerCoreData(for: index) else {return print("Не удалось создать трекер для редактирования") }
-        tracker.isPinned = state
+        tracker.isPinned = !state
+        
+        if tracker.isPinned {
+            //Трекер надо закрепить
+            tracker.lastCategory = tracker.category?.categoryName
+            print("Сохранили категорию трекера - \(tracker.lastCategory)")
+            //Функция на проверку - есть ли Закрепленная категория??
+            try? trackerCategoryStore.editTrackerToCategory(tracker: tracker, newCategoryName: pinnedCategory)
+        } else {
+            //Открепить трекер
+            //Удалить трекер из старой категории и добавить новую
+            try? trackerCategoryStore.editTrackerToCategory(tracker: tracker, newCategoryName: tracker.lastCategory ?? "")
+        }
         trackerStore.saveContext()
     }
     

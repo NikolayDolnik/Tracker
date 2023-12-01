@@ -265,7 +265,7 @@ extension TrackersViewController {
         guard let model = trackerService?.objectModel(at: index),
         let cell = collectionView.cellForItem(at: index) as? TrackersCollectionViewCell else {return }
         cell.isPinned(state: !model.isPinned)
-        trackerService?.pinnedTracker(index: index, state: !model.isPinned)
+        trackerService?.pinnedTracker(index: index, state: model.isPinned)
     }
     
     func editTracker(index: IndexPath){
