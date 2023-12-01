@@ -48,8 +48,6 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
             NSLocalizedString("day_Count",comment: ""),
             model.record
         )
-
-       // cell.dayCountLable.text = model.record.days()
         cell.emojiLabel.text = model.emoji
         cell.viewCard.backgroundColor = model.color
         cell.descriptionLable.text = model.descriptionTracker
@@ -84,16 +82,25 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
         return UIContextMenuConfiguration(actionProvider: { actions in
             return UIMenu(children: [
                 UIAction(title: "Закрепить") { [weak self] _ in
-                    self?.pin()
+                    self?.pin(indexPaths[0])
                 },
                 UIAction(title: "Редактировать") { [weak self] _ in
-                    self?.edit()
+                    self?.edit(indexPaths[0])
                 },
                 UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
                     self?.delete(indexPaths[0])
                 },
             ])
         })
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfiguration configuration: UIContextMenuConfiguration, highlightPreviewForItemAt indexPath: IndexPath) -> UITargetedPreview? {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? TrackersCollectionViewCell else { return nil }
+        cell.layoutIfNeeded()
+        
+        let preview = UIPreviewParameters()
+        preview.backgroundColor = .clear
+        return UITargetedPreview(view: cell.viewCard , parameters: preview)
     }
     
 }
@@ -140,16 +147,18 @@ extension TrackersPresenter: UICollectionViewDelegateFlowLayout {
 //MARK: - UITCollectionView Menu methods
 
 extension TrackersPresenter {
-    func edit(){
+    func edit(_ index: IndexPath){
+        view?.editTracker(index: index)
         
     }
     
-    func pin(){
-        
+    func pin(_ index: IndexPath){
+        view?.pinTracker(index: index)
     }
     
     func delete(_ index: IndexPath){
-        trackerService?.deleteTracker(for: index)
+        view?.tapDelete(index: index)
+        //trackerService?.deleteTracker(for: index)
     }
 }
 

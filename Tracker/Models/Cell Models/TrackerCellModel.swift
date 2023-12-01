@@ -17,4 +17,6 @@ public struct TrackerCellModel {
     var complete: Bool
     var record: Int
     var isEnable: Bool
+    var categoryName: String?
+    var index: IndexPath?
 }

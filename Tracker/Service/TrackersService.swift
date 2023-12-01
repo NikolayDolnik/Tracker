@@ -25,6 +25,7 @@ public protocol TrackersServiseProtocol {
     func objectModel(at indexPath: IndexPath) -> TrackerCellModel?
     func nameforSection(_ section: Int) -> String?
     func setFilters(filter: String, selectedDay: Date)
+    func editTracker(categoryNewName: String, index: IndexPath, name: String, emoji: String, color: UIColor, timetable: [Int])
 }
 
 final class TrackersService: TrackersServiseProtocol {
@@ -32,6 +33,7 @@ final class TrackersService: TrackersServiseProtocol {
     static var shared = TrackersService()
     static let didChangeNotification = Notification.Name(rawValue: "TrackersServiceDidChange")
     private var currentDay = NSDate()
+    private let UIcolorMarshalling = UIColorMarshalling()
     var visibleDay: Date?
     var selectedFilter: String = "Все трекеры"
     weak var view: TrackersViewControllerProtocol?
@@ -85,9 +87,6 @@ final class TrackersService: TrackersServiseProtocol {
     
     func filterCompleted(day: Date){
         //Завершенные - только выолненные трекеры в текущий день. При переключении дней отображаются завершенные трекеры
-        
-        //let completedId = trackerRecordStore.allCompletedTracker()
-        //let numberOfDay = Calendar.current.component(.weekday, from: day ) - 1
         
         trackerStore.predicateFetch(completedDay: day)
         view?.update()
@@ -149,6 +148,30 @@ final class TrackersService: TrackersServiseProtocol {
         saveTracker(tracker: tracker, with: categoryNewName)
     }
     
+    
+    //MARK: - Edit Trackers
+    
+    func editTracker(categoryNewName: String, index: IndexPath, name: String, emoji: String, color: UIColor, timetable: [Int]){
+        
+        //Получаем старый трекер
+        guard let tracker = trackerStore.getTrackerCoreData(for: index) else {return print("Не удалось создать трекер для редактирования") }
+        
+        //проверяем изменилась ли категория?
+        if tracker.category?.categoryName == categoryNewName {
+            //Категория не изменилась
+            // меняем только данные трекера
+            tracker.emoji = emoji
+            tracker.colorHex = UIcolorMarshalling.hexString(from:color)
+            tracker.schedule =  WeekDay.getShedule(for: timetable )
+            tracker.name = name
+            trackerStore.saveContext()
+        } else {
+            //Категория другая
+            //Удаляем трекер из старой категории и добавляем в новую
+           try? trackerCategoryStore.editTrackerToCategory(tracker: tracker, newCategoryName: categoryNewName )
+        }
+        
+    }
     
     //MARK: - Delete Trackers
     
@@ -229,7 +252,9 @@ extension TrackersService: StoreDelegateProtocol {
             timetable: tracker.timetable,
             complete: getCompleteState(tracker: tracker, date: visibleDay!), // функция проверки на выполнение
             record: getTrackerRecord(for: indexPath), // функция проверки на рекорд
-            isEnable: isEnableCompleteButton() // проверка доступности состояния кнопки
+            isEnable: isEnableCompleteButton(), // проверка доступности состояния кнопки
+            categoryName: trackerCore.category?.categoryName,
+            index: indexPath
         )
         
         return trackerModell

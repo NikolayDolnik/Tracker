@@ -12,4 +12,7 @@ public protocol TrackersViewControllerProtocol: AnyObject, TrackersCollectionVie
     var presenter: TrackersPresenterProtocol? {get set}
     func updateData(_ update: StoreUpdate)
     func update()
+    func tapDelete(index: IndexPath)
+    func editTracker(index: IndexPath)
+    func pinTracker(index: IndexPath)
 }

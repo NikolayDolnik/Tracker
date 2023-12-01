@@ -11,6 +11,7 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
     
     private var trackersTitle = "Трекеры"
     private var filterTitle = "Фильтры"
+    private  var analyticsService = AnalyticsService.shared
     var trackerService: TrackersServiseProtocol?
     var presenter: TrackersPresenterProtocol?
     let currentDay = NSDate()
@@ -50,8 +51,13 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
         configPresenter()
         changeDatePicker()
         view.addTapGestureToHideKeyboard()
+        analyticsService.report(event: "open", params: [ Event.typeEvent.rawValue : Event.open.rawValue , Event.typeScreen.rawValue : main])
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        analyticsService.report(event: "close", params: [ Event.typeEvent.rawValue : Event.close.rawValue , Event.typeScreen.rawValue : main])
+    }
     
     //MARK: - Congfiguration
     
@@ -138,12 +144,17 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
     
     @objc func addTrackers(){
         let createVC = CreateViewController()
+        
+        analyticsService.report(event: "tapAddTrackers", params: [ Event.typeEvent.rawValue : Event.click.rawValue , Event.typeScreen.rawValue : main, Event.typeItem.rawValue : "add_track"])
+        
         self.present(createVC, animated: true)
     }
     
     @objc func didTapFilters(){
         guard let trackerService else { return }
         let filtersVC = FiltersViewController(viewModel: FilersViewModel(selectedDay: datePicker.date, selectedFilters: trackerService.selectedFilter))
+        analyticsService.report(event: "tapFilters", params: [ Event.typeEvent.rawValue : Event.click.rawValue , Event.typeScreen.rawValue : main, Event.typeItem.rawValue : "filter"])
+        
         self.present(filtersVC, animated: true)
     }
 }
@@ -232,6 +243,8 @@ extension TrackersViewController: UISearchBarDelegate {
 extension TrackersViewController: TrackersCollectionViewCellDelegate {
     
     @objc func didTapCompleteButton(_ cell: TrackersCollectionViewCell) {
+        analyticsService.report(event: "tapTrack", params: [ Event.typeEvent.rawValue : Event.click.rawValue , Event.typeScreen.rawValue : main, Event.typeItem.rawValue : "track"])
+        
         guard let indexPath = collectionView.indexPath(for: cell),
               let trackerService else {return}
         
@@ -240,13 +253,45 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
         switch cell.completeState {
         case true:
             trackerService.addTrackerRecord(for: indexPath)
-            
-           // cell.dayCountLable.text = "\(trackerService.getTrackerRecord(for: indexPath)) дней"
         case false:
             trackerService.deleteTrackerRecord(for: indexPath)
-            //cell.dayCountLable.text = "\(trackerService.getTrackerRecord(for: indexPath) ) дней"
         }
     }
 }
 
+extension TrackersViewController {
+    
+    func pinTracker(index: IndexPath){
+        
+      
+        
+    }
+    
+    func editTracker(index: IndexPath){
+        analyticsService.report(event: "tapEdit", params: [ Event.typeEvent.rawValue : Event.click.rawValue , Event.typeScreen : main, Event.typeItem.rawValue : "edit"])
+        
+        guard let model = trackerService?.objectModel(at: index) else { return }
+        let viewModel = EditTrackersViewModel(model: model,selectedCategory: model.categoryName ?? "")
+        let vc = EditTrackersViewController(viewModel: viewModel)
+        
+        self.present(vc, animated: true)
+    }
+    
+    
+    func tapDelete(index: IndexPath){
+        analyticsService.report(event: "tapDelete", params: [ Event.typeEvent.rawValue : Event.click.rawValue , Event.typeScreen.rawValue : main, Event.typeItem.rawValue : "delete"])
+        
+        let alert = UIAlertController(title: "Уверены что хотите удалить трекер?", message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Удалить",
+                                      style: .destructive,
+                                      handler: {_ in
+            self.trackerService?.deleteTracker(for: index)
+        }))
+        alert.addAction(UIAlertAction(title: "Отменить", style: .cancel, handler: nil))
+        self.present(alert, animated: true)
+    }
+    
+    
+    
+}
 

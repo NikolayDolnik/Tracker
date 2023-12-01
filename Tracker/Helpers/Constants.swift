@@ -7,6 +7,19 @@
 
 import Foundation
 
+let API = "d4513153-4deb-4b84-be71-6ec75fbadd44"
+let main = "Main"
+
+public enum Event: String, Hashable {
+    case open
+    case close
+    case click
+    case typeEvent
+    case typeScreen
+    case typeItem
+   
+}
+
 public enum identifier: String {
     case cell
     case header

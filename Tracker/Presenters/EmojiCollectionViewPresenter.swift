@@ -10,6 +10,9 @@ import UIKit
 
 protocol CollectionViewPresenterProtocol: UICollectionViewDelegate,UICollectionViewDataSource {
     var delegate: EmojiPresenterDelegateProtocol? {get set}
+    var selectedEmoji: String?  {get set}
+    var selectedColor: UIColor?  {get set}
+    func setSelectedCell() -> [IndexPath]
 }
 
 protocol  EmojiPresenterDelegateProtocol {
@@ -21,9 +24,11 @@ protocol  EmojiPresenterDelegateProtocol {
 final class EmojiPresenter: NSObject, CollectionViewPresenterProtocol {
     
     var delegate: EmojiPresenterDelegateProtocol?
-    private var selectedIndex: IndexPath?
+    var selectedEmoji: String?
+    var selectedColor: UIColor?
     private var emojiIndex: IndexPath?
     private var colorIndex: IndexPath?
+
     private var emojiCollections = ["🙂","😻","🌺","🐶","❤️","😱","😇","😡","🥶","🤔","🙌","🍔","🥦","🏓","🥇","🎸","🏝","😪"]
     
     private var colorsCollection: [UIColor] = {
@@ -35,24 +40,10 @@ final class EmojiPresenter: NSObject, CollectionViewPresenterProtocol {
         return collection
     }()
     
-    
-    func deselectCell(_ collectionView: UICollectionView, for indexPath: IndexPath){
+    func setSelectedCell() -> [IndexPath] {
+        guard let emojiIndex, let colorIndex else { return [] }
         
-        guard let cell =  collectionView.cellForItem(at: indexPath) else {  return print("функция не удалила выделение") }
-        
-        switch indexPath.section {
-        case 0:
-            cell.backgroundColor = .whiteDayTracker
-            delegate?.emoji = nil
-            
-        case 1:
-            cell.layer.borderColor = UIColor.whiteDayTracker.cgColor
-            delegate?.color = nil
-            
-        default:
-            print("default")
-            return
-        }
+        return [emojiIndex, colorIndex]
     }
     
 }
@@ -104,7 +95,6 @@ extension EmojiPresenter {
         case 0:
             cell.backgroundColor = .whiteDayTracker
             delegate?.emoji = nil
-            
         case 1:
             cell.layer.borderColor = UIColor.whiteDayTracker.cgColor
             delegate?.color = nil
@@ -133,14 +123,25 @@ extension EmojiPresenter {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CustomCollectionViewCell
+       
         switch indexPath.section {
         case 0:
             cell.titleLabel.text = emojiCollections[indexPath.row]
+            if let text = selectedEmoji, cell.titleLabel.text == text {
+                emojiIndex = indexPath
+            }
         case 1:
             cell.titleLabel.backgroundColor = colorsCollection[indexPath.row]
+            if let color = selectedColor,
+              color == colorsCollection[indexPath.row]
+              // cell.titleLabel.backgroundColor!.isEqual(color)
+            {
+               colorIndex = indexPath
+            }
         default:
             return cell
         }
+        
         return cell
     }
     

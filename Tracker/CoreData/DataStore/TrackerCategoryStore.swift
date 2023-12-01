@@ -66,6 +66,7 @@ final class TrackerCategoryStore: NSObject {
         fetchedResultsController.fetchRequest.predicate = predicate
         
         let category = try context.fetch(fetchedResultsController.fetchRequest)
+        print("Нашли категорию - \(category[0].categoryName)")
         
         return category.first
     }
@@ -102,6 +103,22 @@ final class TrackerCategoryStore: NSObject {
             try? addTrackerCategory(categoryName: categoryName)
             tracker.category = trackerCategoriesCoreData.first(where: {$0.categoryName == categoryName })
         }
+        saveContext()
+    }
+    
+    func editTrackerToCategory(tracker: TrackerCoreData, newCategoryName: String) throws {
+        guard let oldCategory = tracker.category?.categoryName else { return }
+        //Удаляем трекер из старой категории
+        let trackerCategory = try? fetchTrackerCategory(categoryName: oldCategory )
+        print("Удаляем из - \(trackerCategory?.categoryName!)")
+        trackerCategory?.removeFromTracker(tracker)
+        
+        // Добавляем в новую
+        let trackerNewCategory = try? fetchTrackerCategory(categoryName: newCategoryName)
+        print("Добавляем в - \(trackerNewCategory?.categoryName!)")
+        tracker.category = trackerNewCategory
+        trackerNewCategory?.addToTracker(tracker)
+        
         saveContext()
     }
     

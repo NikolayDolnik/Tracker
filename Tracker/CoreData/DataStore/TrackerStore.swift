@@ -15,6 +15,11 @@ final class TrackerStore: NSObject {
     private let context: NSManagedObjectContext
     private var insertedIndexes: IndexSet?
     private var deletedIndexes: IndexSet?
+    lazy var calendar: Calendar = {
+        var calendar = Calendar.current
+        calendar.timeZone = NSTimeZone.local
+        return calendar
+    }()
     weak var delegate: StoreDelegateProtocol?
     lazy var fetchedResultsController: NSFetchedResultsController<TrackerCoreData> = {
 
@@ -78,6 +83,10 @@ final class TrackerStore: NSObject {
         return customTrackers
     }
     
+    func getTrackerCoreData(for indexPath: IndexPath) -> TrackerCoreData? {
+        return fetchedResultsController.object(at: indexPath)
+    }
+    
     func getTrackers(from trackerCoreData: TrackerCoreData) throws -> Tracker {
    
         guard let id = trackerCoreData.id,
@@ -128,26 +137,46 @@ final class TrackerStore: NSObject {
     }
     
     func predicateFetch(completedDay: Date){
+        
+        let dateFrom = calendar.startOfDay(for: completedDay)
+        guard let dateTo = calendar.date(byAdding: .day, value: 1, to: dateFrom) else { return print("Не создался dateTo")}
+        print(dateFrom)
+        print(dateTo)
+        print(completedDay)
+        let predicatedayFrom = NSPredicate(format: "ANY record.dateRecord >= %@",
+                                            dateFrom as NSDate)
+        let predicatedayTo = NSPredicate(format: "ANY record.dateRecord <= %@",
+                                            dateTo as NSDate)
 
         let predicateComplete = NSPredicate(format: "ANY record.dateRecord == %@",
                                             completedDay as CVarArg)
-        fetchedResultsController.fetchRequest.predicate = predicateComplete
+        
+        fetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicatedayFrom, predicatedayTo])
         try? fetchedResultsController.performFetch()
     }
     
     func predicateFetch(notCompleted: Date){
-        let format1 = "NOT (ANY record.dateRecord ==%@)"
-        let format = "SUBQUERY(record, $record, $record.date != %@ ).@count"
-        let predicateComplete = NSPredicate(format: format1 ,
-                                            notCompleted as CVarArg)
         
+        let dateFrom = calendar.startOfDay(for: notCompleted)
+        guard let dateTo = calendar.date(byAdding: .day, value: 1, to: dateFrom) else { return print("Не создался dateTo")}
+        print(dateFrom)
+        print(dateTo)
+        print(notCompleted)
+        let predicatedayFrom = NSPredicate(format: "ANY record.dateRecord >= %@",
+                                            dateFrom as NSDate)
+        let predicatedayTo = NSPredicate(format: "ANY record.dateRecord <= %@",
+                                            dateTo as NSDate)
+       
+        let predicateNew = NSPredicate(format:  "SUBQUERY(record, $record, $record.dateRecord >= %@ AND $record.dateRecord <= %@).@count == 0", dateFrom as NSDate,
+                                            dateTo as NSDate)
         let numberOfDay = Calendar.current.component(.weekday, from: notCompleted as Date ) - 1
         let stringDay = WeekDay.getString(for: numberOfDay)
         let predicateDate = NSPredicate(format: "%K CONTAINS[cd] %@",
                                     #keyPath(TrackerCoreData.schedule),
                                     stringDay)
+        // predicatedayFrom, predicatedayTo
         
-        fetchedResultsController.fetchRequest.predicate = predicateComplete //NSCompoundPredicate(andPredicateWithSubpredicates: [predicateComplete, predicateDate])
+        fetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateDate,predicateNew])
         try? fetchedResultsController.performFetch()
     }
     
