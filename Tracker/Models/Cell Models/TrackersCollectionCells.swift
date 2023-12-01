@@ -155,6 +155,10 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
         completeButton.setImage(img, for: .normal)
     }
     
+    func isPinned(state: Bool){
+        pinImage.isHidden = !state
+    }
+    
     @objc func didTapCompleteButton(){
         delegate?.didTapCompleteButton(self)
     }

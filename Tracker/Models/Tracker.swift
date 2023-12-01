@@ -14,6 +14,7 @@ public struct Tracker {
     let color: UIColor
     let emoji: String
     let timetable: [Int]
+    var isPinned: Bool
 }
 
 

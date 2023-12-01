@@ -57,6 +57,7 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
         cell.completeButton.isEnabled = model.isEnable
         cell.completeButton.tintColor = model.color
         cell.completeButton.setTitleColor(model.color, for: .disabled)
+        cell.isPinned(state: model.isPinned)
         return cell
     }
     
@@ -74,13 +75,15 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
     }
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
-        guard indexPaths.count > 0 else {
+        guard indexPaths.count > 0,
+              let model = trackerService?.objectModel(at: indexPaths[0]) else {
             return nil
         }
+        let title = model.isPinned ? "Открепить" : "Закрепить"
         
         return UIContextMenuConfiguration(actionProvider: { actions in
             return UIMenu(children: [
-                UIAction(title: "Закрепить") { [weak self] _ in
+                UIAction(title: title) { [weak self] _ in
                     self?.pin(indexPaths[0])
                 },
                 UIAction(title: "Редактировать") { [weak self] _ in
@@ -148,7 +151,6 @@ extension TrackersPresenter: UICollectionViewDelegateFlowLayout {
 extension TrackersPresenter {
     func edit(_ index: IndexPath){
         view?.editTracker(index: index)
-        
     }
     
     func pin(_ index: IndexPath){
@@ -157,7 +159,6 @@ extension TrackersPresenter {
     
     func delete(_ index: IndexPath){
         view?.tapDelete(index: index)
-        //trackerService?.deleteTracker(for: index)
     }
 }
 

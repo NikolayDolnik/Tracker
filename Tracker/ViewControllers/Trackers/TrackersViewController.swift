@@ -262,9 +262,10 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
 extension TrackersViewController {
     
     func pinTracker(index: IndexPath){
-        
-      
-        
+        guard let model = trackerService?.objectModel(at: index),
+        let cell = collectionView.cellForItem(at: index) as? TrackersCollectionViewCell else {return }
+        cell.isPinned(state: !model.isPinned)
+        trackerService?.pinnedTracker(index: index, state: !model.isPinned)
     }
     
     func editTracker(index: IndexPath){
@@ -273,10 +274,8 @@ extension TrackersViewController {
         guard let model = trackerService?.objectModel(at: index) else { return }
         let viewModel = EditTrackersViewModel(model: model,selectedCategory: model.categoryName ?? "")
         let vc = EditTrackersViewController(viewModel: viewModel)
-        
         self.present(vc, animated: true)
     }
-    
     
     func tapDelete(index: IndexPath){
         analyticsService.report(event: "tapDelete", params: [ Event.typeEvent.rawValue : Event.click.rawValue , Event.typeScreen.rawValue : main, Event.typeItem.rawValue : "delete"])

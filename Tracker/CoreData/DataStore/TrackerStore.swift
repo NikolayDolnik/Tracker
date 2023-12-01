@@ -49,9 +49,8 @@ final class TrackerStore: NSObject {
     
     func addTracker(tracker: Tracker, categoryName: String) throws {
         let trackerCoreData = convertTracker(tracker: tracker)
-        //Получаем название категории от VC и ищем их в БД, если нет осоздаем новую категорию. Покаиспользуем кастомную
         let trackerCategoryCoreData = TrackerCategoryCoreData(context: context)
-        trackerCategoryCoreData.categoryName = categoryName //"Созданно контроллером"
+        trackerCategoryCoreData.categoryName = categoryName
         trackerCoreData.category = trackerCategoryCoreData
         saveContext()
     }
@@ -70,6 +69,7 @@ final class TrackerStore: NSObject {
         trackerCoreData.id = tracker.id
         trackerCoreData.schedule = WeekDay.getShedule(for: tracker.timetable )
         trackerCoreData.colorHex = UIcolorMarshalling.hexString(from: tracker.color)
+        trackerCoreData.isPinned = tracker.isPinned
         return trackerCoreData
     }
     
@@ -103,7 +103,8 @@ final class TrackerStore: NSObject {
             name:name,
             color: UIcolorMarshalling.color(from: colorHex),
             emoji: emoji,
-            timetable: WeekDay.getTimetable(for: schedule)
+            timetable: WeekDay.getTimetable(for: schedule),
+            isPinned: trackerCoreData.isPinned
         )
     }
     

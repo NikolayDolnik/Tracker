@@ -26,6 +26,7 @@ public protocol TrackersServiseProtocol {
     func nameforSection(_ section: Int) -> String?
     func setFilters(filter: String, selectedDay: Date)
     func editTracker(categoryNewName: String, index: IndexPath, name: String, emoji: String, color: UIColor, timetable: [Int])
+    func pinnedTracker(index: IndexPath, state: Bool)
 }
 
 final class TrackersService: TrackersServiseProtocol {
@@ -130,7 +131,8 @@ final class TrackersService: TrackersServiseProtocol {
             name: name,
             color: color,
             emoji: emoji,
-            timetable: timetable
+            timetable: timetable,
+            isPinned: false
         )
         saveTracker(tracker: tracker, with: categoryNewName)
     }
@@ -143,7 +145,8 @@ final class TrackersService: TrackersServiseProtocol {
             name: name,
             color: color,
             emoji: emoji,
-            timetable: timetable
+            timetable: timetable,
+            isPinned: false
         )
         saveTracker(tracker: tracker, with: categoryNewName)
     }
@@ -172,6 +175,14 @@ final class TrackersService: TrackersServiseProtocol {
         }
         
     }
+    
+    func pinnedTracker(index: IndexPath, state: Bool){
+        //Получаем старый трекер
+        guard let tracker = trackerStore.getTrackerCoreData(for: index) else {return print("Не удалось создать трекер для редактирования") }
+        tracker.isPinned = state
+        trackerStore.saveContext()
+    }
+    
     
     //MARK: - Delete Trackers
     
@@ -243,7 +254,6 @@ extension TrackersService: StoreDelegateProtocol {
         if visibleDay == nil {
             visibleDay = currentDay as Date
         }
-        
         let trackerModell = TrackerCellModel(
             id: tracker.id,
             descriptionTracker: tracker.name,
@@ -254,9 +264,9 @@ extension TrackersService: StoreDelegateProtocol {
             record: getTrackerRecord(for: indexPath), // функция проверки на рекорд
             isEnable: isEnableCompleteButton(), // проверка доступности состояния кнопки
             categoryName: trackerCore.category?.categoryName,
+            isPinned: tracker.isPinned,
             index: indexPath
         )
-        
         return trackerModell
     }
     
