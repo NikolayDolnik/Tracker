@@ -62,4 +62,9 @@ extension CategoriesViewModel: NewCategoryDelegateProtocol {
         try? categoriesStore.addTrackerCategory(categoryName: categoryName)
         selectedCategory = categoryName
     }
+    
+    func editTrackerCategory(oldName: String, newName: String) {
+        try? categoriesStore.editCategory(oldCategoryName: oldName, newCategoryName: newName)
+        selectedCategory = newName
+    }
 }

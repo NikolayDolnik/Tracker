@@ -91,6 +91,16 @@ final class TrackerCategoryStore: NSObject {
         saveContext()
     }
     
+    func editCategory(oldCategoryName:String, newCategoryName: String) throws {
+        var category = try? fetchTrackerCategory(categoryName: oldCategoryName)
+        if category != nil {
+            category?.categoryName = newCategoryName
+        } else {
+            return
+        }
+        saveContext()
+    }
+    
    
     func addTrackerToCategory(tracker: TrackerCoreData, categoryName: String) throws {
         

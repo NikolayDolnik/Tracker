@@ -57,7 +57,6 @@ extension TrackersPresenter: UICollectionViewDataSource, UICollectionViewDelegat
         cell.completeButton.isEnabled = model.isEnable
         cell.completeButton.tintColor = model.color
         cell.completeButton.setTitleColor(model.color, for: .disabled)
-        
         return cell
     }
     

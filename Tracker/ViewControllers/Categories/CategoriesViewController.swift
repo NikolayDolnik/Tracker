@@ -191,7 +191,9 @@ extension CategoriesViewController {
     }
     
     private func editCategory(for indexPath: IndexPath){
-        
+        let oldCategoryName = viewModel.categories[indexPath.row].categoreName 
+        let vc = EditCategoryViewController(oldCategoryName: oldCategoryName, delegate: viewModel)
+        self.present(vc, animated: true)
     }
 }
 

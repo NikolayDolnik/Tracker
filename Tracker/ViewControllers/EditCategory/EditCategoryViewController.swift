@@ -1,24 +1,20 @@
 //
-//  CreateCategoriesViewController.swift
+//  EditCategoryViewController.swift
 //  Tracker
 //
-//  Created by Dolnik Nikolay on 23.11.2023.
+//  Created by Dolnik Nikolay on 01.12.2023.
 //
 
 import UIKit
 
-protocol NewCategoryDelegateProtocol {
-    func addTrackerCategory(categoryName: String)
-    func editTrackerCategory(oldName: String, newName: String)
-}
-
-final class NewCategoryViewController: UIViewController {
+final class EditCategoryViewController: UIViewController {
     
+    private var oldCategoryName: String
     private var categoryName: String?
     var delegate: NewCategoryDelegateProtocol?
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Новая категория"
+        label.text = "Редактирование категории"
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.textColor = .blackDayTracker
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -41,8 +37,9 @@ final class NewCategoryViewController: UIViewController {
     private var completeButton = UIButton()
     private var buttonText = "Готово"
     
-    init(delegate: NewCategoryDelegateProtocol){
+    init(oldCategoryName: String, delegate: NewCategoryDelegateProtocol){
         self.delegate = delegate
+        self.oldCategoryName = oldCategoryName
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -68,6 +65,7 @@ final class NewCategoryViewController: UIViewController {
         nameLable.delegate = self
         nameLable.leftView = UIView.init(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
         nameLable.leftViewMode = .always
+        nameLable.text = oldCategoryName
       
    
         NSLayoutConstraint.activate([
@@ -92,7 +90,7 @@ final class NewCategoryViewController: UIViewController {
 
 //MARK: - UIText Field Delegate
 
-extension NewCategoryViewController: UITextFieldDelegate {
+extension EditCategoryViewController: UITextFieldDelegate {
     
     func textFieldDidChangeSelection(_ textField: UITextField) {
         categoryName = textField.text
@@ -120,10 +118,10 @@ extension NewCategoryViewController: UITextFieldDelegate {
     
 }
 
-extension NewCategoryViewController {
+extension EditCategoryViewController {
     
     func dataCheking(){
-        guard let  categoryName, categoryName != "", categoryName != " "  else {
+        guard let  categoryName = nameLable.text, categoryName != "", categoryName != " "  else {
             completeButton.isEnabled = false
             completeButton.backgroundColor  =  completeButton.isEnabled ? .blackDayTracker : .grayTracker
             return
@@ -133,11 +131,21 @@ extension NewCategoryViewController {
     }
     
     @objc func didTapCompleteButton(){
-        guard let  categoryName  else { return }
-        try? delegate?.addTrackerCategory(categoryName: categoryName)
-        self.dismiss(animated: true)
+        guard let  categoryName = nameLable.text  else { return }
+        
+        //Проверка категории
+        if categoryName == oldCategoryName {
+            self.dismiss(animated: true)
+        } else {
+            //Редактируем категорию
+            delegate?.editTrackerCategory(oldName: oldCategoryName, newName: categoryName )
+        }
     }
 }
 
 
+
+
+    
+    
 

@@ -37,6 +37,7 @@
 		99933B3C2B18F424007E4089 /* EditTrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99933B3B2B18F424007E4089 /* EditTrackersViewController.swift */; };
 		99933B3E2B18F640007E4089 /* EditTrackersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99933B3D2B18F640007E4089 /* EditTrackersViewModel.swift */; };
 		99933B402B18FA6D007E4089 /* EditViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99933B3F2B18FA6D007E4089 /* EditViewModelProtocol.swift */; };
+		99933B432B1A0AD8007E4089 /* EditCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99933B422B1A0AD8007E4089 /* EditCategoryViewController.swift */; };
 		99C5FD0B2ACC27B000F33BFC /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5FD0A2ACC27B000F33BFC /* TabBarController.swift */; };
 		99C5FD0D2ACC282E00F33BFC /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5FD0C2ACC282E00F33BFC /* StatisticsViewController.swift */; };
 		99C5FD112ACC5F5500F33BFC /* CreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C5FD102ACC5F5500F33BFC /* CreateViewController.swift */; };
@@ -126,6 +127,7 @@
 		99933B3B2B18F424007E4089 /* EditTrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTrackersViewController.swift; sourceTree = "<group>"; };
 		99933B3D2B18F640007E4089 /* EditTrackersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTrackersViewModel.swift; sourceTree = "<group>"; };
 		99933B3F2B18FA6D007E4089 /* EditViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewModelProtocol.swift; sourceTree = "<group>"; };
+		99933B422B1A0AD8007E4089 /* EditCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCategoryViewController.swift; sourceTree = "<group>"; };
 		99C5FD0A2ACC27B000F33BFC /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		99C5FD0C2ACC282E00F33BFC /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		99C5FD102ACC5F5500F33BFC /* CreateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateViewController.swift; sourceTree = "<group>"; };
@@ -302,6 +304,14 @@
 			path = EditTrackers;
 			sourceTree = "<group>";
 		};
+		99933B412B1A0AAB007E4089 /* EditCategory */ = {
+			isa = PBXGroup;
+			children = (
+				99933B422B1A0AD8007E4089 /* EditCategoryViewController.swift */,
+			);
+			path = EditCategory;
+			sourceTree = "<group>";
+		};
 		99C5FD122ACEAFDE00F33BFC /* Create Trakers */ = {
 			isa = PBXGroup;
 			children = (
@@ -341,6 +351,7 @@
 				99C5FD6A2AE7CFAC00F33BFC /* Events */,
 				99C5FD692AE7CF9B00F33BFC /* Habits */,
 				99933B3A2B18F3FC007E4089 /* EditTrackers */,
+				99933B412B1A0AAB007E4089 /* EditCategory */,
 				993F7FBF2B0F7E0600EB0978 /* CreateCategories */,
 				993F7FB62B0F3E7400EB0978 /* Categories */,
 				993F7FDD2B16484000EB0978 /* Filters */,
@@ -761,6 +772,7 @@
 				99DADA5F2ACC0B53004467A3 /* TrackerDataModel.xcdatamodeld in Sources */,
 				99C5FD292AD009CC00F33BFC /* CustomCollectionCell.swift in Sources */,
 				99C5FD402ADF18EA00F33BFC /* TrackerCellModel.swift in Sources */,
+				99933B432B1A0AD8007E4089 /* EditCategoryViewController.swift in Sources */,
 				993F7FCB2B15E0DE00EB0978 /* StatisticViewModel.swift in Sources */,
 				9968F4A52AFB7DBC0033C4B9 /* StoreDelegateProtocol.swift in Sources */,
 				99933B402B18FA6D007E4089 /* EditViewModelProtocol.swift in Sources */,
