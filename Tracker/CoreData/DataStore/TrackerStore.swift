@@ -25,8 +25,8 @@ final class TrackerStore: NSObject {
 
         let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: entityName)
         fetchRequest.sortDescriptors = [
-            NSSortDescriptor(key: "category.categoryName", ascending: false),
-            NSSortDescriptor(key: "isPinned", ascending: true)
+            NSSortDescriptor(key: "category.categoryName", ascending: true),
+           // NSSortDescriptor(key: "isPinned", ascending: false)
         ]
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
@@ -180,7 +180,6 @@ final class TrackerStore: NSObject {
         let predicateDate = NSPredicate(format: "%K CONTAINS[cd] %@",
                                     #keyPath(TrackerCoreData.schedule),
                                     stringDay)
-        // predicatedayFrom, predicatedayTo
         
         fetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateDate,predicateNew])
         try? fetchedResultsController.performFetch()

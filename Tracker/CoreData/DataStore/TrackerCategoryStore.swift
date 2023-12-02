@@ -17,7 +17,7 @@ final class TrackerCategoryStore: NSObject {
     var delegate: TrackerCategoryStoreDelegate?
     private let entityName = "TrackerCategoryCoreData"
     private let UIcolorMarshalling = UIColorMarshalling()
-    private var pinnedCategory = "Закрепленные"
+    private var pinnedCategory = " Закрепленные"
     private let context: NSManagedObjectContext
     var trackerCategoriesCoreData: [TrackerCategoryCoreData] {
        return self.fetchedResultsController.fetchedObjects ?? []

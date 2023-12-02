@@ -37,7 +37,7 @@ final class TrackersService: TrackersServiseProtocol {
     private let UIcolorMarshalling = UIColorMarshalling()
     var visibleDay: Date?
     var selectedFilter: String = "Все трекеры"
-    private var pinnedCategory = "Закрепленные"
+    private var pinnedCategory = " Закрепленные"
     weak var view: TrackersViewControllerProtocol?
     private lazy var trackerStore: TrackerStore = {
         let store = TrackerStore()
