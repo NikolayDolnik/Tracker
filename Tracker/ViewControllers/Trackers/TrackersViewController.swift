@@ -80,6 +80,7 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
         
         view.backgroundColor = .whiteDayTracker
         collectionView.backgroundColor = .whiteDayTracker
+        collectionView.contentInset.bottom = 80
         
         view.addSubview(collectionView)
         view.addSubview(stubsView)
@@ -265,7 +266,7 @@ extension TrackersViewController {
         guard let model = trackerService?.objectModel(at: index),
         let cell = collectionView.cellForItem(at: index) as? TrackersCollectionViewCell else {return }
         cell.isPinned(state: !model.isPinned)
-        trackerService?.pinnedTracker(index: index, state: !model.isPinned)
+        trackerService?.pinnedTracker(index: index, state: model.isPinned)
     }
     
     func editTracker(index: IndexPath){

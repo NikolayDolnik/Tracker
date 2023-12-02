@@ -45,6 +45,7 @@ final class CategoriesViewModel: CategoriesViewModelProtocol {
     }
 
    func getCategoriesFromStore() -> [TrackerCategory] {
+       //Скрыть закрепленные
         guard let categories = try? categoriesStore.fetchTrackerCategories()  else { return [] }
         return categories
     }
