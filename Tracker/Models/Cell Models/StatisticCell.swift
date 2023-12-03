@@ -18,7 +18,7 @@ final class StatisticCell: UITableViewCell {
         return sv
     }()
     
-    private var dayCountLable: UILabel = {
+    private lazy var dayCountLable: UILabel = {
         let label = UILabel()
         label.text = "0"
         label.font = .systemFont(ofSize: 34, weight: .bold)
@@ -26,7 +26,7 @@ final class StatisticCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    private var nameSatisticLable: UILabel = {
+    private lazy var nameSatisticLable: UILabel = {
         let label = UILabel()
         label.text = "Лучший период"
         label.font = .systemFont(ofSize: 12, weight: .medium)

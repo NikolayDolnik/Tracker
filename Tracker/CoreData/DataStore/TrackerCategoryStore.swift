@@ -20,10 +20,10 @@ final class TrackerCategoryStore: NSObject {
     private var pinnedCategory = " Закрепленные"
     private let context: NSManagedObjectContext
     var trackerCategoriesCoreData: [TrackerCategoryCoreData] {
-       return self.fetchedResultsController.fetchedObjects ?? []
+        return self.fetchedResultsController.fetchedObjects ?? []
     }
     private lazy var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData> = {
-
+        
         let fetchRequest = NSFetchRequest<TrackerCategoryCoreData>(entityName: entityName)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "categoryName", ascending: false)]
         
@@ -79,17 +79,12 @@ final class TrackerCategoryStore: NSObject {
         } catch {
             return nil
         }
-//
-//        let categories = try context.fetch(fetchedResultsController.fetchRequest)
-//        print("Нашли категорию - \(categories[0].categoryName)")
-//        guard let category = categories.first else { return nil }
-//        return category
     }
     
     func getCategories(from TrackerCategoryCoreData: TrackerCategoryCoreData) throws -> TrackerCategory {
-   
+        
         guard
-              let name = TrackerCategoryCoreData.categoryName
+            let name = TrackerCategoryCoreData.categoryName
         else {
             throw TrackerStoreError.decodingError
         }
@@ -115,8 +110,8 @@ final class TrackerCategoryStore: NSObject {
         }
         saveContext()
     }
-
-   
+    
+    
     func addTrackerToCategory(tracker: TrackerCoreData, categoryName: String) throws {
         
         if let trackerCategory = try? fetchTrackerCategory(categoryName: categoryName)
@@ -139,7 +134,7 @@ final class TrackerCategoryStore: NSObject {
         print("Удаляем трекер из - \(trackerCategory?.categoryName!)")
         trackerCategory?.removeFromTracker(tracker)
         
-       //Проверяем создана ли новая категория
+        //Проверяем создана ли новая категория
         let trackerNewCategory = try? fetchTrackerCategory(categoryName: newCategoryName)
         
         if let name = trackerNewCategory?.categoryName {

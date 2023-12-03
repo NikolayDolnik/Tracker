@@ -30,7 +30,7 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
     private var search = UISearchTextField()
     private var stubsView = StubView()
     private lazy var filterButton: UIButton = {
-       let button = UIButton()
+        let button = UIButton()
         button.addTarget(self, action: #selector(didTapFilters), for: .touchUpInside)
         button.setTitle(filterTitle, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
@@ -167,7 +167,7 @@ extension TrackersViewController {
     func stubViewConfig(stubs: Stubs){
         guard
             collectionView.numberOfSections == 0
-           // collectionView.numberOfItems(inSection: 0) == 0
+                // collectionView.numberOfItems(inSection: 0) == 0
         else {
             stubsView.isHidden = true
             filterButton.isHidden = false
@@ -190,7 +190,7 @@ extension TrackersViewController {
         stubViewConfig(stubs: Stubs.date)
         
         guard let day = trackerService?.visibleDay else { return }
-            datePicker.date = day
+        datePicker.date = day
         
     }
     
@@ -203,7 +203,7 @@ extension TrackersViewController {
         }
         stubViewConfig(stubs: Stubs.date)
     }
-
+    
 }
 
 //MARK: - DatePicker
@@ -264,7 +264,7 @@ extension TrackersViewController {
     
     func pinTracker(index: IndexPath){
         guard let model = trackerService?.objectModel(at: index),
-        let cell = collectionView.cellForItem(at: index) as? TrackersCollectionViewCell else {return }
+              let cell = collectionView.cellForItem(at: index) as? TrackersCollectionViewCell else {return }
         cell.isPinned(state: !model.isPinned)
         trackerService?.pinnedTracker(index: index, state: model.isPinned)
     }
@@ -290,7 +290,6 @@ extension TrackersViewController {
         alert.addAction(UIAlertAction(title: "Отменить", style: .cancel, handler: nil))
         self.present(alert, animated: true)
     }
-    
     
     
 }

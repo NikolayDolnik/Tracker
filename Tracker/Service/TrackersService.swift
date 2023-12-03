@@ -248,7 +248,7 @@ extension TrackersService: StoreDelegateProtocol {
    
     func didUpdate(_ update: StoreUpdate) {
         view?.update()
-       // view?.updateData(update)
+       
     }
     
     

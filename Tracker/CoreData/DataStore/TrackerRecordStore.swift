@@ -13,8 +13,9 @@ final class TrackerRecordStore: NSObject {
     private let entityName = "TrackerRecordCoreData"
     private let UIcolorMarshalling = UIColorMarshalling()
     private let context: NSManagedObjectContext
+    weak var delegate: StoreDelegateProtocol?
     private lazy var fetchedResultsController: NSFetchedResultsController<TrackerRecordCoreData> = {
-
+        
         let fetchRequest = NSFetchRequest<TrackerRecordCoreData>(entityName: entityName)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: false)]
         
@@ -40,17 +41,17 @@ final class TrackerRecordStore: NSObject {
     // MARK: - Methods Core Data
     
     func addRecord(tracker: Tracker, recordDate: Date) throws {
-      
+        
         let record = TrackerRecordCoreData(context: context)
         record.id = tracker.id
         record.dateRecord = recordDate
         
         let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id" , ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id" , ascending: true)]
         let result = try? context.fetch(fetchRequest)
         result?.forEach{ if $0.id == tracker.id {  record.tracker = $0  } }
         
-         saveContext()
+        saveContext()
     }
     
     func deleteTracker(tracker: Tracker, recordDay: Date) throws {
@@ -119,7 +120,12 @@ final class TrackerRecordStore: NSObject {
 extension TrackerRecordStore:  NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-     
+        let insertedIndexes = IndexSet()
+        let deletedIndexes = IndexSet()
+        delegate?.didUpdate(StoreUpdate(
+            insertedIndexes: insertedIndexes,
+            deletedIndexes: deletedIndexes )
+        )
     }
     
 }

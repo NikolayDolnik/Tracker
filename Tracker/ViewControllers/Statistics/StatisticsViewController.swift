@@ -14,18 +14,17 @@ final class StatisticsViewController: UIViewController {
     private var viewModel: StatisticsViewModelProtocol
     
     private let tableView: UITableView = {
-         let t = UITableView()
-         t.register(StatisticCell.self, forCellReuseIdentifier: identifier.cell.rawValue)
-         t.layer.cornerRadius = 16
-        //t.clipsToBounds = true
-         t.layer.masksToBounds = true
-         t.backgroundColor = .clear
-         t.translatesAutoresizingMaskIntoConstraints = false
-         return t
-     }()
+        let t = UITableView()
+        t.register(StatisticCell.self, forCellReuseIdentifier: identifier.cell.rawValue)
+        t.layer.cornerRadius = 16
+        t.layer.masksToBounds = true
+        t.backgroundColor = .clear
+        t.translatesAutoresizingMaskIntoConstraints = false
+        return t
+    }()
     
     init(){
-        self.viewModel = StatisticViewModel() 
+        self.viewModel = StatisticViewModel()
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -42,10 +41,10 @@ final class StatisticsViewController: UIViewController {
     
     func configUI(){
         viewModel.StatisticCellsBind.bind(action: { [weak self] _ in
-                        guard let self else { return }
-                        self.tableView.reloadData()
-                        self.stubViewConfig(stubs: Stubs.statistic)
-                    })
+            guard let self else { return }
+            self.tableView.reloadData()
+            self.stubViewConfig(stubs: Stubs.statistic)
+        })
         
         view.backgroundColor = .whiteDayTracker
         view.addSubview(tableView)
@@ -53,7 +52,7 @@ final class StatisticsViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorColor = .clear
-
+        
         stubsView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -112,10 +111,15 @@ extension StatisticsViewController {
     
     func stubViewConfig(stubs: Stubs){
         guard
-            viewModel.StatisticCells.count == 0
-        else { return  stubsView.isHidden = true }
-
+            viewModel.statisticIsEmpty
+        else {
+            tableView.isHidden = false
+            stubsView.isHidden = true
+            return
+        }
+        
         stubsView.stubViewConfig(stubs: stubs)
         stubsView.isHidden = false
+        tableView.isHidden = true
     }
 }

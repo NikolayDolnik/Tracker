@@ -9,5 +9,6 @@ import Foundation
 
 protocol StatisticsViewModelProtocol {
     var StatisticCells: [StatisticCellViewModel] { get set }
-    var StatisticCellsBind: Observable<[StatisticCellViewModel]> { get set }
+    var StatisticCellsBind: Observable<Bool> { get set }
+    var statisticIsEmpty: Bool { get }
 }
