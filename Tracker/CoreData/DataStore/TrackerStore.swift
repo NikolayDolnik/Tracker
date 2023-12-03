@@ -26,7 +26,7 @@ final class TrackerStore: NSObject {
         let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: entityName)
         fetchRequest.sortDescriptors = [
             //NSSortDescriptor(key: "isPinned", ascending: false),
-            NSSortDescriptor(key: "category.categoryName", ascending: false)
+            NSSortDescriptor(key: "category.categoryName", ascending: true)
         ]
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,

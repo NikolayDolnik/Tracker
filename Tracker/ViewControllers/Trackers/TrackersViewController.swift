@@ -80,6 +80,7 @@ final class TrackersViewController: UIViewController, UINavigationBarDelegate, T
         
         view.backgroundColor = .whiteDayTracker
         collectionView.backgroundColor = .whiteDayTracker
+        collectionView.contentInset.bottom = 60
         
         view.addSubview(collectionView)
         view.addSubview(stubsView)
