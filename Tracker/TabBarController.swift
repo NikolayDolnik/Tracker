@@ -10,7 +10,8 @@ import UIKit
 
 final class TabBarController: UITabBarController {
     
-    
+    private var trackersItemName = "Tрекеры"
+    private var statisticsItemName = "Статистика"
     override func viewDidLoad() {
         super.viewDidLoad()
         config()
@@ -26,16 +27,15 @@ final class TabBarController: UITabBarController {
         tabBar.layer.borderColor = UIColor.grayTracker.cgColor
         
         let navigationController = UINavigationController(rootViewController: TrackersViewController())
-        
-       
         navigationController.tabBarItem = UITabBarItem(
-            title: "Tрекеры",
+            title: trackersItemName.localized(),
             image: UIImage(named: "trackers"),
             selectedImage: nil
         )
-        let statisticsViewController = StatisticsViewController()
+        
+        let statisticsViewController = UINavigationController(rootViewController: StatisticsViewController())
         statisticsViewController.tabBarItem = UITabBarItem(
-            title: "Статистика",
+            title: statisticsItemName.localized(),
             image: UIImage(named: "stats"),
             selectedImage: nil
         )

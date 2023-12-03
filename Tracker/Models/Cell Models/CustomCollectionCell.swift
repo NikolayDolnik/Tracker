@@ -17,6 +17,7 @@ final class CustomCollectionViewCell: UICollectionViewCell {
         
         contentView.layer.cornerRadius = 16
         view.layer.cornerRadius = 16
+        
        
         view.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(view)
@@ -25,10 +26,11 @@ final class CustomCollectionViewCell: UICollectionViewCell {
         titleLabel.textAlignment = .center
         titleLabel.layer.cornerRadius = 8
         titleLabel.clipsToBounds = true
+        titleLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         
         NSLayoutConstraint.activate([
-            view.heightAnchor.constraint(equalToConstant: 46),
-            view.widthAnchor.constraint(equalToConstant: 46),
+            view.heightAnchor.constraint(equalToConstant: 49),
+            view.widthAnchor.constraint(equalToConstant: 49),
             view.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             view.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             titleLabel.heightAnchor.constraint(equalToConstant: 40),
@@ -52,11 +54,10 @@ final class SupplementaryView: UICollectionReusableView {
         addSubview(titleLabel)
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.font = .monospacedSystemFont(ofSize: 19, weight: .bold)
-        
+        titleLabel.font = UIFont.systemFont(ofSize: 19, weight: .bold)
         
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])

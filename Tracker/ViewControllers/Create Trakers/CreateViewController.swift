@@ -12,15 +12,15 @@ final class CreateViewController: UIViewController {
     
     var habitsButton = UIButton()
     var eventsButton = UIButton()
-   
+    
     lazy var titleLabel: UILabel = {
-         let label = UILabel()
-         label.text = "Создание трекера"
-         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-         label.textColor = .blackDayTracker
-         label.translatesAutoresizingMaskIntoConstraints = false
-         return label
-     }()
+        let label = UILabel()
+        label.text = "Создание трекера"
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        label.textColor = .blackDayTracker
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +34,7 @@ final class CreateViewController: UIViewController {
         view.addSubview(titleLabel)
         view.addSubview(habitsButton)
         view.addSubview(eventsButton)
-       
+        
         NSLayoutConstraint.activate([
             titleLabel.heightAnchor.constraint(equalToConstant: 22),
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
@@ -55,10 +55,10 @@ final class CreateViewController: UIViewController {
     @objc func didTapHabitsButton(){
         let vc = HabitsViewController()
         present(vc, animated: true)
-        }
-        
+    }
+    
     @objc func didTapEventsButton(){
         let vc = EventViewController()
         present(vc, animated: true)
-        }
+    }
 }
