@@ -74,12 +74,32 @@ final class TrackerRecordStore: NSObject {
         return record
     }
     
+    func getTrackerRecord(id: UUID)-> Int {
+        var record = 0
+        let result = fetchedResultsController.fetchedObjects ?? []
+        result.forEach{
+            if $0.id == id { record += 1 }
+        }
+        return record
+    }
+    
     func getCompleteState(tracker: Tracker, date: Date)-> Bool {
         var completeState = false
         
         guard let result = fetchedResultsController.fetchedObjects else { return false }
         result.forEach{
             if $0.id == tracker.id &&
+                $0.dateRecord?.daysBetweenDate(toDate: date) == 0 { completeState = true }
+        }
+        return completeState
+    }
+    
+    func getCompleteState(id: UUID, date: Date)-> Bool {
+        var completeState = false
+        
+        guard let result = fetchedResultsController.fetchedObjects else { return false }
+        result.forEach{
+            if $0.id == id &&
                 $0.dateRecord?.daysBetweenDate(toDate: date) == 0 { completeState = true }
         }
         return completeState

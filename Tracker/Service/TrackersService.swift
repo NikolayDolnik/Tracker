@@ -38,6 +38,7 @@ final class TrackersService: TrackersServiseProtocol {
     var visibleDay: Date?
     var selectedFilter: String = "Все трекеры"
     private var pinnedCategory = " Закрепленные"
+    private var pinnedSection: Bool = false
     weak var view: TrackersViewControllerProtocol?
     private lazy var trackerStore: TrackerStore = {
         let store = TrackerStore()
@@ -253,35 +254,109 @@ extension TrackersService: StoreDelegateProtocol {
     
     
     var numberOfSections: Int {
-      trackerStore.fetchedResultsController.sections?.count ?? 0
+        if let pinCount = trackerStore.pinnedFetchedResultsController.sections?.count
+           {
+            pinnedSection = true
+            print(trackerStore.fetchedResultsController.sections?.count)
+            return (trackerStore.fetchedResultsController.sections?.count ?? 0) //+ 1
+        } else {
+            print("Секций в обычных трекерах - \(trackerStore.fetchedResultsController.sections?.count)")
+            return trackerStore.fetchedResultsController.sections?.count ?? 0
+        }
+      //trackerStore.fetchedResultsController.sections?.count ?? 0
     }
     
     func numberOfRowsInSection(_ section: Int) -> Int {
-       trackerStore.fetchedResultsController.sections?[section].numberOfObjects ?? 0
+        print("Ищем эллементы в секции - \(section)")
+        if section == 0 {
+            print("Элементов за закрепе трекерах - \(trackerStore.pinnedFetchedResultsController.sections?[section].numberOfObjects)")
+            return trackerStore.pinnedFetchedResultsController.sections?[section].numberOfObjects ?? 0
+        } else {
+            print("Элементов в обычных трекерах - \(trackerStore.fetchedResultsController.sections?[section - 1].numberOfObjects)")
+            return trackerStore.fetchedResultsController.sections?[section - 1].numberOfObjects ?? 0
+        }
+      // trackerStore.fetchedResultsController.sections?[section].numberOfObjects ?? 0
     }
     
     func objectModel(at indexPath: IndexPath) -> TrackerCellModel? {
-       let trackerCore = trackerStore.fetchedResultsController.object(at: indexPath)
-        guard let tracker = try? trackerStore.getTrackers(from: trackerCore) else { return nil }
+        var trackerCore : TrackerCoreData
         
+        if pinnedSection {
+            //делаем свичь по секциям
+            switch indexPath.section {
+            case 0:
+                trackerCore = trackerStore.pinnedFetchedResultsController.object(at: indexPath)
+            default:
+                trackerCore = trackerStore.fetchedResultsController.object(at: indexPath)
+            }
+            
+        } else {
+            trackerCore = trackerStore.fetchedResultsController.object(at: indexPath)
+        }
+        
+        let trackerModell = try? getTrackersCellViewModel(for: trackerCore)
+        return trackerModell
+    }
+    
+    func getTrackersCellViewModel(for trackerCoreData: TrackerCoreData) throws -> TrackerCellModel {
+        //Проверяем какой выбран день
         if visibleDay == nil {
             visibleDay = currentDay as Date
         }
-        let trackerModell = TrackerCellModel(
-            id: tracker.id,
-            descriptionTracker: tracker.name,
-            color: tracker.color,
-            emoji: tracker.emoji,
-            timetable: tracker.timetable,
-            complete: getCompleteState(tracker: tracker, date: visibleDay!), // функция проверки на выполнение
-            record: getTrackerRecord(for: indexPath), // функция проверки на рекорд
-            isEnable: isEnableCompleteButton(), // проверка доступности состояния кнопки
-            categoryName: trackerCore.category?.categoryName,
-            isPinned: tracker.isPinned,
-            index: indexPath
-        )
-        return trackerModell
+        
+        guard let id = trackerCoreData.id,
+              let name = trackerCoreData.name,
+              let emoji = trackerCoreData.emoji,
+              let colorHex = trackerCoreData.colorHex,
+              let schedule = trackerCoreData.schedule
+        else {
+            throw TrackerServiceError.decodingError
+        }
+        
+        //Создаем модель трекера
+         let trackerModell = TrackerCellModel(
+             id: id,
+             descriptionTracker: name,
+             color: UIcolorMarshalling.color(from: colorHex),
+             emoji: emoji,
+             timetable: WeekDay.getTimetable(for: schedule),
+             complete: cellCompleteState(id: id, date: visibleDay!), // функция проверки на выполнение
+             record: getTrackerRecord(id: id), // функция проверки на рекорд
+             isEnable: isEnableCompleteButton(), // проверка доступности состояния кнопки
+             categoryName: trackerCoreData.category?.categoryName,
+             isPinned: trackerCoreData.isPinned,
+             index: IndexPath()
+         )
+         return trackerModell
     }
+    
+    func cellCompleteState(id: UUID, date: Date) -> Bool {
+        return trackerRecordStore.getCompleteState(id: id, date: date)
+    }
+    
+    func getTrackerRecord(id: UUID)-> Int {
+        return trackerRecordStore.getTrackerRecord(id: id)
+    }
+    
+//    func getModels(tracker: Tracker) -> TrackerCellModel{
+//        if visibleDay == nil {
+//            visibleDay = currentDay as Date
+//        }
+//        let trackerModell = TrackerCellModel(
+//            id: tracker.id,
+//            descriptionTracker: tracker.name,
+//            color: tracker.color,
+//            emoji: tracker.emoji,
+//            timetable: tracker.timetable,
+//            complete: getCompleteState(tracker: tracker, date: visibleDay!), // функция проверки на выполнение
+//            record: getTrackerRecord(for: indexPath), // функция проверки на рекорд
+//            isEnable: isEnableCompleteButton(), // проверка доступности состояния кнопки
+//            categoryName: trackerCore.category?.categoryName,
+//            isPinned: tracker.isPinned,
+//            index: indexPath
+//        )
+//        return trackerModell
+//    }
     
     func fetchTrackers() -> [Tracker] {
         guard let trackers = try? trackerStore.fetchTrackers()  else { return [] }
@@ -289,7 +364,21 @@ extension TrackersService: StoreDelegateProtocol {
     }
     
     func nameforSection(_ section: Int) -> String? {
-        return trackerStore.fetchedResultsController.sections?[section].name ?? ""
+        if pinnedSection &&
+           section < (numberOfSections) {
+            //делаем свичь по секциям
+            switch section {
+            case 0:
+                return trackerStore.pinnedFetchedResultsController.sections?[section].name ?? ""
+            default:
+                // Надо возвращать -1, но не могу убрать категорию закрепленных
+                return trackerStore.fetchedResultsController.sections?[section].name ?? ""
+            }
+            
+        } else {
+            return trackerStore.fetchedResultsController.sections?[section].name ?? ""
+        }
+        //return trackerStore.fetchedResultsController.sections?[section].name ?? ""
         }
     
 }
@@ -298,4 +387,8 @@ extension TrackersService: TrackerCategoryStoreDelegate {
     func storeDidUpdate(_ store: TrackerCategoryStore) {
     
     }
+}
+
+enum TrackerServiceError: Error {
+    case decodingError
 }

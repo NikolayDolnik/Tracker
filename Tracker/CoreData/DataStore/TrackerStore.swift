@@ -11,6 +11,14 @@ import CoreData
 final class TrackerStore: NSObject {
     
     private let entityName = "TrackerCoreData"
+    private var pinnedCategory = " Закрепленные"
+//    private var notPinnedPredicate = NSPredicate(format: "%K == %@",
+//                                                    #keyPath(TrackerCoreData.isPinned),
+//                                                    false)
+//    private var pinnedPredicate = NSPredicate(format: "NONE %K == %@",
+//                                              #keyPath(TrackerCoreData.isPinned),
+//                                              false)
+    
     private let UIcolorMarshalling = UIColorMarshalling()
     private let context: NSManagedObjectContext
     private var insertedIndexes: IndexSet?
@@ -25,10 +33,30 @@ final class TrackerStore: NSObject {
 
         let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: entityName)
         fetchRequest.sortDescriptors = [
-            //NSSortDescriptor(key: "isPinned", ascending: false),
             NSSortDescriptor(key: "category.categoryName", ascending: true)
         ]
+        let predicate = NSPredicate(format: "%K == false",
+                                    #keyPath(TrackerCoreData.isPinned))
+        fetchRequest.predicate = predicate
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                                                  managedObjectContext: context,
+                                                                  sectionNameKeyPath: #keyPath(TrackerCoreData.category.categoryName),
+                                                                  cacheName: nil)
+        fetchedResultsController.delegate = self
+        try? fetchedResultsController.performFetch()
+        return fetchedResultsController
+    }()
+    
+    lazy var pinnedFetchedResultsController: NSFetchedResultsController<TrackerCoreData> = {
+
+        let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: entityName)
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(key: "category.categoryName", ascending: true),
+        ]
         
+        let predicate = NSPredicate(format: "%K == true",
+                                    #keyPath(TrackerCoreData.isPinned))
+        fetchRequest.predicate = predicate
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
                                                                   managedObjectContext: context,
                                                                   sectionNameKeyPath: #keyPath(TrackerCoreData.category.categoryName),
@@ -121,8 +149,24 @@ final class TrackerStore: NSObject {
         let predicate = NSPredicate(format: "%K CONTAINS[cd] %@",
                                     #keyPath(TrackerCoreData.schedule),
                                     stringDay)
-        fetchedResultsController.fetchRequest.predicate = predicate
-        try? fetchedResultsController.performFetch()
+        let notPinnedPredicate = NSPredicate(format: "%K == %@",
+                                                        #keyPath(TrackerCoreData.isPinned),
+                                                        false)
+        let pinnedPredicate = NSPredicate(format: "NONE %K == %@",
+                                                  #keyPath(TrackerCoreData.isPinned),
+                                                  false)
+
+//        fetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(type: .and, subpredicates: [predicate, notPinnedPredicate])
+//        try? fetchedResultsController.performFetch()
+//        let result2 = fetchedResultsController.fetchedObjects
+//        result2?.forEach{print("Элементов обычных - \($0.isPinned)")}
+//        
+        pinnedFetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(type: .and, subpredicates: [predicate, pinnedPredicate]) // , pinnedPredicate
+        try? pinnedFetchedResultsController.performFetch()
+        
+        let result = pinnedFetchedResultsController.fetchedObjects
+        result?.forEach{print("Элементов закрепленных - \($0.isPinned)")}
+      
     }
     
     func predicateFetch(text: String, numberOfDay: Int){
@@ -178,7 +222,6 @@ final class TrackerStore: NSObject {
         let predicateDate = NSPredicate(format: "%K CONTAINS[cd] %@",
                                     #keyPath(TrackerCoreData.schedule),
                                     stringDay)
-        // predicatedayFrom, predicatedayTo
         
         fetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateDate,predicateNew])
         try? fetchedResultsController.performFetch()
