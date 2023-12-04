@@ -10,6 +10,9 @@ import UIKit
 
 protocol CollectionViewPresenterProtocol: UICollectionViewDelegate,UICollectionViewDataSource {
     var delegate: EmojiPresenterDelegateProtocol? {get set}
+    var selectedEmoji: String?  {get set}
+    var selectedColor: UIColor?  {get set}
+    func setSelectedCell() -> [IndexPath]
 }
 
 protocol  EmojiPresenterDelegateProtocol {
@@ -21,7 +24,11 @@ protocol  EmojiPresenterDelegateProtocol {
 final class EmojiPresenter: NSObject, CollectionViewPresenterProtocol {
     
     var delegate: EmojiPresenterDelegateProtocol?
-    private var selectedIndex: IndexPath?
+    var selectedEmoji: String?
+    var selectedColor: UIColor?
+    private var emojiIndex: IndexPath?
+    private var colorIndex: IndexPath?
+
     private var emojiCollections = ["🙂","😻","🌺","🐶","❤️","😱","😇","😡","🥶","🤔","🙌","🍔","🥦","🏓","🥇","🎸","🏝","😪"]
     
     private var colorsCollection: [UIColor] = {
@@ -32,6 +39,12 @@ final class EmojiPresenter: NSObject, CollectionViewPresenterProtocol {
         }
         return collection
     }()
+    
+    func setSelectedCell() -> [IndexPath] {
+        guard let emojiIndex, let colorIndex else { return [] }
+        
+        return [emojiIndex, colorIndex]
+    }
     
 }
 
@@ -49,38 +62,46 @@ extension EmojiPresenter {
             cell.backgroundColor = .lightGrayTracker
             delegate?.emoji = cell.titleLabel.text
         case 1:
-            cell.view.layer.masksToBounds = false
-            cell.view.layer.shadowOffset = CGSize(width: 0, height: 0)
-            cell.view.layer.shadowOpacity = 0.8
-            cell.view.layer.shadowRadius = 3
-            cell.view.layer.shadowColor = cell.titleLabel.backgroundColor?.cgColor
-            //cell.view.layer.shadowPath = UIBezierPath(roundedRect: cell.view.bounds, cornerRadius: cell.contentView.layer.cornerRadius).cgPath
+            cell.layer.masksToBounds = false
+            cell.layer.borderColor = nil
+            
+            cell.backgroundColor = .clear
+            cell.layer.cornerRadius = 8
+            cell.layer.borderWidth = 3
+            cell.layer.borderColor = cell.titleLabel.backgroundColor?.withAlphaComponent(0.3).cgColor
             delegate?.color = cell.titleLabel.backgroundColor
             
         default:
             return
         }
-        selectedIndex = indexPath
-        delegate?.dataCheking()
+               delegate?.dataCheking()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+     
+        collectionView.indexPathsForSelectedItems?.filter({ $0.section == indexPath.section }).forEach({
+            collectionView.deselectItem(at: $0, animated: false)
+            collectionView.delegate?.collectionView?(collectionView, didDeselectItemAt: $0)
+
+               })
+    
+        return true
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        guard let cell =  collectionView.cellForItem(at: indexPath) else {  return print("функция не удалила выделение") }
         
-        guard let selectedIndex, let cell = collectionView.cellForItem(at: indexPath) as? CustomCollectionViewCell else { return  }
-        if selectedIndex.section == indexPath.section {
-            switch selectedIndex.section {
-            case 0:
-                cell.backgroundColor = .whiteDayTracker
-                delegate?.emoji = nil
-            case 1:
-                cell.layer.borderColor = UIColor.whiteDayTracker.cgColor
-                delegate?.color = nil
-                
-            default:
-                return
-            }
+        switch indexPath.section {
+        case 0:
+            cell.backgroundColor = .whiteDayTracker
+            delegate?.emoji = nil
+        case 1:
+            cell.layer.borderColor = UIColor.whiteDayTracker.cgColor
+            delegate?.color = nil
+            
+        default:
+            return
         }
-        
         delegate?.dataCheking()
     }
     
@@ -102,14 +123,25 @@ extension EmojiPresenter {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CustomCollectionViewCell
+       
         switch indexPath.section {
         case 0:
             cell.titleLabel.text = emojiCollections[indexPath.row]
+            if let text = selectedEmoji, cell.titleLabel.text == text {
+                emojiIndex = indexPath
+            }
         case 1:
             cell.titleLabel.backgroundColor = colorsCollection[indexPath.row]
+            if let color = selectedColor,
+              color == colorsCollection[indexPath.row]
+              // cell.titleLabel.backgroundColor!.isEqual(color)
+            {
+               colorIndex = indexPath
+            }
         default:
             return cell
         }
+        
         return cell
     }
     
@@ -120,7 +152,7 @@ extension EmojiPresenter {
         case 0:
             view.titleLabel.text = "Emoji"
         case 1:
-            view.titleLabel.text = "Colors"
+            view.titleLabel.text = "Цвет"
         default:
             return view
         }
@@ -147,7 +179,11 @@ extension EmojiPresenter: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         minimumInteritemSpacingForSectionAt section: Int
     ) -> CGFloat {
-        return 8
+        return 5
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -162,7 +198,7 @@ extension EmojiPresenter: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
+        return UIEdgeInsets(top: 24, left: 2, bottom: 24, right: 2)
     }
     
 }

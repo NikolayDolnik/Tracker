@@ -17,4 +17,8 @@ public struct TrackerCellModel {
     var complete: Bool
     var record: Int
     var isEnable: Bool
+    var categoryName: String?
+    var pincategory = "Закрепленные"
+    var isPinned: Bool
+    var index: IndexPath?
 }
