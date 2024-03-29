@@ -16,12 +16,20 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
     
     var delegate: TrackersCollectionViewCellDelegate?
     var completeState: Bool = true
-    //private var buttonState = true
     
     var viewCard: UIView = {
-       let view = UIStackView()
+        let view = UIStackView()
         view.backgroundColor  = .redTracker
         view.layer.cornerRadius = 16
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    var emojiView: UIView = {
+        let view = UIView()
+        view.backgroundColor  = .white.withAlphaComponent(0.3)
+        view.layer.cornerRadius = 12
+        view.clipsToBounds = false
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -29,23 +37,25 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
     var emojiLabel: UILabel = {
         let label = UILabel()
         label.text = "😻"
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     let pinImage : UIImageView = {
-       var view = UIImageView()
-       guard let img = UIImage(named: "pin") else { return view }
+        var view = UIImageView()
+        guard let img = UIImage(named: "pin") else { return view }
         view.image = img
         view.translatesAutoresizingMaskIntoConstraints = false
-       return view
+        return view
     }()
     
     var descriptionLable: UILabel = {
         let label = UILabel()
         label.text = "Описание привычки"
         label.font = .systemFont(ofSize: 12, weight: .medium)
-        label.textColor = .whiteDayTracker
+        label.textColor = .white
         label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -53,7 +63,7 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
     
     
     let stackViewDays: UIStackView = {
-       let sv = UIStackView()
+        let sv = UIStackView()
         sv.axis = .horizontal
         sv.alignment = .center
         sv.distribution = .equalSpacing
@@ -72,16 +82,14 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
     
     lazy var completeButton: UIButton = {
         let button = UIButton(type: .system)
-//        let state = buttonState ? "ButtonTracker" :  "PropertyDone"
-//        button.setImage(UIImage(named: state), for: .normal)
-        button.tintColor = .redTracker
+        button.layer.cornerRadius = 17
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-       config()
+        config()
     }
     
     required init?(coder: NSCoder) {
@@ -93,20 +101,26 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
         pinImage.isHidden = true
         
         contentView.addSubview(viewCard)
-        viewCard.addSubview(emojiLabel)
+        viewCard.addSubview(emojiView)
+        emojiView.addSubview(emojiLabel)
         viewCard.addSubview(pinImage)
         viewCard.addSubview(descriptionLable)
         contentView.addSubview(stackViewDays)
         
-  
+        
         NSLayoutConstraint.activate([
             viewCard.topAnchor.constraint(equalTo: contentView.topAnchor),
             viewCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             viewCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             viewCard.heightAnchor.constraint(equalToConstant: 90),
             
-            emojiLabel.topAnchor.constraint(equalTo: viewCard.topAnchor,constant: 12),
-            emojiLabel.leadingAnchor.constraint(equalTo: viewCard.leadingAnchor, constant: 12),
+            emojiView.topAnchor.constraint(equalTo: viewCard.topAnchor,constant: 12),
+            emojiView.leadingAnchor.constraint(equalTo: viewCard.leadingAnchor, constant: 12),
+            emojiView.heightAnchor.constraint(equalToConstant: 24),
+            emojiView.widthAnchor.constraint(equalToConstant: 24),
+            
+            emojiLabel.centerXAnchor.constraint(equalTo: emojiView.centerXAnchor),
+            emojiLabel.centerYAnchor.constraint(equalTo: emojiView.centerYAnchor),
             emojiLabel.heightAnchor.constraint(equalToConstant: 24),
             emojiLabel.widthAnchor.constraint(equalToConstant: 24),
             
@@ -119,7 +133,7 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
             descriptionLable.leadingAnchor.constraint(equalTo: viewCard.leadingAnchor, constant: 12),
             descriptionLable.trailingAnchor.constraint(equalTo: viewCard.trailingAnchor, constant: -12),
             descriptionLable.bottomAnchor.constraint(equalTo: viewCard.bottomAnchor, constant: -12)
-         
+            
         ])
         
         stackViewDays.addArrangedSubview(dayCountLable)
@@ -129,7 +143,7 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
             stackViewDays.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             stackViewDays.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,constant: 12),
             stackViewDays.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12)
-
+            
         ])
         
     }
@@ -137,7 +151,12 @@ public final class TrackersCollectionViewCell: UICollectionViewCell {
     func changeState(state: Bool){
         completeState = !state
         let state = completeState ? State.complete : State.addRecord
-        completeButton.setImage(UIImage(named: state.rawValue), for: .normal)
+        let img = UIImage(named: state.rawValue)
+        completeButton.setImage(img, for: .normal)
+    }
+    
+    func isPinned(state: Bool){
+        pinImage.isHidden = !state
     }
     
     @objc func didTapCompleteButton(){
